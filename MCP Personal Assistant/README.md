@@ -31,16 +31,16 @@ Web Search	`@modelcontextprotocol/server-brave-search`	Brave API key
 File System	`@modelcontextprotocol/server-filesystem`	Local path config
 Memory	`@modelcontextprotocol/server-memory`	None
 Notion	`@modelcontextprotocol/server-notion`	Notion API key
-MCP Config (`mcp_config.json`)
+MCP Config (`mcp\_config.json`)
 ```json
 {
   "mcpServers": {
-    "calendar": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-google-calendar"] },
-    "gmail":    { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-gmail"] },
-    "search":   { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-brave-search"],
-                  "env": { "BRAVE_API_KEY": "your_key" } },
-    "memory":   { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-memory"] },
-    "files":    { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-filesystem",
+    "calendar": { "command": "npx", "args": \["-y", "@modelcontextprotocol/server-google-calendar"] },
+    "gmail":    { "command": "npx", "args": \["-y", "@modelcontextprotocol/server-gmail"] },
+    "search":   { "command": "npx", "args": \["-y", "@modelcontextprotocol/server-brave-search"],
+                  "env": { "BRAVE\_API\_KEY": "your\_key" } },
+    "memory":   { "command": "npx", "args": \["-y", "@modelcontextprotocol/server-memory"] },
+    "files":    { "command": "npx", "args": \["-y", "@modelcontextprotocol/server-filesystem",
                   "/path/to/allowed/directory"] }
   }
 }
@@ -63,7 +63,7 @@ Never call a tool unless you are confident it is needed.
 ---
 💬 Chat Interface Options
 Option A — Claude Desktop (fastest to ship)
-Add the `mcp_config.json` to Claude Desktop settings. Zero frontend code needed.
+Add the `mcp\_config.json` to Claude Desktop settings. Zero frontend code needed.
 Option B — Custom Web Chat (React + FastAPI)
 ```
 frontend/     React chat UI (Tailwind + shadcn)
@@ -84,7 +84,16 @@ Auth: Google OAuth2, API keys via env vars
 📸 Architecture Diagram / Screenshot
 ![Architecture](./screenshot.png)
 ---
-
+🎥 Demo
+Watch Loom walkthrough ← replace with your link
+---
+📂 Files
+`mcp\_config.json` — MCP server configuration
+`agent.py` — core agent loop
+`system\_prompt.txt` — routing instructions
+`screenshot.png` — architecture or UI screenshot
+`README.md` — this file
+---
 🚀 How to Use
 Clone this repo
 Run `npm install` to pull MCP server packages
