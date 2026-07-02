@@ -1,0 +1,461 @@
+{
+  "name": "Build 8 - CRM Enrichment & Scoring Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "getAll",
+        "limit": 20,
+        "additionalFields": {
+          "propertiesCollection": {
+            "propertiesValues": {
+              "properties": [
+                "email",
+                "firstname",
+                "lastname",
+                "jobtitle",
+                "phone",
+                "company",
+                "ai_enriched"
+              ],
+              "propertyMode": "valueOnly"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 2.2,
+      "position": [
+        512,
+        -160
+      ],
+      "id": "a0c0ec49-9d57-4873-8d13-b0644291aa9b",
+      "name": "Get many contacts",
+      "credentials": {
+        "hubspotOAuth2Api": {
+          "id": "REPLACE_WITH_YOUR_HUBSPOT_CREDENTIAL",
+          "name": "REPLACE_WITH_YOUR_HUBSPOT_CREDENTIAL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        928,
+        -160
+      ],
+      "id": "f752385e-09a7-407b-a0cf-eff60dfa5b27",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "528ebaf1-6ab3-41a4-853b-07edcf4b0419",
+              "name": "id",
+              "value": "={{ $json.vid }}",
+              "type": "string"
+            },
+            {
+              "id": "0f4fb628-4a69-4890-bd72-d8eb055dc23a",
+              "name": "email",
+              "value": "={{ $json.properties.email.value }}",
+              "type": "string"
+            },
+            {
+              "id": "f4f8ca5c-42d1-459d-bb40-d68c9fc482db",
+              "name": "firstname",
+              "value": "={{ $json.properties.firstname.value }}",
+              "type": "string"
+            },
+            {
+              "id": "745da4e9-261c-4456-9b94-276e5844036c",
+              "name": "lastname",
+              "value": "={{ $json.properties.lastname.value }}",
+              "type": "string"
+            },
+            {
+              "id": "d754a43f-3bf2-400c-ba98-25b69bbb986d",
+              "name": "company",
+              "value": "={{ $json.properties.company.value }}",
+              "type": "string"
+            },
+            {
+              "id": "8ae1bb7c-c6fd-473d-86d0-cc262b273c23",
+              "name": "jobtitle",
+              "value": "={{ $json.properties.jobtitle.value }}",
+              "type": "string"
+            },
+            {
+              "id": "fdd8d14b-9c26-47bd-914e-b89ca854da27",
+              "name": "phone",
+              "value": "={{ $json.properties.phone.value }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1200,
+        -144
+      ],
+      "id": "367c1605-b234-4770-81b1-d17c642a7bae",
+      "name": "Normalize"
+    },
+    {
+      "parameters": {
+        "text": "={{ JSON.stringify($json) }}",
+        "attributes": {
+          "attributes": [
+            {
+              "name": "normalized_first_name",
+              "description": "First name, properly capitalized. \"\" if unknown."
+            },
+            {
+              "name": "normalized_last_name",
+              "description": "Last name, properly capitalized. \"\" if unknown."
+            },
+            {
+              "name": "company_name",
+              "description": "Company; infer from email domain if blank; \"\" for personal providers"
+            },
+            {
+              "name": "company_domain",
+              "description": "Lowercased domain from the email; \"\" for personal providers."
+            },
+            {
+              "name": "industry",
+              "description": "Best-guess industry; \"unknown\" if not inferable."
+            },
+            {
+              "name": "seniority",
+              "description": "One of: c_level, vp, director, manager, individual_contributor, unknown."
+            },
+            {
+              "name": "segment",
+              "description": "Short persona label e.g. agency_owner, smb_marketer; \"unknown\" if unclear."
+            },
+            {
+              "name": "summary",
+              "description": "One sentence about who this contact is."
+            },
+            {
+              "name": "data_quality_score",
+              "type": "number",
+              "description": "0–100 integer, quality of the ORIGINAL record."
+            }
+          ]
+        },
+        "options": {
+          "systemPromptTemplate": "=You are a CRM data-hygiene assistant. You clean and enrich ONE contact record using\nONLY the information provided plus what can be directly inferred from the email address.\n\nRules:\n1. Never invent facts you cannot infer. No fake phone numbers, no guessed real companies\n   beyond what the email domain tells you.\n2. Proper-case names: \"john smith\" -> \"John Smith\", \"SARA\" -> \"Sara\".\n3. If company is blank, infer it from the email domain (e.g. john@acmewidgets.com ->\n   \"Acme Widgets\"). Leave company blank for personal/free email providers.\n4. company_domain = the part after \"@\" in the email, lowercased — BUT return an empty\n   string (\"\") when the domain is a personal/free email provider. Treat these as personal:\n   gmail.com, googlemail.com, yahoo.com, ymail.com, hotmail.com, outlook.com, live.com,\n   msn.com, icloud.com, me.com, mac.com, aol.com, proton.me, protonmail.com, gmx.com,\n   zoho.com. For a personal provider, BOTH company_name AND company_domain MUST be \"\".\n5. seniority: infer from job title, exactly one of:\n   c_level, vp, director, manager, individual_contributor, unknown.\n   Mapping:\n   - c_level: CEO, CTO, CFO, COO, any \"Chief ...\" title, Founder, Co-Founder, President, Owner.\n   - vp: \"VP\", \"Vice President\", \"SVP\", \"EVP\".\n   - director: \"Director\", or any \"Head of ...\" title.\n   - manager: \"Manager\", \"Lead\", \"Supervisor\".\n   - individual_contributor: specialist, coordinator, associate, analyst, engineer,\n     representative, or any title with no leadership indicator.\n   - unknown: only when the job title is blank or genuinely unclassifiable.\n6. industry / segment: best guess from company + title; use \"unknown\" if not inferable.\n7. summary: one sentence describing who this contact is, based only on given data.\n8. data_quality_score: integer 0-100 reflecting how COMPLETE and CLEAN the ORIGINAL\n   record was (full name + company + title + valid business email = high; mostly blank = low).\n9. For anything you genuinely cannot determine, return an empty string (\"\") — except\n   industry/seniority/segment which use \"unknown\"."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
+      "position": [
+        1472,
+        -144
+      ],
+      "id": "ae9b54d8-fdc4-48ea-9a59-f30914ab539a",
+      "name": "Information Extractor"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1472,
+        112
+      ],
+      "id": "43519f82-9de0-4a27-8439-bce55a7272d1",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
+          "name": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.hubapi.com/crm/v3/objects/contacts/{{ $('Normalize').first().json.id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"properties\": {\n    \"ai_summary\": \"{{ $('Information Extractor').first().json.output.summary }}\",\n    \"ai_segment\": \"{{ $('Information Extractor').first().json.output.segment }}\",\n    \"ai_industry\": \"{{ $('Information Extractor').first().json.output.industry }}\",\n    \"ai_seniority\": \"{{ $('Information Extractor').first().json.output.seniority }}\",\n    \"ai_company_domain\": \"{{ $('Information Extractor').first().json.output.company_domain }}\",\n    \"data_quality_score\": \"{{ $('Information Extractor').first().json.output.data_quality_score }}\",\n    \"ai_enriched\": \"true\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1824,
+        -144
+      ],
+      "id": "6406aa2e-1ae6-462b-a3f6-a3d0bac9b60b",
+      "name": "HubSpot Update",
+      "credentials": {
+        "hubspotOAuth2Api": {
+          "id": "REPLACE_WITH_YOUR_HUBSPOT_CREDENTIAL",
+          "name": "REPLACE_WITH_YOUR_HUBSPOT_CREDENTIAL"
+        },
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_YOUR_HUBSPOT_TOKEN_CREDENTIAL",
+          "name": "REPLACE_WITH_YOUR_HUBSPOT_TOKEN_CREDENTIAL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst count = items.length;\nlet scoreSum = 0;\nconst seniority = {};\nfor (const it of items) {\n  const p = it.json.properties || {};\n  scoreSum += Number(p.data_quality_score) || 0;\n  const sen = p.ai_seniority || 'unknown';\n  seniority[sen] = (seniority[sen] || 0) + 1;\n}\nconst avgScore = count ? Math.round(scoreSum / count) : 0;\nconst segLine = Object.entries(seniority).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k}: ${v}`).join(', ') || 'none';\nreturn [{ json: { count, avgScore, segLine } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        -288
+      ],
+      "id": "f2a7b0b2-b166-45c9-bfbc-18d9bb4a5594",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "YOUR_SLACK_CHANNEL_ID",
+          "mode": "list",
+          "cachedResultName": "your-channel"
+        },
+        "text": "=🧹 CRM hygiene run complete — enriched {{ $json.count }} contacts. Avg data-quality score: {{ $json.avgScore }}/100. Seniority mix — {{ $json.segLine }}.",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.5,
+      "position": [
+        1424,
+        -288
+      ],
+      "id": "07127a77-cc03-45ef-8cec-be62a10ffc90",
+      "name": "Send a message",
+      "webhookId": "480f68f0-ea18-4b59-9f88-112010122f58",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "REPLACE_WITH_YOUR_SLACK_CREDENTIAL",
+          "name": "REPLACE_WITH_YOUR_SLACK_CREDENTIAL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "214b2025-9b6a-4a97-af1e-6606a070dff6",
+              "leftValue": "={{ $json.properties.ai_enriched?.value || \"\" }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        720,
+        -160
+      ],
+      "id": "8d807efd-eb5a-4f31-8c49-c795c97926ef",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 0 6 * * *"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        1072,
+        -16
+      ],
+      "id": "dc6d9ff9-d5ac-4977-b564-a79dbd97b940",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 0 6 * * *"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        272,
+        -160
+      ],
+      "id": "433ff8be-364f-4997-affb-e089beb096e5",
+      "name": "Schedule Trigger1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get many contacts": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Normalize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "HubSpot Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HubSpot Update": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Get many contacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "nodeGroups": []
+}
