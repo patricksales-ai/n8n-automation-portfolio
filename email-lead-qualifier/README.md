@@ -71,6 +71,19 @@ straight to the thread. You work a ranked list instead of triaging raw mail.
 Single workflow. Real Gmail in; real Gmail / Slack / Postgres / Sheets actions out;
 three gpt-4o-mini calls (one to score, one per lead branch to reply).
 
+### Data design — two layers, on purpose
+
+Leads are written to **two** places, and that's deliberate — each does a job the other
+can't. **Supabase `email_leads` is the system of record:** an `INSERT … ON CONFLICT
+(email)` upsert keyed on the sender's email, so re-contacts update the existing row
+instead of duplicating it — the kind of keyed, deduped state a spreadsheet can't hold
+without a racey lookup-then-write. The **Google Sheet is the human front-of-house:** a
+readable, shareable tracker with a `Status` column a rep owns by hand and a one-click
+link to the thread. Postgres is the source of truth the automation trusts; the Sheet is
+the disposable view a person actually works from. (Airtable would swap the Sheet for a
+prettier board — worth it only if a non-technical user *manages* leads there daily; for
+a glance-and-update tracker, Sheets is free and instant.)
+
 ---
 
 ## Demo
