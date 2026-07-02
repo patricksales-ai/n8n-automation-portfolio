@@ -112,6 +112,17 @@ Gmail Trigger → Get a message (full body) → Lead Qualifier (gate + extract)
 
 ---
 
+## Demo
+
+**Inbound Lead Capture** — a raw email arrives, the AI qualifies it, creates the lead in
+HubSpot, routes it by temperature, auto-replies, and pings Slack:
+
+![Inbound Lead Capture demo](docs/demo-inbound.gif)
+
+> A demo of the scheduled **CRM Enrichment & Scoring** lane is on the way.
+
+---
+
 ## Setup
 
 1. Import both files in [`workflows/`](workflows/) into your n8n instance.
