@@ -119,7 +119,9 @@ HubSpot, routes it by temperature, auto-replies, and pings Slack:
 
 ![Inbound Lead Capture demo](docs/demo-inbound.gif)
 
-> A demo of the scheduled **CRM Enrichment & Scoring** lane is on the way.
+**CRM Enrichment & Scoring** runs on a schedule (or on demand): point it at a set of
+half-filled contacts and watch the `ai_*` properties and `data_quality_score` populate
+directly in HubSpot, followed by a Slack summary of the run.
 
 ---
 
@@ -144,6 +146,39 @@ HubSpot, routes it by temperature, auto-replies, and pings Slack:
 - **LLM:** OpenAI gpt-4o-mini / gpt-4o (Information Extractor + Basic LLM Chain)
 - **CRM:** HubSpot (native OAuth2 node + REST write-back via Header Auth)
 - **Interfaces:** Gmail (inbound + auto-reply) · Slack (alerts)
+
+---
+
+## Security & safety
+
+- **No secrets in the repo.** Every credential is a `REPLACE_WITH_YOUR_…_CREDENTIAL`
+  placeholder; the HubSpot Private-App token, OpenAI / Slack / Gmail creds, Slack channel
+  ID, and webhook IDs are stripped or regenerated in the exported JSON, and pinned run
+  data is emptied.
+- **The write-back is scoped.** By default the enrichment lane only writes to its own
+  `ai_*` / `data_quality_score` / `ai_enriched` custom properties — it never overwrites
+  native fields, so nothing good gets clobbered.
+- **The only auto-outbound is a guard-railed acknowledgment.** Hot/warm replies are
+  constrained to acknowledge by name and promise follow-up; the prompt forbids quoting
+  prices, making commitments, or inventing details — and the qualifier is told to classify
+  the workflow's own replies as *not a lead*, so it never loops on itself.
+- **Lead PII lives in your own HubSpot**, not in this repo.
+
+---
+
+## Results & highlights
+
+- **The CRM maintains itself** — existing contacts get proper-cased, company-inferred,
+  seniority-tagged, and quality-scored without anyone touching a record by hand.
+- **No lead goes cold** — genuine inbound emails become HubSpot leads within a minute,
+  temperature-ranked, with an instant acknowledgment on the hot and warm ones.
+- **Incomplete ≠ ignored** — a bare "do you do bulk pricing?" is captured and scored on
+  data quality, not dropped for missing a name or company.
+- **Idempotent by design** — the `ai_enriched` filter and the email upsert mean re-runs
+  never re-spend on done contacts or create duplicate leads.
+- **One engine, two lanes** — the same enrich-and-score logic serves both scheduled
+  cleanup and live inbound, and it's HubSpot-native, so every improvement is permanent
+  and actionable, not a throwaway report.
 
 ---
 
