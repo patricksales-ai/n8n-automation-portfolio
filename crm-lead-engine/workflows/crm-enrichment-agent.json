@@ -3,49 +3,12 @@
   "nodes": [
     {
       "parameters": {
-        "authentication": "oAuth2",
-        "operation": "getAll",
-        "limit": 20,
-        "additionalFields": {
-          "propertiesCollection": {
-            "propertiesValues": {
-              "properties": [
-                "email",
-                "firstname",
-                "lastname",
-                "jobtitle",
-                "phone",
-                "company",
-                "ai_enriched"
-              ],
-              "propertyMode": "valueOnly"
-            }
-          }
-        }
-      },
-      "type": "n8n-nodes-base.hubspot",
-      "typeVersion": 2.2,
-      "position": [
-        512,
-        -160
-      ],
-      "id": "a0c0ec49-9d57-4873-8d13-b0644291aa9b",
-      "name": "Get many contacts",
-      "credentials": {
-        "hubspotOAuth2Api": {
-          "id": "REPLACE_WITH_YOUR_HUBSPOT_CREDENTIAL",
-          "name": "REPLACE_WITH_YOUR_HUBSPOT_CREDENTIAL"
-        }
-      }
-    },
-    {
-      "parameters": {
         "options": {}
       },
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        928,
+        1552,
         -160
       ],
       "id": "f752385e-09a7-407b-a0cf-eff60dfa5b27",
@@ -58,43 +21,43 @@
             {
               "id": "528ebaf1-6ab3-41a4-853b-07edcf4b0419",
               "name": "id",
-              "value": "={{ $json.vid }}",
+              "value": "={{ $json.id }}",
               "type": "string"
             },
             {
               "id": "0f4fb628-4a69-4890-bd72-d8eb055dc23a",
               "name": "email",
-              "value": "={{ $json.properties.email.value }}",
+              "value": "={{ $json.properties.email }}",
               "type": "string"
             },
             {
               "id": "f4f8ca5c-42d1-459d-bb40-d68c9fc482db",
               "name": "firstname",
-              "value": "={{ $json.properties.firstname.value }}",
+              "value": "={{ $json.properties.firstname }}",
               "type": "string"
             },
             {
               "id": "745da4e9-261c-4456-9b94-276e5844036c",
               "name": "lastname",
-              "value": "={{ $json.properties.lastname.value }}",
+              "value": "={{ $json.properties.lastname }}",
               "type": "string"
             },
             {
               "id": "d754a43f-3bf2-400c-ba98-25b69bbb986d",
               "name": "company",
-              "value": "={{ $json.properties.company.value }}",
+              "value": "={{ $json.properties.company }}",
               "type": "string"
             },
             {
               "id": "8ae1bb7c-c6fd-473d-86d0-cc262b273c23",
               "name": "jobtitle",
-              "value": "={{ $json.properties.jobtitle.value }}",
+              "value": "={{ $json.properties.jobtitle }}",
               "type": "string"
             },
             {
               "id": "fdd8d14b-9c26-47bd-914e-b89ca854da27",
               "name": "phone",
-              "value": "={{ $json.properties.phone.value }}",
+              "value": "={{ $json.properties.phone }}",
               "type": "string"
             }
           ]
@@ -104,7 +67,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1200,
+        1824,
         -144
       ],
       "id": "367c1605-b234-4770-81b1-d17c642a7bae",
@@ -161,7 +124,7 @@
       "type": "@n8n/n8n-nodes-langchain.informationExtractor",
       "typeVersion": 1.2,
       "position": [
-        1472,
+        2096,
         -144
       ],
       "id": "ae9b54d8-fdc4-48ea-9a59-f30914ab539a",
@@ -181,7 +144,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
       "position": [
-        1472,
+        2096,
         112
       ],
       "id": "43519f82-9de0-4a27-8439-bce55a7272d1",
@@ -195,42 +158,12 @@
     },
     {
       "parameters": {
-        "method": "PATCH",
-        "url": "=https://api.hubapi.com/crm/v3/objects/contacts/{{ $('Normalize').first().json.id }}",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"properties\": {\n    \"ai_summary\": \"{{ $('Information Extractor').first().json.output.summary }}\",\n    \"ai_segment\": \"{{ $('Information Extractor').first().json.output.segment }}\",\n    \"ai_industry\": \"{{ $('Information Extractor').first().json.output.industry }}\",\n    \"ai_seniority\": \"{{ $('Information Extractor').first().json.output.seniority }}\",\n    \"ai_company_domain\": \"{{ $('Information Extractor').first().json.output.company_domain }}\",\n    \"data_quality_score\": \"{{ $('Information Extractor').first().json.output.data_quality_score }}\",\n    \"ai_enriched\": \"true\"\n  }\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.4,
-      "position": [
-        1824,
-        -144
-      ],
-      "id": "6406aa2e-1ae6-462b-a3f6-a3d0bac9b60b",
-      "name": "HubSpot Update",
-      "credentials": {
-        "hubspotOAuth2Api": {
-          "id": "REPLACE_WITH_YOUR_HUBSPOT_CREDENTIAL",
-          "name": "REPLACE_WITH_YOUR_HUBSPOT_CREDENTIAL"
-        },
-        "httpHeaderAuth": {
-          "id": "REPLACE_WITH_YOUR_HUBSPOT_TOKEN_CREDENTIAL",
-          "name": "REPLACE_WITH_YOUR_HUBSPOT_TOKEN_CREDENTIAL"
-        }
-      }
-    },
-    {
-      "parameters": {
         "jsCode": "const items = $input.all();\nconst count = items.length;\nlet scoreSum = 0;\nconst seniority = {};\nfor (const it of items) {\n  const p = it.json.properties || {};\n  scoreSum += Number(p.data_quality_score) || 0;\n  const sen = p.ai_seniority || 'unknown';\n  seniority[sen] = (seniority[sen] || 0) + 1;\n}\nconst avgScore = count ? Math.round(scoreSum / count) : 0;\nconst segLine = Object.entries(seniority).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k}: ${v}`).join(', ') || 'none';\nreturn [{ json: { count, avgScore, segLine } }];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1200,
+        1840,
         -288
       ],
       "id": "f2a7b0b2-b166-45c9-bfbc-18d9bb4a5594",
@@ -238,13 +171,11 @@
     },
     {
       "parameters": {
-        "authentication": "oAuth2",
         "select": "channel",
         "channelId": {
           "__rl": true,
           "value": "YOUR_SLACK_CHANNEL_ID",
-          "mode": "list",
-          "cachedResultName": "your-channel"
+          "mode": "id"
         },
         "text": "=🧹 CRM hygiene run complete — enriched {{ $json.count }} contacts. Avg data-quality score: {{ $json.avgScore }}/100. Seniority mix — {{ $json.segLine }}.",
         "otherOptions": {}
@@ -252,14 +183,14 @@
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.5,
       "position": [
-        1424,
+        2144,
         -288
       ],
       "id": "07127a77-cc03-45ef-8cec-be62a10ffc90",
       "name": "Send a message",
-      "webhookId": "480f68f0-ea18-4b59-9f88-112010122f58",
+      "webhookId": "cf44a3be-92ad-4724-b999-d1c81adc4ef1",
       "credentials": {
-        "slackOAuth2Api": {
+        "slackApi": {
           "id": "REPLACE_WITH_YOUR_SLACK_CREDENTIAL",
           "name": "REPLACE_WITH_YOUR_SLACK_CREDENTIAL"
         }
@@ -292,31 +223,11 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.3,
       "position": [
-        720,
+        1264,
         -160
       ],
       "id": "8d807efd-eb5a-4f31-8c49-c795c97926ef",
       "name": "Filter"
-    },
-    {
-      "parameters": {
-        "rule": {
-          "interval": [
-            {
-              "field": "cronExpression",
-              "expression": "0 0 6 * * *"
-            }
-          ]
-        }
-      },
-      "type": "n8n-nodes-base.scheduleTrigger",
-      "typeVersion": 1.3,
-      "position": [
-        1072,
-        -16
-      ],
-      "id": "dc6d9ff9-d5ac-4977-b564-a79dbd97b940",
-      "name": "Schedule Trigger"
     },
     {
       "parameters": {
@@ -337,21 +248,118 @@
       ],
       "id": "433ff8be-364f-4997-affb-e089beb096e5",
       "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.hubapi.com/crm/v3/objects/contacts",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "limit",
+              "value": "20"
+            },
+            {
+              "name": "properties",
+              "value": "email,firstname,lastname,company,jobtitle,phone,ai_enriched"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        480,
+        -160
+      ],
+      "id": "1d582e87-25a8-47e9-8427-208cd622fef1",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_YOUR_HUBSPOT_TOKEN_CREDENTIAL",
+          "name": "REPLACE_WITH_YOUR_HUBSPOT_TOKEN_CREDENTIAL"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "results",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        720,
+        -160
+      ],
+      "id": "429958c3-cae4-4e4d-82d7-20f7019729ab",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f8c6953b-a9fe-47eb-a35d-f1b98eb3f12b",
+              "leftValue": "={{ $json.properties.ai_enriched || \"\" }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        944,
+        -160
+      ],
+      "id": "b07ec04c-8e8c-4355-bd08-6dae5f88876b",
+      "name": "Filter1"
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://api.hubapi.com/crm/v3/objects/contacts/{{ $('Normalize').first().json.id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"properties\": {\n    \"ai_summary\": \"{{ $('Information Extractor').first().json.output.summary }}\",\n    \"ai_segment\": \"{{ $('Information Extractor').first().json.output.segment }}\",\n    \"ai_industry\": \"{{ $('Information Extractor').first().json.output.industry }}\",\n    \"ai_seniority\": \"{{ $('Information Extractor').first().json.output.seniority }}\",\n    \"ai_company_domain\": \"{{ $('Information Extractor').first().json.output.company_domain }}\",\n    \"data_quality_score\": \"{{ $('Information Extractor').first().json.output.data_quality_score }}\",\n    \"ai_enriched\": \"true\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2416,
+        -144
+      ],
+      "id": "e87093ac-55a4-45e4-b2ae-66ea49679575",
+      "name": "HubSpot Update",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_YOUR_HUBSPOT_TOKEN_CREDENTIAL",
+          "name": "REPLACE_WITH_YOUR_HUBSPOT_TOKEN_CREDENTIAL"
+        }
+      }
     }
   ],
   "pinData": {},
   "connections": {
-    "Get many contacts": {
-      "main": [
-        [
-          {
-            "node": "Filter",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Loop Over Items": {
       "main": [
         [
@@ -403,17 +411,6 @@
         ]
       ]
     },
-    "HubSpot Update": {
-      "main": [
-        [
-          {
-            "node": "Loop Over Items",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Code in JavaScript": {
       "main": [
         [
@@ -440,7 +437,51 @@
       "main": [
         [
           {
-            "node": "Get many contacts",
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Filter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter1": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HubSpot Update": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
             "type": "main",
             "index": 0
           }
