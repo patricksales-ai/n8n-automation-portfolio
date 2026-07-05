@@ -5,11 +5,10 @@
       "parameters": {
         "promptType": "define",
         "text": "=Turn the idea below into platform-tailored posts.\n\nIdea: {{ $json.idea }}",
-        "hasOutputParser": true,
         "messages": {
           "messageValues": [
             {
-              "message": "=You are a social content writer building a personal brand on professional and\ncreative platforms. Voice: sharp, honest, encouraging. Audience: professionals,\njob seekers, and early-career builders.\n\nRules:\n- Lead every post with a strong first line that earns the scroll-stop.\n- Write like a real person. No hype words, no emoji spam, no \"in today's world,\"\n  no generic AI phrasing (\"unlock,\" \"leverage,\" \"game-changer,\" \"dive in\").\n- Each post must stand alone and make sense without the others.\n- No fabricated stats, quotes, or names. Specific and concrete beats vague.\n- One clear call-to-action per post.\n\nTurn the idea below into platform-tailored posts:\n- linkedin: text (<=1200 chars, professional but human, 1 CTA, 2-3 hashtags) and\n  hook (the first line on its own).\n- x: text (<=270 chars, punchy, 1-2 hashtags).\n- instagram: caption (<=300 chars, warm and personal) and hashtags (5-10 relevant tags)."
+              "message": "=You are a social content writer building a personal brand on professional and\ncreative platforms. Voice: sharp, honest, encouraging. Audience: professionals,\njob seekers, and early-career builders.\n\nRules:\n- Lead every post with a strong first line that earns the scroll-stop.\n- Write like a real person. No hype words, no emoji spam, no \"in today's world,\"\n  no generic AI phrasing (\"unlock,\" \"leverage,\" \"game-changer,\" \"dive in\").\n- Each post must stand alone and make sense without the others.\n- No fabricated stats, quotes, or names. Specific and concrete beats vague.\n- One clear call-to-action per post.\n\nTurn the idea below into platform-tailored posts:\n- linkedin: text (<=1200 chars, professional but human, 1 CTA, 2-3 hashtags) and\n  hook (the first line on its own).\n- x: text (<=270 chars, punchy, 1-2 hashtags).\n- instagram: caption (<=300 chars, warm and personal) and hashtags (5-10 relevant tags).\nReturn ONLY valid minified JSON in exactly this shape — no markdown, no code fences, no headings, no commentary:\n{\"output\":{\"linkedin\":{\"hook\":\"\",\"text\":\"\"},\"x\":{\"text\":\"\"},\"instagram\":{\"caption\":\"\",\"hashtags\":[]}}}"
             }
           ]
         },
@@ -26,28 +25,16 @@
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\n  \"linkedin\": {\n    \"text\": \"Full LinkedIn post body goes here.\",\n    \"hook\": \"The strong first line.\"\n  },\n  \"x\": {\n    \"text\": \"Punchy tweet under 270 chars.\"\n  },\n  \"instagram\": {\n    \"caption\": \"Short Instagram caption.\",\n    \"hashtags\": [\"jobsearch\", \"careers\", \"hiring\"]\n  }\n}",
-        "autoFix": true
-      },
-      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
-      "typeVersion": 1.3,
-      "position": [
-        480,
-        320
-      ],
-      "id": "2dd533ea-1bc2-4af4-9576-73a2a394d721",
-      "name": "Structured Output Parser"
-    },
-    {
-      "parameters": {
         "model": {
           "__rl": true,
           "value": "gpt-4o-mini",
           "mode": "list",
           "cachedResultName": "gpt-4o-mini"
         },
-        "builtInTools": {},
-        "options": {}
+        "responsesApiEnabled": false,
+        "options": {
+          "responseFormat": "json_object"
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
@@ -59,7 +46,7 @@
       "name": "OpenAI Chat Model",
       "credentials": {
         "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
+          "id": "SYpGRkU0nCCv3rd3",
           "name": "OpenAI account"
         }
       }
@@ -68,7 +55,6 @@
       "parameters": {
         "promptType": "define",
         "text": "=Improve these draft posts:\n\n{{ JSON.stringify($json.output) }}",
-        "hasOutputParser": true,
         "messages": {
           "messageValues": [
             {
@@ -81,7 +67,7 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.9,
       "position": [
-        768,
+        848,
         0
       ],
       "id": "4aa31ce6-2106-4c27-8766-8f631d616037",
@@ -95,8 +81,10 @@
           "mode": "list",
           "cachedResultName": "gpt-4o-mini"
         },
-        "builtInTools": {},
-        "options": {}
+        "responsesApiEnabled": false,
+        "options": {
+          "responseFormat": "json_object"
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
@@ -108,40 +96,26 @@
       "name": "OpenAI Chat Model1",
       "credentials": {
         "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
+          "id": "SYpGRkU0nCCv3rd3",
           "name": "OpenAI account"
         }
       }
     },
     {
       "parameters": {
-        "jsonSchemaExample": "{\n  \"linkedin\": {\n    \"text\": \"Full LinkedIn post body goes here.\",\n    \"hook\": \"The strong first line.\"\n  },\n  \"x\": {\n    \"text\": \"Punchy tweet under 270 chars.\"\n  },\n  \"instagram\": {\n    \"caption\": \"Short Instagram caption.\",\n    \"hashtags\": [\"jobsearch\", \"careers\", \"hiring\"]\n  }\n}",
-        "autoFix": true
-      },
-      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
-      "typeVersion": 1.3,
-      "position": [
-        912,
-        208
-      ],
-      "id": "5d363ee3-5469-4451-80c0-05b29ca11900",
-      "name": "Structured Output Parser1"
-    },
-    {
-      "parameters": {
         "documentId": {
           "__rl": true,
-          "value": "YOUR_SHEET_ID",
+          "value": "1BdnAUwHtTruIiQV28RScEp64RHIle9DI4oQQMO17erA",
           "mode": "list",
           "cachedResultName": "content_calendar",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=drivesdk"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BdnAUwHtTruIiQV28RScEp64RHIle9DI4oQQMO17erA/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BdnAUwHtTruIiQV28RScEp64RHIle9DI4oQQMO17erA/edit#gid=0"
         },
         "filtersUI": {
           "values": [
@@ -151,9 +125,7 @@
             }
           ]
         },
-        "options": {
-          "returnFirstMatch": true
-        }
+        "options": {}
       },
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
@@ -165,8 +137,8 @@
       "name": "Get row(s) in sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "REPLACE_WITH_YOUR_GOOGLE_SHEETS_CREDENTIAL",
-          "name": "Google Sheets OAuth2 API"
+          "id": "yMqkk4M0kF50KIC0",
+          "name": "Google Sheets account"
         }
       }
     },
@@ -175,17 +147,17 @@
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "value": "YOUR_SHEET_ID",
+          "value": "1BdnAUwHtTruIiQV28RScEp64RHIle9DI4oQQMO17erA",
           "mode": "list",
           "cachedResultName": "content_calendar",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=drivesdk"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BdnAUwHtTruIiQV28RScEp64RHIle9DI4oQQMO17erA/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BdnAUwHtTruIiQV28RScEp64RHIle9DI4oQQMO17erA/edit#gid=0"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -287,28 +259,26 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        1936,
+        2032,
         -16
       ],
       "id": "3fce7d77-dfb7-449a-b5c3-c1df2e620df6",
       "name": "Update row in sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "REPLACE_WITH_YOUR_GOOGLE_SHEETS_CREDENTIAL",
-          "name": "Google Sheets OAuth2 API"
+          "id": "yMqkk4M0kF50KIC0",
+          "name": "Google Sheets account"
         }
       }
     },
     {
       "parameters": {
-        "authentication": "oAuth2",
         "operation": "sendAndWait",
         "select": "channel",
         "channelId": {
           "__rl": true,
-          "value": "YOUR_SLACK_CHANNEL_ID",
-          "mode": "list",
-          "cachedResultName": "your-channel"
+          "value": "C0BBTD9TCR5",
+          "mode": "id"
         },
         "message": "=*New posts ready for review*  —  idea: {{ $('Get row(s) in sheet').first().json.idea }}\n\n*LinkedIn:*\n{{ $json.output.linkedin.text }}\n\n*X:*\n{{ $json.output.x.text }}\n\n*Instagram:*\n{{ $json.output.instagram.caption }}\n{{ $json.output.instagram.hashtags.join(' ') }}",
         "approvalOptions": {
@@ -323,15 +293,15 @@
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.5,
       "position": [
-        1152,
+        1376,
         0
       ],
       "id": "be0a677e-ff69-486b-a68f-4eba4d4076ea",
       "name": "Send message and wait for response",
-      "webhookId": "d378e35d-ed64-4116-a535-af4fa4ec5700",
+      "webhookId": "ef71b17e-98a5-4620-934c-62bf24002ff3",
       "credentials": {
-        "slackOAuth2Api": {
-          "id": "REPLACE_WITH_YOUR_SLACK_CREDENTIAL",
+        "slackApi": {
+          "id": "1OmcAA2AKHVVunVC",
           "name": "Slack account"
         }
       }
@@ -364,7 +334,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        1360,
+        1552,
         0
       ],
       "id": "91ef3c9c-42e8-4202-ba60-330062548f84",
@@ -378,73 +348,21 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"post\": {{ JSON.stringify($('Basic LLM Chain1').first().json.output.linkedin.text) }},\n  \"platforms\": [\"linkedin\"]\n}",
+        "jsonBody": "={\n  \"post\": {{ JSON.stringify($('Normalize Final').first().json.output.linkedin.text) }},\n  \"platforms\": [\"linkedin\"]\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        1696,
+        1840,
         -16
       ],
       "id": "a1f2862f-cc73-4756-83f9-7e1e5f7583e3",
       "name": "HTTP Request",
       "credentials": {
         "httpHeaderAuth": {
-          "id": "REPLACE_WITH_YOUR_AYRSHARE_HEADER_AUTH_CREDENTIAL",
-          "name": "Header Auth account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "model": {
-          "__rl": true,
-          "value": "gpt-4o-mini",
-          "mode": "list",
-          "cachedResultName": "gpt-4o-mini"
-        },
-        "builtInTools": {},
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.3,
-      "position": [
-        416,
-        448
-      ],
-      "id": "e6fa67c4-a6cf-4322-b0a0-f313dc96f06f",
-      "name": "OpenAI Chat Model2",
-      "credentials": {
-        "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
-          "name": "OpenAI account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "model": {
-          "__rl": true,
-          "value": "gpt-4o-mini",
-          "mode": "list",
-          "cachedResultName": "gpt-4o-mini"
-        },
-        "builtInTools": {},
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.3,
-      "position": [
-        784,
-        432
-      ],
-      "id": "4327f34d-c08f-4a07-86ca-abca16a74d14",
-      "name": "OpenAI Chat Model3",
-      "credentials": {
-        "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
-          "name": "OpenAI account"
+          "id": "trHSo3RUnBy8ZqXd",
+          "name": "Ayrshare Header Auth Local"
         }
       }
     },
@@ -467,21 +385,36 @@
       ],
       "id": "5de30f43-a11b-4c23-991a-d110904b607d",
       "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = $input.item.json;\nlet obj;\nif (typeof j.text === 'string') {\n  // Cloud / string case: parse the JSON string\n  const s = j.text.replace(/```json\\s*/gi, '').replace(/```/g, '').trim();\n  obj = JSON.parse(s.slice(s.indexOf('{'), s.lastIndexOf('}') + 1));\n} else {\n  obj = j;                       // self-host case: already a parsed object\n}\nif (!obj.output) obj = { output: obj };   // force consistent {output:{…}} shape\nreturn { json: obj };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        0
+      ],
+      "id": "73d573e7-255c-436a-8b80-be30c08939eb",
+      "name": "Normalize Draft"
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = $input.item.json;\nlet obj;\nif (typeof j.text === 'string') {\n  // Cloud / string case: parse the JSON string\n  const s = j.text.replace(/```json\\s*/gi, '').replace(/```/g, '').trim();\n  obj = JSON.parse(s.slice(s.indexOf('{'), s.lastIndexOf('}') + 1));\n} else {\n  obj = j;                       // self-host case: already a parsed object\n}\nif (!obj.output) obj = { output: obj };   // force consistent {output:{…}} shape\nreturn { json: obj };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        0
+      ],
+      "id": "1815aefd-c2e6-4b7d-9b4d-f8c8d1277115",
+      "name": "Normalize Final"
     }
   ],
   "pinData": {},
   "connections": {
-    "Structured Output Parser": {
-      "ai_outputParser": [
-        [
-          {
-            "node": "Basic LLM Chain",
-            "type": "ai_outputParser",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "OpenAI Chat Model": {
       "ai_languageModel": [
         [
@@ -497,7 +430,7 @@
       "main": [
         [
           {
-            "node": "Basic LLM Chain1",
+            "node": "Normalize Draft",
             "type": "main",
             "index": 0
           }
@@ -510,17 +443,6 @@
           {
             "node": "Basic LLM Chain1",
             "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Structured Output Parser1": {
-      "ai_outputParser": [
-        [
-          {
-            "node": "Basic LLM Chain1",
-            "type": "ai_outputParser",
             "index": 0
           }
         ]
@@ -541,7 +463,7 @@
       "main": [
         [
           {
-            "node": "Send message and wait for response",
+            "node": "Normalize Final",
             "type": "main",
             "index": 0
           }
@@ -581,33 +503,33 @@
         ]
       ]
     },
-    "OpenAI Chat Model2": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Structured Output Parser",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "OpenAI Chat Model3": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Structured Output Parser1",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Schedule Trigger": {
       "main": [
         [
           {
             "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Draft": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Final": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response",
             "type": "main",
             "index": 0
           }
