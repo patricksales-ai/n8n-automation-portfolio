@@ -55,9 +55,10 @@ patching records by hand.
 ## What it does
 
 ### Lane 1 — CRM Enrichment & Scoring Agent
-- **Pulls a batch** of HubSpot contacts (`Get Many` / `Search`), skipping any already
-  marked `ai_enriched` — a **Filter** node makes re-runs idempotent, so no AI spend is
-  wasted re-processing done records.
+- **Pulls a batch** of HubSpot contacts via the CRM v3 REST API
+  (`GET /crm/v3/objects/contacts`, authed by a scoped private-app token), skipping any
+  already marked `ai_enriched` — a **Filter** node makes re-runs idempotent, so no AI
+  spend is wasted re-processing done records.
 - **Loops one contact at a time** (batch size 1) so each AI reference resolves cleanly.
 - **One LLM call per contact** (Information Extractor, gpt-4o-mini) returns a typed
   schema: normalised name, `company_name`, `company_domain`, `industry`, `seniority`,
@@ -95,7 +96,7 @@ patching records by hand.
 
 ```
 LANE 1 — ENRICHMENT (scheduled)
-Schedule / Manual → HubSpot Get Many → Filter (skip ai_enriched)
+Schedule → HubSpot REST API (GET contacts) → Split Out → Filter (skip ai_enriched)
   → Loop (batch 1) → Normalize → Information Extractor (gpt-4o-mini)
       → HubSpot write-back (REST) → back to loop
   → (done) → aggregate → Slack report
@@ -144,7 +145,7 @@ directly in HubSpot, followed by a Slack summary of the run.
 
 - **Orchestration:** n8n
 - **LLM:** OpenAI gpt-4o-mini / gpt-4o (Information Extractor + Basic LLM Chain)
-- **CRM:** HubSpot (native OAuth2 node + REST write-back via Header Auth)
+- **CRM:** HubSpot CRM v3 REST API — read + write over a scoped private-app token (Header Auth)
 - **Interfaces:** Gmail (inbound + auto-reply) · Slack (alerts)
 
 ---
@@ -177,8 +178,8 @@ directly in HubSpot, followed by a Slack summary of the run.
 - **Idempotent by design** — the `ai_enriched` filter and the email upsert mean re-runs
   never re-spend on done contacts or create duplicate leads.
 - **One engine, two lanes** — the same enrich-and-score logic serves both scheduled
-  cleanup and live inbound, and it's HubSpot-native, so every improvement is permanent
-  and actionable, not a throwaway report.
+  cleanup and live inbound, and it writes straight into HubSpot, so every improvement is
+  permanent and actionable, not a throwaway report.
 
 ---
 
