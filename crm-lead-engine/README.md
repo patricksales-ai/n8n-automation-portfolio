@@ -111,6 +111,10 @@ Gmail Trigger → Get a message (full body) → Lead Qualifier (gate + extract)
           └ cold → label triaged  ┘→ Slack (no reply)
 ```
 
+**Enrichment agent — n8n canvas:**
+
+![Enrichment agent architecture](docs/enrichment-architecture.png)
+
 ---
 
 ## Demo
