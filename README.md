@@ -12,6 +12,7 @@ walkthrough. Click any project below.
 
 | Project | The problem it solves | Stack |
 |---------|-----------------------|-------|
+| [ai-voice-front-desk](./ai-voice-front-desk/) | **A receptionist that answers the phone.** Handles inbound calls by voice — qualifies, **books mid-call** with round-robin across staff + an availability guard (no double-booking), confirms + SMSes, and **transfers to a human** on request. Also runs **outbound**, dialing a lead list with a personalized pitch. | Twilio · n8n · GPT-4o-mini · Google Calendar · Sheets |
 | [mcp-personal-assistant](./mcp-personal-assistant/) | **Scattered daily tasks → one chat.** A single agent reaches calendar, email, sheets, notes, web search, and math over MCP — picking the right tool itself, gating irreversible actions. | MCP · GPT-4o-mini · Supabase · n8n |
 | [competitor-intelligence](./competitor-intelligence/) | **Replaces a $100s/mo SaaS.** Tracks competitors daily, uses AI to surface *only what changed* (hash-diff keeps it cents/day), and ships a sectioned weekly brief + a RAG chat — across 3 businesses. | n8n · OpenAI · Supabase/pgvector · Slack |
 | [whatsapp-lead-qualifier](./whatsapp-lead-qualifier/) | **No inbound lead goes cold.** Answers WhatsApp leads instantly 24/7, runs a full BANT qualification, saves state per phone (resumable), then routes hot leads to a booking link + Slack alert. | n8n · OpenAI · Supabase · WhatsApp · Slack |
