@@ -71,6 +71,22 @@ Sheets.
 
 ---
 
+## Workflow canvases
+
+**Inbound Greeting** — answers the call and hands off to the agent.
+![Inbound Greeting workflow](docs/inbound-greeting-canvas.png)
+
+**AI Voice Agent** — the brain: OpenAI chat + per-call memory + the `book_appointment` tool, with an `If` branch that routes "talk to a human" to a `<Dial>` transfer.
+![AI Voice Agent workflow](docs/voice-agent-canvas.png)
+
+**Smart Booking** — round-robin across three stylists, per-calendar availability check, create event → log row → SMS → respond.
+![Smart Booking workflow](docs/smart-booking-canvas.png)
+
+**Outbound SDR Dialer** — reads a lead sheet and places a personalized outbound call to each lead.
+![Outbound SDR Dialer workflow](docs/outbound-dialer-canvas.png)
+
+---
+
 ## Notes
 
 - Phone numbers, host URLs, calendar IDs, and credentials in the JSON are placeholders or
