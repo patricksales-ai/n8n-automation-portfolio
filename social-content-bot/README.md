@@ -18,6 +18,9 @@ Build 5 of a six-build AI automation portfolio.
 
 ---
 
+> 📖 **[WALKTHROUGH.md](WALKTHROUGH.md)** explains every node, step by step.
+
+
 ## Why this exists
 
 **The problem —** posting consistently across platforms is a grind, and naive

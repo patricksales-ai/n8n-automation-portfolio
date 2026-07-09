@@ -25,6 +25,9 @@ your team already lives in**, so it's permanent and actionable, not a throwaway 
 
 ---
 
+> 📖 **[WALKTHROUGH.md](WALKTHROUGH.md)** explains every node, step by step.
+
+
 ## Why this exists
 
 **The problem —** CRMs rot. Contacts arrive half-filled (`john` / blank company /

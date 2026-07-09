@@ -19,6 +19,9 @@ Build 6 of a six-build AI automation portfolio.
 
 ---
 
+> 📖 **[WALKTHROUGH.md](WALKTHROUGH.md)** explains every node, step by step.
+
+
 ## Why this exists
 
 **The problem —** a busy inbox is mostly noise with a few things that genuinely

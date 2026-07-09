@@ -12,6 +12,9 @@ caller asks for one.
 
 ---
 
+> 📖 **[WALKTHROUGH.md](WALKTHROUGH.md)** explains every node, step by step.
+
+
 ## What it does
 
 **📞 Inbound receptionist**
