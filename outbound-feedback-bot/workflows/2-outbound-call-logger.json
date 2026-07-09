@@ -1,6 +1,6 @@
 [
   {
-    "updatedAt": "2026-07-09T19:38:41.368Z",
+    "updatedAt": "2026-07-09T23:06:06.062Z",
     "createdAt": "2026-07-08T20:50:03.906Z",
     "id": "VAg5Nbnmg9zsk2sl",
     "name": "Outbound Call Logger",
@@ -632,7 +632,7 @@
     "nodeGroups": [],
     "pinData": {},
     "versionId": "3d12aa89-c676-4532-b2e8-52df55b7531b",
-    "activeVersionId": "7354dd2a-f7c5-4430-b7f2-5e95dea9aa2a",
+    "activeVersionId": "3d12aa89-c676-4532-b2e8-52df55b7531b",
     "versionCounter": 80,
     "triggerCount": 1,
     "sourceWorkflowId": null,
@@ -658,8 +658,8 @@
       }
     ],
     "versionMetadata": {
-      "name": null,
-      "description": null
+      "name": "Version 3d12aa89",
+      "description": ""
     }
   }
 ]

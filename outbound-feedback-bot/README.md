@@ -12,6 +12,17 @@ turned into structured CRM-ready data with zero manual data entry.
 
 ---
 
+## 🎥 Demo
+
+▶️ **[Watch the full demo video](https://drive.google.com/file/d/1zs89DLm53nAEuO-oRIiN5A0JykVwTk0u/view?usp=sharing)** — the bot dials a real number, greets the customer by name, qualifies the lead, logs it, emails the summary, and honors an opt-out.
+
+Sample call recordings (real calls, clean Vapi audio):
+
+- 🎧 [Qualify call — hot lead](docs/demo-qualify-call.wav) — greets "Arvie" by name, captures a hot opportunity (500 t-shirts, $2,000, next quarter, Sydney).
+- 🎧 [Opt-out call](docs/demo-optout-call.wav) — customer asks to be removed → auto-added to the Do-Not-Call list → skipped on the next run.
+
+---
+
 ## What it does
 
 **📞 Places the call**

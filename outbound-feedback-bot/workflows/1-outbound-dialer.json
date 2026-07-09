@@ -1,6 +1,6 @@
 [
   {
-    "updatedAt": "2026-07-09T19:35:17.174Z",
+    "updatedAt": "2026-07-09T22:35:34.090Z",
     "createdAt": "2026-07-09T14:51:51.420Z",
     "id": "Kfp06BQZGbAqIojQ",
     "name": "Outbound Feedback Bot — Dialer",
@@ -97,6 +97,7 @@
         ],
         "id": "22ed1199-d53c-4aba-9dd7-a304adec3b44",
         "name": "Get DNC",
+        "alwaysOutputData": true,
         "credentials": {
           "googleSheetsOAuth2Api": {
             "id": "yMqkk4M0kF50KIC0",
@@ -206,9 +207,9 @@
     },
     "nodeGroups": [],
     "pinData": {},
-    "versionId": "6c7c81ce-e45e-4d55-8a62-d591b91bae2b",
+    "versionId": "cc15dc5a-c80e-46db-9977-596d55bb5607",
     "activeVersionId": null,
-    "versionCounter": 37,
+    "versionCounter": 38,
     "triggerCount": 0,
     "sourceWorkflowId": null,
     "tags": [],
