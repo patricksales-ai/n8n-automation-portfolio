@@ -72,6 +72,14 @@ Two n8n workflows, cleanly split by job:
 
 See **[WALKTHROUGH.md](WALKTHROUGH.md)** for a node-by-node explanation of both.
 
+**Workflow 1 — Outbound Dialer**
+
+![Outbound Dialer workflow](docs/dialer-canvas.png)
+
+**Workflow 2 — Outbound Call Logger**
+
+![Outbound Call Logger workflow](docs/logger-canvas.png)
+
 ## Stack
 
 | Layer | Tool |
