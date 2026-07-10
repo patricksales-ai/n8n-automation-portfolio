@@ -3,6 +3,86 @@
   "nodes": [
     {
       "parameters": {
+        "content": "## Schedule",
+        "height": 479,
+        "width": 222,
+        "color": 5
+      },
+      "id": "02b1d6e2-991b-401e-b2c8-acd5130c37d1",
+      "name": "Sticky · Schedule",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -111
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Get idea\nNext idea from the sheet.",
+        "height": 479,
+        "width": 361,
+        "color": 2
+      },
+      "id": "2f2ca93d-2ff0-437a-8a21-504615766aa7",
+      "name": "Sticky · Get idea",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        162,
+        -111
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Draft + self-critique\nTwo LLM passes — write, then refine for quality.",
+        "height": 479,
+        "width": 628,
+        "color": 3
+      },
+      "id": "e00e19b8-7f64-4d7c-b1a5-d2499499343d",
+      "name": "Sticky · Draft + self-critique",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        523,
+        -111
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Human gate\nSlack Approve / Decline before anything is posted.",
+        "height": 479,
+        "width": 607,
+        "color": 6
+      },
+      "id": "725e5b6d-0c18-43bc-a30b-a6f776600d76",
+      "name": "Sticky · Human gate",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1151,
+        -111
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish + log\nAyrshare posts it, then the live link is written back to the sheet.",
+        "height": 479,
+        "width": 449,
+        "color": 7
+      },
+      "id": "c2cd4c4e-9aa3-4480-b439-fce96f760005",
+      "name": "Sticky · Publish + log",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1758,
+        -111
+      ]
+    },
+    {
+      "parameters": {
         "promptType": "define",
         "text": "=Turn the idea below into platform-tailored posts.\n\nIdea: {{ $json.idea }}",
         "messages": {

@@ -3,6 +3,70 @@
   "nodes": [
     {
       "parameters": {
+        "content": "## Daily schedule",
+        "height": 655,
+        "width": 547,
+        "color": 5
+      },
+      "id": "0aaecad9-5a51-4e7f-8d0f-a7845ea5e7da",
+      "name": "Sticky · Daily schedule",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        212,
+        -383
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Pull & clean contacts\nFetch HubSpot contacts, split, filter, normalize.",
+        "height": 655,
+        "width": 869,
+        "color": 2
+      },
+      "id": "a0039048-e151-436e-9a26-94ba8fc63962",
+      "name": "Sticky · Pull & clean contacts",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        759,
+        -383
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Enrich + score\nInfer company / seniority / segment from what's already there; score data quality.",
+        "height": 655,
+        "width": 575,
+        "color": 3
+      },
+      "id": "1c4dbb1c-e00a-43fe-bfbe-23e4ef9070c5",
+      "name": "Sticky · Enrich + score",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1628,
+        -383
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Write back\nUpdate HubSpot + Slack digest.",
+        "height": 655,
+        "width": 388,
+        "color": 7
+      },
+      "id": "a61655c6-1f19-4f2c-81fa-de3719043987",
+      "name": "Sticky · Write back",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2203,
+        -383
+      ]
+    },
+    {
+      "parameters": {
         "options": {}
       },
       "type": "n8n-nodes-base.splitInBatches",

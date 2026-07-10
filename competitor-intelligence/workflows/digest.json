@@ -3,6 +3,70 @@
   "nodes": [
     {
       "parameters": {
+        "content": "## Weekly schedule",
+        "height": 559,
+        "width": 274,
+        "color": 5
+      },
+      "id": "c5e688e2-6bc3-46bc-8e22-7d1803f76e2e",
+      "name": "Sticky · Weekly schedule",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -191
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Gather the week\nPull the week's changes and aggregate.",
+        "height": 559,
+        "width": 296,
+        "color": 2
+      },
+      "id": "ef02c5bc-c6a8-40f8-af3a-86b0b4f9d547",
+      "name": "Sticky · Gather the week",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        214,
+        -191
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Write the brief\nSectioned weekly summary.",
+        "height": 559,
+        "width": 324,
+        "color": 3
+      },
+      "id": "201a25d8-5d2b-46c1-a9a3-e9606e334b0a",
+      "name": "Sticky · Write the brief",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        510,
+        -191
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Deliver\nEmail + Slack.",
+        "height": 559,
+        "width": 301,
+        "color": 7
+      },
+      "id": "0e4476d9-932b-468e-8e9f-218ff6b02325",
+      "name": "Sticky · Deliver",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        834,
+        -191
+      ]
+    },
+    {
+      "parameters": {
         "rule": {
           "interval": [
             {

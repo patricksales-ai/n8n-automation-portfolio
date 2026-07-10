@@ -1,1 +1,195 @@
-[{"updatedAt":"2026-07-07T03:37:30.000Z","createdAt":"2026-07-05T02:10:52.334Z","id":"hDyutsWxAvSEaAgL","name":"VFD — Outbound Call (Twilio)","description":null,"active":false,"isArchived":false,"nodes":[{"parameters":{},"type":"n8n-nodes-base.manualTrigger","typeVersion":1,"position":[0,0],"id":"98262b37-bb85-40e7-a7c3-edb332ff89d3","name":"When clicking ‘Execute workflow’"},{"parameters":{"resource":"call","from":"+18312783515","to":"={{ String($json.Phone).startsWith('+') ? String($json.Phone) : '+' + String($json.Phone) }}","twiml":true,"message":"=<Response>\n  <Say voice=\"Polly.Joanna\">Hi {{ $json.Name }}, this is Bella from Glow Salon. We have a few openings this week — would you like to book a haircut or a styling appointment?</Say>\n  <Gather input=\"speech\" action=\"https://YOUR_N8N_HOST/webhook/voice-respond\" method=\"POST\" speechTimeout=\"auto\"/>\n  <Say voice=\"Polly.Joanna\">No problem, we'll reach out another time. Goodbye.</Say>\n</Response>","options":{}},"type":"n8n-nodes-base.twilio","typeVersion":1,"position":[416,0],"id":"87340fbd-9183-431d-895d-717a1b567791","name":"Make a call","credentials":{"twilioApi":{"id":"ikZGrC1P6M9xYG6B","name":"Twilio account"}}},{"parameters":{"documentId":{"__rl":true,"value":"1o9x6hsC-Y-5gaySb0VDd7QDJNe_oEAZY9-7h_FdjDXM","mode":"list","cachedResultName":"VFD Leads","cachedResultUrl":"https://docs.google.com/spreadsheets/d/1o9x6hsC-Y-5gaySb0VDd7QDJNe_oEAZY9-7h_FdjDXM/edit?usp=drivesdk"},"sheetName":{"__rl":true,"value":"gid=0","mode":"list","cachedResultName":"Sheet1","cachedResultUrl":"https://docs.google.com/spreadsheets/d/1o9x6hsC-Y-5gaySb0VDd7QDJNe_oEAZY9-7h_FdjDXM/edit#gid=0"},"options":{}},"type":"n8n-nodes-base.googleSheets","typeVersion":4.7,"position":[208,0],"id":"4e03e9b5-a7b9-429a-808f-f944a4590599","name":"Get row(s) in sheet","credentials":{"googleSheetsOAuth2Api":{"id":"yMqkk4M0kF50KIC0","name":"Google Sheets account"}}}],"connections":{"When clicking ‘Execute workflow’":{"main":[[{"node":"Get row(s) in sheet","type":"main","index":0}]]},"Get row(s) in sheet":{"main":[[{"node":"Make a call","type":"main","index":0}]]}},"settings":{"executionOrder":"v1","binaryMode":"separate","availableInMCP":false},"staticData":null,"meta":{"templateCredsSetupCompleted":true,"instanceId":"62723e8c0c4d2def90d739da45e03a3a859e153db925b2a728b12b118a53e7e2"},"nodeGroups":[],"pinData":{},"versionId":"de8c1862-12db-4e34-9660-8010c5a12139","activeVersionId":null,"versionCounter":12,"triggerCount":0,"sourceWorkflowId":null,"tags":[],"shared":[{"updatedAt":"2026-07-05T02:10:52.336Z","createdAt":"2026-07-05T02:10:52.336Z","role":"workflow:owner","workflowId":"hDyutsWxAvSEaAgL","projectId":"PlPV7NzkP8IUO5iX","project":{"updatedAt":"2026-07-05T01:59:27.501Z","createdAt":"2026-07-05T01:57:50.631Z","id":"PlPV7NzkP8IUO5iX","name":"Patrick Sales <fatquicksales0022@gmail.com>","type":"personal","icon":null,"description":null,"customTelemetryTags":[],"creatorId":"915728a1-cf61-4d3a-b6be-54603facefe9"}}],"versionMetadata":{"name":null,"description":null}}]
+[
+  {
+    "updatedAt": "2026-07-07T03:37:30.000Z",
+    "createdAt": "2026-07-05T02:10:52.334Z",
+    "id": "hDyutsWxAvSEaAgL",
+    "name": "VFD — Outbound Call (Twilio)",
+    "description": null,
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "content": "## Start dial\nManual / scheduled kick-off.",
+          "height": 255,
+          "width": 222,
+          "color": 5
+        },
+        "id": "b6743fad-0ba9-4982-b497-0964d5e64665",
+        "name": "Sticky · Start dial",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -60,
+          -95
+        ]
+      },
+      {
+        "parameters": {
+          "content": "## Lead list\nPulls the next lead from the sheet.",
+          "height": 255,
+          "width": 208,
+          "color": 2
+        },
+        "id": "26b4c6d0-fa23-4ba3-8172-2e3fc8617c0e",
+        "name": "Sticky · Lead list",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          162,
+          -95
+        ]
+      },
+      {
+        "parameters": {
+          "content": "## Place the call\nTwilio dials the lead with a personalized pitch.",
+          "height": 255,
+          "width": 221,
+          "color": 7
+        },
+        "id": "ef6e3b2a-cbc4-4dea-8aa1-dc055998bb71",
+        "name": "Sticky · Place the call",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          370,
+          -95
+        ]
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "98262b37-bb85-40e7-a7c3-edb332ff89d3",
+        "name": "When clicking ‘Execute workflow’"
+      },
+      {
+        "parameters": {
+          "resource": "call",
+          "from": "+18312783515",
+          "to": "={{ String($json.Phone).startsWith('+') ? String($json.Phone) : '+' + String($json.Phone) }}",
+          "twiml": true,
+          "message": "=<Response>\n  <Say voice=\"Polly.Joanna\">Hi {{ $json.Name }}, this is Bella from Glow Salon. We have a few openings this week — would you like to book a haircut or a styling appointment?</Say>\n  <Gather input=\"speech\" action=\"https://YOUR_N8N_HOST/webhook/voice-respond\" method=\"POST\" speechTimeout=\"auto\"/>\n  <Say voice=\"Polly.Joanna\">No problem, we'll reach out another time. Goodbye.</Say>\n</Response>",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.twilio",
+        "typeVersion": 1,
+        "position": [
+          416,
+          0
+        ],
+        "id": "87340fbd-9183-431d-895d-717a1b567791",
+        "name": "Make a call",
+        "credentials": {
+          "twilioApi": {
+            "id": "ikZGrC1P6M9xYG6B",
+            "name": "Twilio account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1o9x6hsC-Y-5gaySb0VDd7QDJNe_oEAZY9-7h_FdjDXM",
+            "mode": "list",
+            "cachedResultName": "VFD Leads",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1o9x6hsC-Y-5gaySb0VDd7QDJNe_oEAZY9-7h_FdjDXM/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Sheet1",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1o9x6hsC-Y-5gaySb0VDd7QDJNe_oEAZY9-7h_FdjDXM/edit#gid=0"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          208,
+          0
+        ],
+        "id": "4e03e9b5-a7b9-429a-808f-f944a4590599",
+        "name": "Get row(s) in sheet",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "yMqkk4M0kF50KIC0",
+            "name": "Google Sheets account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "When clicking ‘Execute workflow’": {
+        "main": [
+          [
+            {
+              "node": "Get row(s) in sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get row(s) in sheet": {
+        "main": [
+          [
+            {
+              "node": "Make a call",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "binaryMode": "separate",
+      "availableInMCP": false
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true,
+      "instanceId": "62723e8c0c4d2def90d739da45e03a3a859e153db925b2a728b12b118a53e7e2"
+    },
+    "nodeGroups": [],
+    "pinData": {},
+    "versionId": "de8c1862-12db-4e34-9660-8010c5a12139",
+    "activeVersionId": null,
+    "versionCounter": 12,
+    "triggerCount": 0,
+    "sourceWorkflowId": null,
+    "tags": [],
+    "shared": [
+      {
+        "updatedAt": "2026-07-05T02:10:52.336Z",
+        "createdAt": "2026-07-05T02:10:52.336Z",
+        "role": "workflow:owner",
+        "workflowId": "hDyutsWxAvSEaAgL",
+        "projectId": "PlPV7NzkP8IUO5iX",
+        "project": {
+          "updatedAt": "2026-07-05T01:59:27.501Z",
+          "createdAt": "2026-07-05T01:57:50.631Z",
+          "id": "PlPV7NzkP8IUO5iX",
+          "name": "Patrick Sales <fatquicksales0022@gmail.com>",
+          "type": "personal",
+          "icon": null,
+          "description": null,
+          "customTelemetryTags": [],
+          "creatorId": "915728a1-cf61-4d3a-b6be-54603facefe9"
+        }
+      }
+    ],
+    "versionMetadata": {
+      "name": null,
+      "description": null
+    }
+  }
+]

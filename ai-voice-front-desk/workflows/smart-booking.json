@@ -1,1 +1,583 @@
-[{"updatedAt":"2026-07-06T19:37:33.389Z","createdAt":"2026-07-06T14:50:07.295Z","id":"rexrmJrzLfo9t6yJ","name":"VFD — Smart Booking","description":null,"active":true,"isArchived":false,"nodes":[{"parameters":{"documentId":{"__rl":true,"value":"1IFAdgceqZFeIzZH1QR_CpoWiFl2GBnXVn96PPLEbGZA","mode":"list","cachedResultName":"VFD Bookings","cachedResultUrl":"https://docs.google.com/spreadsheets/d/1IFAdgceqZFeIzZH1QR_CpoWiFl2GBnXVn96PPLEbGZA/edit?usp=drivesdk"},"sheetName":{"__rl":true,"value":"gid=0","mode":"list","cachedResultName":"Sheet1","cachedResultUrl":"https://docs.google.com/spreadsheets/d/1IFAdgceqZFeIzZH1QR_CpoWiFl2GBnXVn96PPLEbGZA/edit#gid=0"},"options":{}},"type":"n8n-nodes-base.googleSheets","typeVersion":4.7,"position":[-1488,16],"id":"3e77990f-c9a6-49ce-a83b-34b447d4a45a","name":"Get Rows","alwaysOutputData":true,"credentials":{"googleSheetsOAuth2Api":{"id":"yMqkk4M0kF50KIC0","name":"Google Sheets account"}}},{"parameters":{"calendar":{"__rl":true,"value":"={{ $('Pick First Free').item.json.calendarId }}","mode":"id"},"start":"={{ $('Pick First Free').item.json.startTime }}","end":"={{ $('Pick First Free').item.json.endTime }}","additionalFields":{"summary":"={{ $('Pick First Free').item.json.service }} - {{ $('Pick First Free').item.json.name }}"}},"type":"n8n-nodes-base.googleCalendar","typeVersion":1.3,"position":[-320,-192],"id":"4c128a33-ba40-4b64-a4f5-7c77a47a36ec","name":"Create an event","credentials":{"googleCalendarOAuth2Api":{"id":"cbpTHgNL1Qh9uhoP","name":"Google Calendar account Local"}}},{"parameters":{"operation":"append","documentId":{"__rl":true,"value":"1IFAdgceqZFeIzZH1QR_CpoWiFl2GBnXVn96PPLEbGZA","mode":"list","cachedResultName":"VFD Bookings","cachedResultUrl":"https://docs.google.com/spreadsheets/d/1IFAdgceqZFeIzZH1QR_CpoWiFl2GBnXVn96PPLEbGZA/edit?usp=drivesdk"},"sheetName":{"__rl":true,"value":"gid=0","mode":"list","cachedResultName":"Sheet1","cachedResultUrl":"https://docs.google.com/spreadsheets/d/1IFAdgceqZFeIzZH1QR_CpoWiFl2GBnXVn96PPLEbGZA/edit#gid=0"},"columns":{"mappingMode":"defineBelow","value":{"Timestamp":"={{$now}}","Name":"={{ $('Pick First Free').item.json.name }}","Service":"={{ $('Pick First Free').item.json.service }}","Stylist":"={{ $('Pick First Free').item.json.stylistName }}","StartTime":"={{ $('Pick First Free').item.json.startTime }}","CalendarID":"={{ $('Pick First Free').item.json.calendarId }}"},"matchingColumns":[],"schema":[{"id":"Timestamp","displayName":"Timestamp","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"Name","displayName":"Name","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"Service","displayName":"Service","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"Stylist","displayName":"Stylist","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"StartTime","displayName":"StartTime","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true},{"id":"CalendarID","displayName":"CalendarID","required":false,"defaultMatch":false,"display":true,"type":"string","canBeUsedToMatch":true}],"attemptToConvertTypes":false,"convertFieldsToString":false},"options":{}},"type":"n8n-nodes-base.googleSheets","typeVersion":4.7,"position":[-160,-192],"id":"fdec3824-fc33-414f-a23c-7cf1250caebb","name":"Append row in sheet","credentials":{"googleSheetsOAuth2Api":{"id":"yMqkk4M0kF50KIC0","name":"Google Sheets account"}}},{"parameters":{"assignments":{"assignments":[{"id":"bb6f439d-d035-4ab1-9b08-62a0604bcb0b","name":"response","value":"=Booked {{ $('Pick First Free').item.json.service }} for {{ $('Pick First Free').item.json.name }} with {{ $('Pick First Free').item.json.stylistName }}.","type":"string"}]},"options":{}},"type":"n8n-nodes-base.set","typeVersion":3.4,"position":[16,-192],"id":"687a90d1-4695-40b5-9aae-95732dd93b2b","name":"Confirmation"},{"parameters":{"resource":"calendar","calendar":{"__rl":true,"value":"={{ $json.calendarId }}","mode":"id"},"timeMin":"={{ $json.startTime }}","timeMax":"={{ $json.endTime }}","options":{}},"type":"n8n-nodes-base.googleCalendar","typeVersion":1.3,"position":[-1008,16],"id":"a7e8fef4-ba1c-48bc-808b-853215a093fc","name":"Get availability in a calendar","credentials":{"googleCalendarOAuth2Api":{"id":"cbpTHgNL1Qh9uhoP","name":"Google Calendar account Local"}}},{"parameters":{"jsCode":"// Pick First Free — walk candidates in round-robin order, take the first FREE one.\nconst candidates = $('Build Candidates').all();  // 3 items in preference order\nconst checks     = $input.all();                 // Get Availability output, same order\n\nlet chosen = null;\nfor (let i = 0; i < candidates.length; i++) {\n  if (checks[i].json.available === true) { chosen = candidates[i].json; break; }\n}\n\nconst first = candidates[0].json;\n\nif (!chosen) {                                    // all three busy\n  return [{ json: {\n    booked: false,\n    response: 'Sorry, all our stylists are booked at that time. Could you try another time?',\n    name: first.name, service: first.service, startTime: first.startTime,\n  }}];\n}\n\nreturn [{ json: {                                 // a free stylist was found\n  booked: true,\n  stylistName: chosen.stylistName,\n  calendarId:  chosen.calendarId,\n  name:        chosen.name,\n  service:     chosen.service,\n  startTime:   chosen.startTime,\n  endTime:     chosen.endTime,\n}}];"},"type":"n8n-nodes-base.code","typeVersion":2,"position":[-720,16],"id":"9c01c426-3322-4538-a3a7-1a40f42956c1","name":"Pick First Free"},{"parameters":{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"strict","version":3},"conditions":[{"id":"d3ec5421-55b7-41a0-959d-1401d4e7f007","leftValue":"={{ $json.booked }}","rightValue":"","operator":{"type":"boolean","operation":"true","singleValue":true}}],"combinator":"and"},"options":{}},"type":"n8n-nodes-base.if","typeVersion":2.3,"position":[-512,16],"id":"2554ffc9-c8ae-492f-a360-a703a189e48e","name":"If"},{"parameters":{"from":"+18312783515","to":"={{ $('Booking Webhook').first().json.body.phone }}","message":"=Hi {{ $('Pick First Free').item.json.name }}, your {{ $('Pick First Free').item.json.service }} is booked for {{ DateTime.fromISO($('Pick First Free').item.json.startTime).toFormat('MMM d, h:mm a') }} with {{ $('Pick First Free').item.json.stylistName }}. See you then!","options":{}},"type":"n8n-nodes-base.twilio","typeVersion":1,"position":[224,-192],"id":"563d72f7-3bba-4ef7-8ad1-2ab6a8149436","name":"Send an SMS/MMS/WhatsApp message","credentials":{"twilioApi":{"id":"ikZGrC1P6M9xYG6B","name":"Twilio account"}},"onError":"continueRegularOutput"},{"parameters":{"jsCode":"// Build Candidates — round-robin order, reading booking details from the webhook body.\nconst body = $('Booking Webhook').first().json.body;\nconst name = body.name;\nconst service = body.service;\n\nconst start   = DateTime.fromISO(body.startTime, { zone: 'Asia/Manila' });\nconst startISO = start.toISO();\nconst endISO   = start.plus({ minutes: 30 }).toISO();\n\nconst realRows = $input.all().filter(i => i.json && i.json.Name);\nconst idx = realRows.length % 3;\n\nconst stylists = [\n  { stylistName: 'Stylist A', calendarId: 'bdd7ff6246bda16dc8858e022cbd22ce43fb2bcf5934c69fd298c25e08d392dc@group.calendar.google.com' },\n  { stylistName: 'Stylist B', calendarId: 'bb0915931df59c658f62a1cd22d7906ad0fe1fcddc5a10a27abd39514214ccb8@group.calendar.google.com' },\n  { stylistName: 'Stylist C', calendarId: '3b5a30cfd028461b373be9a685b1e255b0898de55d3b227b85053c3c7655dab7@group.calendar.google.com' },\n];\n\nreturn [0, 1, 2].map((offset) => {\n  const s = stylists[(idx + offset) % 3];\n  return {\n    json: {\n      preference: offset, stylistName: s.stylistName, calendarId: s.calendarId,\n      name, service, startTime: startISO, endTime: endISO,\n    },\n  };\n});"},"type":"n8n-nodes-base.code","typeVersion":2,"position":[-1248,16],"id":"87440a07-8a7f-495b-8160-36cd32787d5f","name":"Build Candidates"},{"parameters":{"httpMethod":"POST","path":"vfd-book","responseMode":"responseNode","options":{}},"type":"n8n-nodes-base.webhook","typeVersion":2.1,"position":[-1712,16],"id":"a71cc70a-30e2-4f52-be25-5f2f490b3cb8","name":"Booking Webhook","webhookId":"eb352c93-f30a-46a3-8e22-cc58c66f55e3"},{"parameters":{"respondWith":"text","responseBody":"={{ $('Confirmation').item.json.response }}","options":{}},"type":"n8n-nodes-base.respondToWebhook","typeVersion":1.5,"position":[432,-192],"id":"7ffd32fc-0ebd-4373-8d25-c234a065eab8","name":"Respond to Webhook"},{"parameters":{"respondWith":"text","responseBody":"={{ $json.response }}","options":{}},"type":"n8n-nodes-base.respondToWebhook","typeVersion":1.5,"position":[-304,112],"id":"41ef8672-46fd-4cc0-9ac3-08f6dd59c1cf","name":"Respond to Webhook1"}],"connections":{"Get Rows":{"main":[[{"node":"Build Candidates","type":"main","index":0}]]},"Create an event":{"main":[[{"node":"Append row in sheet","type":"main","index":0}]]},"Append row in sheet":{"main":[[{"node":"Confirmation","type":"main","index":0}]]},"Get availability in a calendar":{"main":[[{"node":"Pick First Free","type":"main","index":0}]]},"Pick First Free":{"main":[[{"node":"If","type":"main","index":0}]]},"If":{"main":[[{"node":"Create an event","type":"main","index":0}],[{"node":"Respond to Webhook1","type":"main","index":0}]]},"Confirmation":{"main":[[{"node":"Send an SMS/MMS/WhatsApp message","type":"main","index":0}]]},"Build Candidates":{"main":[[{"node":"Get availability in a calendar","type":"main","index":0}]]},"Booking Webhook":{"main":[[{"node":"Get Rows","type":"main","index":0}]]},"Send an SMS/MMS/WhatsApp message":{"main":[[{"node":"Respond to Webhook","type":"main","index":0}]]}},"settings":{"executionOrder":"v1","availableInMCP":false,"binaryMode":"separate"},"staticData":null,"meta":{"templateCredsSetupCompleted":true},"nodeGroups":[],"pinData":{},"versionId":"287bea6a-4839-45ab-b8df-260d68812528","activeVersionId":"287bea6a-4839-45ab-b8df-260d68812528","versionCounter":46,"triggerCount":1,"sourceWorkflowId":null,"tags":[],"shared":[{"updatedAt":"2026-07-06T14:50:07.300Z","createdAt":"2026-07-06T14:50:07.300Z","role":"workflow:owner","workflowId":"rexrmJrzLfo9t6yJ","projectId":"PlPV7NzkP8IUO5iX","project":{"updatedAt":"2026-07-05T01:59:27.501Z","createdAt":"2026-07-05T01:57:50.631Z","id":"PlPV7NzkP8IUO5iX","name":"Patrick Sales <fatquicksales0022@gmail.com>","type":"personal","icon":null,"description":null,"customTelemetryTags":[],"creatorId":"915728a1-cf61-4d3a-b6be-54603facefe9"}}],"versionMetadata":{"name":"Version 287bea6a","description":""}}]
+[
+  {
+    "updatedAt": "2026-07-06T19:37:33.389Z",
+    "createdAt": "2026-07-06T14:50:07.295Z",
+    "id": "rexrmJrzLfo9t6yJ",
+    "name": "VFD — Smart Booking",
+    "description": null,
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "content": "## Booking request\nCalled by the voice agent with the desired time.",
+          "height": 559,
+          "width": 416,
+          "color": 5
+        },
+        "id": "cc597b70-c979-4dea-87b2-59ce07098ef9",
+        "name": "Sticky · Booking request",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -1772,
+          -287
+        ]
+      },
+      {
+        "parameters": {
+          "content": "## Find a free slot\nRound-robin across staff + availability guard — no double-booking.",
+          "height": 559,
+          "width": 600,
+          "color": 2
+        },
+        "id": "03a7ed98-5874-4c48-a60f-b475d6f25285",
+        "name": "Sticky · Find a free slot",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -1356,
+          -287
+        ]
+      },
+      {
+        "parameters": {
+          "content": "## Slot free?",
+          "height": 559,
+          "width": 548,
+          "color": 6
+        },
+        "id": "5dcf68c4-8925-431e-aef5-a9ea0a049d4b",
+        "name": "Sticky · Slot free?",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -756,
+          -287
+        ]
+      },
+      {
+        "parameters": {
+          "content": "## Book & confirm\nCreates the event, logs it, and SMS-confirms the caller.",
+          "height": 559,
+          "width": 815,
+          "color": 7
+        },
+        "id": "5ce4fbf6-dcc1-488a-bfd9-aca271a36e02",
+        "name": "Sticky · Book & confirm",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -208,
+          -287
+        ]
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1IFAdgceqZFeIzZH1QR_CpoWiFl2GBnXVn96PPLEbGZA",
+            "mode": "list",
+            "cachedResultName": "VFD Bookings",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1IFAdgceqZFeIzZH1QR_CpoWiFl2GBnXVn96PPLEbGZA/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Sheet1",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1IFAdgceqZFeIzZH1QR_CpoWiFl2GBnXVn96PPLEbGZA/edit#gid=0"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          -1488,
+          16
+        ],
+        "id": "3e77990f-c9a6-49ce-a83b-34b447d4a45a",
+        "name": "Get Rows",
+        "alwaysOutputData": true,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "yMqkk4M0kF50KIC0",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "calendar": {
+            "__rl": true,
+            "value": "={{ $('Pick First Free').item.json.calendarId }}",
+            "mode": "id"
+          },
+          "start": "={{ $('Pick First Free').item.json.startTime }}",
+          "end": "={{ $('Pick First Free').item.json.endTime }}",
+          "additionalFields": {
+            "summary": "={{ $('Pick First Free').item.json.service }} - {{ $('Pick First Free').item.json.name }}"
+          }
+        },
+        "type": "n8n-nodes-base.googleCalendar",
+        "typeVersion": 1.3,
+        "position": [
+          -320,
+          -192
+        ],
+        "id": "4c128a33-ba40-4b64-a4f5-7c77a47a36ec",
+        "name": "Create an event",
+        "credentials": {
+          "googleCalendarOAuth2Api": {
+            "id": "cbpTHgNL1Qh9uhoP",
+            "name": "Google Calendar account Local"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1IFAdgceqZFeIzZH1QR_CpoWiFl2GBnXVn96PPLEbGZA",
+            "mode": "list",
+            "cachedResultName": "VFD Bookings",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1IFAdgceqZFeIzZH1QR_CpoWiFl2GBnXVn96PPLEbGZA/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Sheet1",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1IFAdgceqZFeIzZH1QR_CpoWiFl2GBnXVn96PPLEbGZA/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Timestamp": "={{$now}}",
+              "Name": "={{ $('Pick First Free').item.json.name }}",
+              "Service": "={{ $('Pick First Free').item.json.service }}",
+              "Stylist": "={{ $('Pick First Free').item.json.stylistName }}",
+              "StartTime": "={{ $('Pick First Free').item.json.startTime }}",
+              "CalendarID": "={{ $('Pick First Free').item.json.calendarId }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Timestamp",
+                "displayName": "Timestamp",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Name",
+                "displayName": "Name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Service",
+                "displayName": "Service",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Stylist",
+                "displayName": "Stylist",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "StartTime",
+                "displayName": "StartTime",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "CalendarID",
+                "displayName": "CalendarID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          -160,
+          -192
+        ],
+        "id": "fdec3824-fc33-414f-a23c-7cf1250caebb",
+        "name": "Append row in sheet",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "yMqkk4M0kF50KIC0",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "bb6f439d-d035-4ab1-9b08-62a0604bcb0b",
+                "name": "response",
+                "value": "=Booked {{ $('Pick First Free').item.json.service }} for {{ $('Pick First Free').item.json.name }} with {{ $('Pick First Free').item.json.stylistName }}.",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          16,
+          -192
+        ],
+        "id": "687a90d1-4695-40b5-9aae-95732dd93b2b",
+        "name": "Confirmation"
+      },
+      {
+        "parameters": {
+          "resource": "calendar",
+          "calendar": {
+            "__rl": true,
+            "value": "={{ $json.calendarId }}",
+            "mode": "id"
+          },
+          "timeMin": "={{ $json.startTime }}",
+          "timeMax": "={{ $json.endTime }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleCalendar",
+        "typeVersion": 1.3,
+        "position": [
+          -1008,
+          16
+        ],
+        "id": "a7e8fef4-ba1c-48bc-808b-853215a093fc",
+        "name": "Get availability in a calendar",
+        "credentials": {
+          "googleCalendarOAuth2Api": {
+            "id": "cbpTHgNL1Qh9uhoP",
+            "name": "Google Calendar account Local"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "// Pick First Free — walk candidates in round-robin order, take the first FREE one.\nconst candidates = $('Build Candidates').all();  // 3 items in preference order\nconst checks     = $input.all();                 // Get Availability output, same order\n\nlet chosen = null;\nfor (let i = 0; i < candidates.length; i++) {\n  if (checks[i].json.available === true) { chosen = candidates[i].json; break; }\n}\n\nconst first = candidates[0].json;\n\nif (!chosen) {                                    // all three busy\n  return [{ json: {\n    booked: false,\n    response: 'Sorry, all our stylists are booked at that time. Could you try another time?',\n    name: first.name, service: first.service, startTime: first.startTime,\n  }}];\n}\n\nreturn [{ json: {                                 // a free stylist was found\n  booked: true,\n  stylistName: chosen.stylistName,\n  calendarId:  chosen.calendarId,\n  name:        chosen.name,\n  service:     chosen.service,\n  startTime:   chosen.startTime,\n  endTime:     chosen.endTime,\n}}];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -720,
+          16
+        ],
+        "id": "9c01c426-3322-4538-a3a7-1a40f42956c1",
+        "name": "Pick First Free"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "d3ec5421-55b7-41a0-959d-1401d4e7f007",
+                "leftValue": "={{ $json.booked }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -512,
+          16
+        ],
+        "id": "2554ffc9-c8ae-492f-a360-a703a189e48e",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "from": "+18312783515",
+          "to": "={{ $('Booking Webhook').first().json.body.phone }}",
+          "message": "=Hi {{ $('Pick First Free').item.json.name }}, your {{ $('Pick First Free').item.json.service }} is booked for {{ DateTime.fromISO($('Pick First Free').item.json.startTime).toFormat('MMM d, h:mm a') }} with {{ $('Pick First Free').item.json.stylistName }}. See you then!",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.twilio",
+        "typeVersion": 1,
+        "position": [
+          224,
+          -192
+        ],
+        "id": "563d72f7-3bba-4ef7-8ad1-2ab6a8149436",
+        "name": "Send an SMS/MMS/WhatsApp message",
+        "credentials": {
+          "twilioApi": {
+            "id": "ikZGrC1P6M9xYG6B",
+            "name": "Twilio account"
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Build Candidates — round-robin order, reading booking details from the webhook body.\nconst body = $('Booking Webhook').first().json.body;\nconst name = body.name;\nconst service = body.service;\n\nconst start   = DateTime.fromISO(body.startTime, { zone: 'Asia/Manila' });\nconst startISO = start.toISO();\nconst endISO   = start.plus({ minutes: 30 }).toISO();\n\nconst realRows = $input.all().filter(i => i.json && i.json.Name);\nconst idx = realRows.length % 3;\n\nconst stylists = [\n  { stylistName: 'Stylist A', calendarId: 'bdd7ff6246bda16dc8858e022cbd22ce43fb2bcf5934c69fd298c25e08d392dc@group.calendar.google.com' },\n  { stylistName: 'Stylist B', calendarId: 'bb0915931df59c658f62a1cd22d7906ad0fe1fcddc5a10a27abd39514214ccb8@group.calendar.google.com' },\n  { stylistName: 'Stylist C', calendarId: '3b5a30cfd028461b373be9a685b1e255b0898de55d3b227b85053c3c7655dab7@group.calendar.google.com' },\n];\n\nreturn [0, 1, 2].map((offset) => {\n  const s = stylists[(idx + offset) % 3];\n  return {\n    json: {\n      preference: offset, stylistName: s.stylistName, calendarId: s.calendarId,\n      name, service, startTime: startISO, endTime: endISO,\n    },\n  };\n});"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -1248,
+          16
+        ],
+        "id": "87440a07-8a7f-495b-8160-36cd32787d5f",
+        "name": "Build Candidates"
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "vfd-book",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -1712,
+          16
+        ],
+        "id": "a71cc70a-30e2-4f52-be25-5f2f490b3cb8",
+        "name": "Booking Webhook",
+        "webhookId": "eb352c93-f30a-46a3-8e22-cc58c66f55e3"
+      },
+      {
+        "parameters": {
+          "respondWith": "text",
+          "responseBody": "={{ $('Confirmation').item.json.response }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          432,
+          -192
+        ],
+        "id": "7ffd32fc-0ebd-4373-8d25-c234a065eab8",
+        "name": "Respond to Webhook"
+      },
+      {
+        "parameters": {
+          "respondWith": "text",
+          "responseBody": "={{ $json.response }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          -304,
+          112
+        ],
+        "id": "41ef8672-46fd-4cc0-9ac3-08f6dd59c1cf",
+        "name": "Respond to Webhook1"
+      }
+    ],
+    "connections": {
+      "Get Rows": {
+        "main": [
+          [
+            {
+              "node": "Build Candidates",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create an event": {
+        "main": [
+          [
+            {
+              "node": "Append row in sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Append row in sheet": {
+        "main": [
+          [
+            {
+              "node": "Confirmation",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get availability in a calendar": {
+        "main": [
+          [
+            {
+              "node": "Pick First Free",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Pick First Free": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Create an event",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Respond to Webhook1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Confirmation": {
+        "main": [
+          [
+            {
+              "node": "Send an SMS/MMS/WhatsApp message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Build Candidates": {
+        "main": [
+          [
+            {
+              "node": "Get availability in a calendar",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Booking Webhook": {
+        "main": [
+          [
+            {
+              "node": "Get Rows",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send an SMS/MMS/WhatsApp message": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "availableInMCP": false,
+      "binaryMode": "separate"
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "nodeGroups": [],
+    "pinData": {},
+    "versionId": "287bea6a-4839-45ab-b8df-260d68812528",
+    "activeVersionId": "287bea6a-4839-45ab-b8df-260d68812528",
+    "versionCounter": 46,
+    "triggerCount": 1,
+    "sourceWorkflowId": null,
+    "tags": [],
+    "shared": [
+      {
+        "updatedAt": "2026-07-06T14:50:07.300Z",
+        "createdAt": "2026-07-06T14:50:07.300Z",
+        "role": "workflow:owner",
+        "workflowId": "rexrmJrzLfo9t6yJ",
+        "projectId": "PlPV7NzkP8IUO5iX",
+        "project": {
+          "updatedAt": "2026-07-05T01:59:27.501Z",
+          "createdAt": "2026-07-05T01:57:50.631Z",
+          "id": "PlPV7NzkP8IUO5iX",
+          "name": "Patrick Sales <fatquicksales0022@gmail.com>",
+          "type": "personal",
+          "icon": null,
+          "description": null,
+          "customTelemetryTags": [],
+          "creatorId": "915728a1-cf61-4d3a-b6be-54603facefe9"
+        }
+      }
+    ],
+    "versionMetadata": {
+      "name": "Version 287bea6a",
+      "description": ""
+    }
+  }
+]

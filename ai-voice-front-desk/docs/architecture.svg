@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 486" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#94a3b8"/>
+    </marker>
+    <style>
+      .box  { rx:9; ry:9; fill:#ffffff; stroke-width:2; }
+      .lbl  { font-size:13px; fill:#0f172a; font-weight:600; }
+      .sub  { font-size:11px; fill:#64748b; }
+      .lane { font-size:11px; fill:#94a3b8; font-weight:700; letter-spacing:.08em; }
+      .flow { stroke:#94a3b8; stroke-width:2; fill:none; }
+      .dash { stroke:#cbd5e1; stroke-width:2; fill:none; stroke-dasharray:5 4; }
+      .note { font-size:10.5px; fill:#94a3b8; font-style:italic; }
+    </style>
+  </defs>
+  <rect x="0" y="0" width="1140" height="486" fill="#f7f8fa"/>
+  <text x="30" y="40" font-size="22" font-weight="700" fill="#0f172a">AI Voice Front Desk</text>
+  <text x="30" y="62" font-size="13" fill="#64748b">Inbound calls answered by voice → qualify → book mid-call (round-robin + availability guard) → SMS confirm; human transfer; also outbound</text>
+  <text class="lane" x="30" y="96">INBOUND CALL</text>
+  <rect class="box" x="30" y="108" width="168" height="58" stroke="#f22f46"/>
+  <text class="lbl" x="45" y="133">Twilio inbound</text>
+  <text class="sub" x="45" y="151">greeting webhook</text>
+  <rect class="box" x="233" y="108" width="186" height="58" stroke="#10a37f"/>
+  <text class="lbl" x="248" y="133">AI voice agent</text>
+  <text class="sub" x="248" y="151">gpt-4o-mini + memory</text>
+  <rect class="box" x="454" y="108" width="150" height="58" stroke="#6b46c1"/>
+  <text class="lbl" x="469" y="133">Transfer?</text>
+  <text class="sub" x="469" y="151">If</text>
+  <rect class="box" x="639" y="108" width="200" height="58" stroke="#64748b"/>
+  <text class="lbl" x="654" y="133">Respond / transfer</text>
+  <text class="sub" x="654" y="151">TwiML · human handoff</text>
+  <path class="flow" d="M198,137 H233" marker-end="url(#arrow)"/>
+  <path class="flow" d="M419,137 H454" marker-end="url(#arrow)"/>
+  <path class="flow" d="M604,137 H639" marker-end="url(#arrow)"/>
+  <text class="lane" x="30" y="240">SMART BOOKING  ·  tool</text>
+  <rect class="box" x="233" y="252" width="168" height="58" stroke="#64748b"/>
+  <text class="lbl" x="248" y="277">Booking request</text>
+  <text class="sub" x="248" y="295">from agent</text>
+  <rect class="box" x="436" y="252" width="236" height="58" stroke="#4285f4"/>
+  <text class="lbl" x="451" y="277">Find free slot</text>
+  <text class="sub" x="451" y="295">round-robin + availability guard</text>
+  <rect class="box" x="707" y="252" width="168" height="58" stroke="#4285f4"/>
+  <text class="lbl" x="722" y="277">Book event</text>
+  <text class="sub" x="722" y="295">Google Calendar</text>
+  <rect class="box" x="910" y="252" width="168" height="58" stroke="#f22f46"/>
+  <text class="lbl" x="925" y="277">SMS confirm</text>
+  <text class="sub" x="925" y="295">Twilio</text>
+  <path class="flow" d="M401,281 H436" marker-end="url(#arrow)"/>
+  <path class="flow" d="M672,281 H707" marker-end="url(#arrow)"/>
+  <path class="flow" d="M875,281 H910" marker-end="url(#arrow)"/>
+  <path class="dash" d="M326,166 V252" marker-end="url(#arrow)"/>
+  <text class="note" x="332" y="206">agent books mid-call</text>
+  <text class="lane" x="30" y="384">OUTBOUND  ·  SDR</text>
+  <rect class="box" x="30" y="396" width="150" height="58" stroke="#64748b"/>
+  <text class="lbl" x="45" y="421">Start</text>
+  <text class="sub" x="45" y="439">manual / sched</text>
+  <rect class="box" x="215" y="396" width="168" height="58" stroke="#0f9d58"/>
+  <text class="lbl" x="230" y="421">Lead list</text>
+  <text class="sub" x="230" y="439">Google Sheets</text>
+  <rect class="box" x="418" y="396" width="168" height="58" stroke="#f22f46"/>
+  <text class="lbl" x="433" y="421">Dial + pitch</text>
+  <text class="sub" x="433" y="439">Twilio</text>
+  <path class="flow" d="M180,425 H215" marker-end="url(#arrow)"/>
+  <path class="flow" d="M383,425 H418" marker-end="url(#arrow)"/>
+</svg>

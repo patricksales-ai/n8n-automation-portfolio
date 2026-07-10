@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 360" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#94a3b8"/>
+    </marker>
+    <style>
+      .box  { rx:9; ry:9; fill:#ffffff; stroke-width:2; }
+      .lbl  { font-size:13px; fill:#0f172a; font-weight:600; }
+      .sub  { font-size:11px; fill:#64748b; }
+      .lane { font-size:11px; fill:#94a3b8; font-weight:700; letter-spacing:.08em; }
+      .flow { stroke:#94a3b8; stroke-width:2; fill:none; }
+      .dash { stroke:#cbd5e1; stroke-width:2; fill:none; stroke-dasharray:5 4; }
+      .note { font-size:10.5px; fill:#94a3b8; font-style:italic; }
+    </style>
+  </defs>
+  <rect x="0" y="0" width="1040" height="360" fill="#f7f8fa"/>
+  <text x="30" y="40" font-size="22" font-weight="700" fill="#0f172a">Telegram Voice Agent</text>
+  <text x="30" y="62" font-size="13" fill="#64748b">Voice or text in Telegram → Whisper → agent routes to sub-agents → replies by text or generated audio</text>
+  <rect class="box" x="30" y="110" width="160" height="58" stroke="#229ED9"/>
+  <text class="lbl" x="45" y="135">Telegram in</text>
+  <text class="sub" x="45" y="153">voice / text</text>
+  <rect class="box" x="222" y="110" width="160" height="58" stroke="#6b46c1"/>
+  <text class="lbl" x="237" y="135">Text or voice?</text>
+  <text class="sub" x="237" y="153">Switch</text>
+  <rect class="box" x="414" y="110" width="160" height="58" stroke="#10a37f"/>
+  <text class="lbl" x="429" y="135">Transcribe</text>
+  <text class="sub" x="429" y="153">Whisper (voice)</text>
+  <rect class="box" x="606" y="110" width="170" height="58" stroke="#10a37f"/>
+  <text class="lbl" x="621" y="135">AI Agent</text>
+  <text class="sub" x="621" y="153">gpt-4o + memory</text>
+  <rect class="box" x="820" y="110" width="160" height="58" stroke="#229ED9"/>
+  <text class="lbl" x="835" y="135">Reply</text>
+  <text class="sub" x="835" y="153">text or audio</text>
+  <path class="flow" d="M190,139 H222" marker-end="url(#arrow)"/>
+  <path class="flow" d="M382,139 H414" marker-end="url(#arrow)"/>
+  <path class="flow" d="M574,139 H606" marker-end="url(#arrow)"/>
+  <path class="flow" d="M776,139 H820" marker-end="url(#arrow)"/>
+  <rect class="box" x="470" y="250" width="140" height="58" stroke="#6366f1"/>
+  <text class="lbl" x="485" y="275">Search</text>
+  <text class="sub" x="485" y="293">web</text>
+  <rect class="box" x="628" y="250" width="140" height="58" stroke="#4285f4"/>
+  <text class="lbl" x="643" y="275">Calendar</text>
+  <text class="sub" x="643" y="293">Google</text>
+  <rect class="box" x="786" y="250" width="140" height="58" stroke="#ea4335"/>
+  <text class="lbl" x="801" y="275">Mail</text>
+  <text class="sub" x="801" y="293">Gmail</text>
+  <path class="dash" d="M691,168 V210 H540 V250" marker-end="url(#arrow)"/>
+  <path class="dash" d="M691,168 V250" marker-end="url(#arrow)"/>
+  <path class="dash" d="M691,168 V210 H856 V250" marker-end="url(#arrow)"/>
+  <text class="note" x="470" y="300">agent picks a sub-agent per request</text>
+</svg>

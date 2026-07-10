@@ -3,6 +3,38 @@
   "nodes": [
     {
       "parameters": {
+        "content": "## MCP server\nExposes the toolbox to the agent.",
+        "height": 447,
+        "width": 412,
+        "color": 5
+      },
+      "id": "3c784002-6f55-4ff7-b9cb-a76ad858897b",
+      "name": "Sticky · MCP server",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        196,
+        -143
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Toolbox\nCalendar · Gmail · Sheets · web search · Supabase · calculator.",
+        "height": 447,
+        "width": 927,
+        "color": 7
+      },
+      "id": "57333b68-8476-4cfb-a7c6-bd60865961c6",
+      "name": "Sticky · Toolbox",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        608,
+        -143
+      ]
+    },
+    {
+      "parameters": {
         "path": "YOUR-MCP-SERVER-PATH"
       },
       "type": "@n8n/n8n-nodes-langchain.mcpTrigger",

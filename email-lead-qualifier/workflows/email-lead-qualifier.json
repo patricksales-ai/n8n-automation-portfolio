@@ -3,6 +3,86 @@
   "nodes": [
     {
       "parameters": {
+        "content": "## New email",
+        "height": 815,
+        "width": 378,
+        "color": 5
+      },
+      "id": "e38e8bf5-af54-454e-8005-ef4f2d635306",
+      "name": "Sticky · New email",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -447
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Normalize",
+        "height": 815,
+        "width": 244,
+        "color": 2
+      },
+      "id": "0b975910-ecaf-4057-895f-16ee8032a41a",
+      "name": "Sticky · Normalize",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        318,
+        -447
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## BANT score\nBudget · authority · need · timeline → score + stage.",
+        "height": 815,
+        "width": 272,
+        "color": 3
+      },
+      "id": "30d23fa6-73ba-47c7-8fe5-7196bbff024c",
+      "name": "Sticky · BANT score",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        562,
+        -447
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Route\nhot / warm / dismiss.",
+        "height": 815,
+        "width": 576,
+        "color": 6
+      },
+      "id": "5a145cdf-3cdd-4302-a97f-2357eaa8e3d6",
+      "name": "Sticky · Route",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        834,
+        -447
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Save · alert · reply\nCapture to DB + tracker sheet, Slack alert, label, temperature-aware auto-reply. The warm path captures incomplete inquiries instead of dropping them.",
+        "height": 815,
+        "width": 1181,
+        "color": 7
+      },
+      "id": "2320d205-8aa4-4691-9881-55205a36132e",
+      "name": "Sticky · Save · alert · reply",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1410,
+        -447
+      ]
+    },
+    {
+      "parameters": {
         "pollTimes": {
           "item": [
             {

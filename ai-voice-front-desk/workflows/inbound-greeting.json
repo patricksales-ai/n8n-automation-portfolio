@@ -1,1 +1,140 @@
-[{"updatedAt":"2026-07-07T03:43:38.000Z","createdAt":"2026-07-05T02:10:52.264Z","id":"x9EOYOCctMse690F","name":"VFD — Inbound Greeting","description":null,"active":true,"isArchived":false,"nodes":[{"parameters":{"httpMethod":"POST","path":"voice-inbound","responseMode":"responseNode","options":{}},"type":"n8n-nodes-base.webhook","typeVersion":2.1,"position":[0,0],"id":"4779d6d5-c733-4534-8371-a616914a76c3","name":"Webhook","webhookId":"58a83c46-c734-44b1-bb26-56aafe26c05c"},{"parameters":{"respondWith":"text","responseBody":"=<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Response>\n  <Say voice=\"Polly.Joanna\">Hi, thanks for calling. This is your A I front desk. How can I help you today?</Say>\n  <Gather input=\"speech\" action=\"https://YOUR_N8N_HOST/webhook/voice-respond\" method=\"POST\" speechTimeout=\"auto\"/>\n  <Say voice=\"Polly.Joanna\">Sorry, I didn't catch that. Goodbye.</Say>\n</Response>","options":{"responseHeaders":{"entries":[{"name":"Content-Type","value":"text/xml"}]}}},"type":"n8n-nodes-base.respondToWebhook","typeVersion":1.5,"position":[416,0],"id":"db0289f3-9a89-4665-a6c1-46db5752d1b7","name":"Respond to Webhook"}],"connections":{"Webhook":{"main":[[{"node":"Respond to Webhook","type":"main","index":0}]]}},"settings":{"executionOrder":"v1","binaryMode":"separate","availableInMCP":false},"staticData":null,"meta":{"instanceId":"62723e8c0c4d2def90d739da45e03a3a859e153db925b2a728b12b118a53e7e2"},"nodeGroups":[],"pinData":{},"versionId":"db721e43-1f3b-46c8-b9a8-ec52d9d4904a","activeVersionId":"db721e43-1f3b-46c8-b9a8-ec52d9d4904a","versionCounter":2,"triggerCount":1,"sourceWorkflowId":null,"tags":[],"shared":[{"updatedAt":"2026-07-05T02:10:52.271Z","createdAt":"2026-07-05T02:10:52.271Z","role":"workflow:owner","workflowId":"x9EOYOCctMse690F","projectId":"PlPV7NzkP8IUO5iX","project":{"updatedAt":"2026-07-05T01:59:27.501Z","createdAt":"2026-07-05T01:57:50.631Z","id":"PlPV7NzkP8IUO5iX","name":"Patrick Sales <fatquicksales0022@gmail.com>","type":"personal","icon":null,"description":null,"customTelemetryTags":[],"creatorId":"915728a1-cf61-4d3a-b6be-54603facefe9"}}],"versionMetadata":{"name":null,"description":null}}]
+[
+  {
+    "updatedAt": "2026-07-07T03:43:38.000Z",
+    "createdAt": "2026-07-05T02:10:52.264Z",
+    "id": "x9EOYOCctMse690F",
+    "name": "VFD — Inbound Greeting",
+    "description": null,
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "content": "## Inbound call\nTwilio hits the webhook when the phone rings.",
+          "height": 255,
+          "width": 326,
+          "color": 5
+        },
+        "id": "b2c029ba-dcb3-48cd-b3ef-c02fbb30c3e1",
+        "name": "Sticky · Inbound call",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -60,
+          -95
+        ]
+      },
+      {
+        "parameters": {
+          "content": "## Greet & hand off\nReturns TwiML that greets the caller and routes them to the AI voice agent.",
+          "height": 255,
+          "width": 325,
+          "color": 7
+        },
+        "id": "3db9be17-617c-46e8-8959-a3d3d46eea78",
+        "name": "Sticky · Greet & hand off",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          266,
+          -95
+        ]
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "voice-inbound",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "4779d6d5-c733-4534-8371-a616914a76c3",
+        "name": "Webhook",
+        "webhookId": "58a83c46-c734-44b1-bb26-56aafe26c05c"
+      },
+      {
+        "parameters": {
+          "respondWith": "text",
+          "responseBody": "=<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Response>\n  <Say voice=\"Polly.Joanna\">Hi, thanks for calling. This is your A I front desk. How can I help you today?</Say>\n  <Gather input=\"speech\" action=\"https://YOUR_N8N_HOST/webhook/voice-respond\" method=\"POST\" speechTimeout=\"auto\"/>\n  <Say voice=\"Polly.Joanna\">Sorry, I didn't catch that. Goodbye.</Say>\n</Response>",
+          "options": {
+            "responseHeaders": {
+              "entries": [
+                {
+                  "name": "Content-Type",
+                  "value": "text/xml"
+                }
+              ]
+            }
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          416,
+          0
+        ],
+        "id": "db0289f3-9a89-4665-a6c1-46db5752d1b7",
+        "name": "Respond to Webhook"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "binaryMode": "separate",
+      "availableInMCP": false
+    },
+    "staticData": null,
+    "meta": {
+      "instanceId": "62723e8c0c4d2def90d739da45e03a3a859e153db925b2a728b12b118a53e7e2"
+    },
+    "nodeGroups": [],
+    "pinData": {},
+    "versionId": "db721e43-1f3b-46c8-b9a8-ec52d9d4904a",
+    "activeVersionId": "db721e43-1f3b-46c8-b9a8-ec52d9d4904a",
+    "versionCounter": 2,
+    "triggerCount": 1,
+    "sourceWorkflowId": null,
+    "tags": [],
+    "shared": [
+      {
+        "updatedAt": "2026-07-05T02:10:52.271Z",
+        "createdAt": "2026-07-05T02:10:52.271Z",
+        "role": "workflow:owner",
+        "workflowId": "x9EOYOCctMse690F",
+        "projectId": "PlPV7NzkP8IUO5iX",
+        "project": {
+          "updatedAt": "2026-07-05T01:59:27.501Z",
+          "createdAt": "2026-07-05T01:57:50.631Z",
+          "id": "PlPV7NzkP8IUO5iX",
+          "name": "Patrick Sales <fatquicksales0022@gmail.com>",
+          "type": "personal",
+          "icon": null,
+          "description": null,
+          "customTelemetryTags": [],
+          "creatorId": "915728a1-cf61-4d3a-b6be-54603facefe9"
+        }
+      }
+    ],
+    "versionMetadata": {
+      "name": null,
+      "description": null
+    }
+  }
+]

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 360" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#94a3b8"/>
+    </marker>
+    <style>
+      .box  { rx:9; ry:9; fill:#ffffff; stroke-width:2; }
+      .lbl  { font-size:13px; fill:#0f172a; font-weight:600; }
+      .sub  { font-size:11px; fill:#64748b; }
+      .lane { font-size:11px; fill:#94a3b8; font-weight:700; letter-spacing:.08em; }
+      .flow { stroke:#94a3b8; stroke-width:2; fill:none; }
+      .dash { stroke:#cbd5e1; stroke-width:2; fill:none; stroke-dasharray:5 4; }
+      .note { font-size:10.5px; fill:#94a3b8; font-style:italic; }
+    </style>
+  </defs>
+  <rect x="0" y="0" width="1140" height="360" fill="#f7f8fa"/>
+  <text x="30" y="40" font-size="22" font-weight="700" fill="#0f172a">CRM Lead Engine</text>
+  <text x="30" y="62" font-size="13" fill="#64748b">Two AI lanes on one HubSpot CRM — enrich & score existing contacts; capture & route every inbound lead</text>
+  <text class="lane" x="30" y="96">ENRICHMENT  ·  scheduled</text>
+  <rect class="box" x="30" y="108" width="150" height="58" stroke="#64748b"/>
+  <text class="lbl" x="45" y="133">Schedule</text>
+  <text class="sub" x="45" y="151">daily</text>
+  <rect class="box" x="215" y="108" width="178" height="58" stroke="#ff7a59"/>
+  <text class="lbl" x="230" y="133">Pull contacts</text>
+  <text class="sub" x="230" y="151">HTTP → HubSpot</text>
+  <rect class="box" x="428" y="108" width="168" height="58" stroke="#4b5563"/>
+  <text class="lbl" x="443" y="133">Clean</text>
+  <text class="sub" x="443" y="151">split · filter · set</text>
+  <rect class="box" x="631" y="108" width="178" height="58" stroke="#10a37f"/>
+  <text class="lbl" x="646" y="133">Enrich + score</text>
+  <text class="sub" x="646" y="151">gpt-4o-mini</text>
+  <rect class="box" x="844" y="108" width="186" height="58" stroke="#ff7a59"/>
+  <text class="lbl" x="859" y="133">Update HubSpot</text>
+  <text class="sub" x="859" y="151">+ Slack digest</text>
+  <path class="flow" d="M180,137 H215" marker-end="url(#arrow)"/>
+  <path class="flow" d="M393,137 H428" marker-end="url(#arrow)"/>
+  <path class="flow" d="M596,137 H631" marker-end="url(#arrow)"/>
+  <path class="flow" d="M809,137 H844" marker-end="url(#arrow)"/>
+  <text class="lane" x="30" y="250">INBOUND CAPTURE</text>
+  <rect class="box" x="30" y="262" width="168" height="58" stroke="#ea4335"/>
+  <text class="lbl" x="45" y="287">Gmail Trigger</text>
+  <text class="sub" x="45" y="305">new email</text>
+  <rect class="box" x="233" y="262" width="168" height="58" stroke="#10a37f"/>
+  <text class="lbl" x="248" y="287">Qualify lead</text>
+  <text class="sub" x="248" y="305">gpt-4o-mini</text>
+  <rect class="box" x="436" y="262" width="168" height="58" stroke="#6b46c1"/>
+  <text class="lbl" x="451" y="287">Route by temp</text>
+  <text class="sub" x="451" y="305">If · Switch</text>
+  <rect class="box" x="639" y="262" width="230" height="58" stroke="#ff7a59"/>
+  <text class="lbl" x="654" y="287">Capture + reply</text>
+  <text class="sub" x="654" y="305">HubSpot · auto-reply · Slack</text>
+  <path class="flow" d="M198,291 H233" marker-end="url(#arrow)"/>
+  <path class="flow" d="M401,291 H436" marker-end="url(#arrow)"/>
+  <path class="flow" d="M604,291 H639" marker-end="url(#arrow)"/>
+</svg>

@@ -3,6 +3,38 @@
   "nodes": [
     {
       "parameters": {
+        "content": "## Question",
+        "height": 495,
+        "width": 266,
+        "color": 5
+      },
+      "id": "620bddec-c9ea-4ad9-b4a5-7d3c1576a7bc",
+      "name": "Sticky · Question",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -95
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Answer from intel\nAgent retrieves over pgvector and answers only from logged changes.",
+        "height": 495,
+        "width": 513,
+        "color": 3
+      },
+      "id": "6c348bde-2c9c-4bba-a575-d58ea41d9110",
+      "name": "Sticky · Answer from intel",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        206,
+        -95
+      ]
+    },
+    {
+      "parameters": {
         "public": true,
         "options": {}
       },

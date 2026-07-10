@@ -3,6 +3,70 @@
   "nodes": [
     {
       "parameters": {
+        "content": "## New message",
+        "height": 559,
+        "width": 539,
+        "color": 5
+      },
+      "id": "e70bff47-7443-44fe-9a1b-fb64825390d1",
+      "name": "Sticky · New message",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -364,
+        -191
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Qualify (BANT agent)\nLoads lead state (resumable per phone), scores with Postgres memory, upserts the lead, replies on WhatsApp.",
+        "height": 559,
+        "width": 600,
+        "color": 3
+      },
+      "id": "16c8325a-d5fb-416b-a5e2-4d7b8cedd90d",
+      "name": "Sticky · Qualify (BANT agent)",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        175,
+        -191
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Hot lead?",
+        "height": 559,
+        "width": 431,
+        "color": 6
+      },
+      "id": "96eabd09-5a8e-4a6f-8a37-98fa859480a7",
+      "name": "Sticky · Hot lead?",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        775,
+        -191
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Alert sales\nSlack alert + booking link.",
+        "height": 559,
+        "width": 265,
+        "color": 7
+      },
+      "id": "c4547879-0d4d-4fa8-9201-9b207dbdea87",
+      "name": "Sticky · Alert sales",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1206,
+        -191
+      ]
+    },
+    {
+      "parameters": {
         "promptType": "define",
         "text": "={{ $('Edit Fields').item.json.text }}",
         "options": {

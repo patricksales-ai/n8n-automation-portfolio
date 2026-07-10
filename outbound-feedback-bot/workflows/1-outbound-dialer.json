@@ -10,6 +10,54 @@
     "nodes": [
       {
         "parameters": {
+          "content": "## Start dial\nManual / scheduled kick-off.",
+          "height": 255,
+          "width": 310,
+          "color": 5
+        },
+        "id": "fe476354-ea87-47a6-b3e6-e1af356c9f11",
+        "name": "Sticky · Start dial",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -236,
+          -95
+        ]
+      },
+      {
+        "parameters": {
+          "content": "## Lead list + DNC guard\nLoad leads and skip anyone on the do-not-call list before dialing.",
+          "height": 255,
+          "width": 400,
+          "color": 2
+        },
+        "id": "11d8f9c0-9ef0-4b12-8feb-8ececad93cd8",
+        "name": "Sticky · Lead list + DNC guard",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          74,
+          -95
+        ]
+      },
+      {
+        "parameters": {
+          "content": "## Place AI call\nHTTP → Vapi (GPT-4o-mini voice over Twilio).",
+          "height": 255,
+          "width": 325,
+          "color": 3
+        },
+        "id": "fc70bc43-2c55-4b6b-b075-eb16e174c7ec",
+        "name": "Sticky · Place AI call",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          474,
+          -95
+        ]
+      },
+      {
+        "parameters": {
           "documentId": {
             "__rl": true,
             "value": "YOUR_SHEET_ID",

@@ -3,6 +3,70 @@
   "nodes": [
     {
       "parameters": {
+        "content": "## New email",
+        "height": 863,
+        "width": 390,
+        "color": 5
+      },
+      "id": "0c1b9f55-6511-46ce-bc40-0f55f8e2d705",
+      "name": "Sticky · New email",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -383
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Qualify the lead\nIs it a lead? Temperature, contact, intent, quality.",
+        "height": 863,
+        "width": 480,
+        "color": 3
+      },
+      "id": "181fd6dc-3678-440b-868a-97f6eef2805e",
+      "name": "Sticky · Qualify the lead",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        330,
+        -383
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Route by temperature",
+        "height": 863,
+        "width": 646,
+        "color": 6
+      },
+      "id": "94447335-b6ff-49db-b335-cc4c6ef6d623",
+      "name": "Sticky · Route by temperature",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        810,
+        -383
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Capture + reply\nUpsert into HubSpot, label, auto-reply to hot/warm, alert Slack.",
+        "height": 863,
+        "width": 1071,
+        "color": 7
+      },
+      "id": "1ee08096-326a-4f0e-a66f-c3e4bdaa813c",
+      "name": "Sticky · Capture + reply",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1456,
+        -383
+      ]
+    },
+    {
+      "parameters": {
         "pollTimes": {
           "item": [
             {

@@ -3,6 +3,38 @@
   "nodes": [
     {
       "parameters": {
+        "content": "## Question",
+        "height": 623,
+        "width": 242,
+        "color": 5
+      },
+      "id": "c6e1ce46-1669-42ac-adaf-42194361bde2",
+      "name": "Sticky · Question",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -95
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Retrieve + answer\nAgent searches the docs (pgvector), cites the source file, and refuses what isn't documented.",
+        "height": 623,
+        "width": 409,
+        "color": 3
+      },
+      "id": "8e0ba25d-2ef3-4570-8630-c1673af722bb",
+      "name": "Sticky · Retrieve + answer",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        182,
+        -95
+      ]
+    },
+    {
+      "parameters": {
         "options": {
           "systemMessage": "=You are a customer support assistant. Answer ONLY using the retrieved\ndocumentation provided by your search tool.\n- If the docs don't contain the answer, say so and offer to escalate to\n  a human — do not guess or use outside knowledge.\n- Cite the source file name for each claim.\n- Be concise and friendly. Give steps as a numbered list when relevant."
         }

@@ -3,6 +3,70 @@
   "nodes": [
     {
       "parameters": {
+        "content": "## Message in\nVoice or text.",
+        "height": 783,
+        "width": 222,
+        "color": 5
+      },
+      "id": "46ece237-6a4b-4613-878f-4dc674248867",
+      "name": "Sticky · Message in",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1356,
+        -303
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Text or voice?",
+        "height": 783,
+        "width": 436,
+        "color": 6
+      },
+      "id": "738ba98a-6790-4375-a280-ef8fc08ed936",
+      "name": "Sticky · Text or voice?",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1134,
+        -303
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Transcribe + reason\nWhisper transcribes voice; the agent routes to sub-agents for search, calendar and mail.",
+        "height": 783,
+        "width": 645,
+        "color": 3
+      },
+      "id": "6a4540d2-3380-419b-8175-156dd3cdc9fa",
+      "name": "Sticky · Transcribe + reason",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -698,
+        -303
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Reply\nText, or generate audio and send it back.",
+        "height": 783,
+        "width": 772,
+        "color": 7
+      },
+      "id": "aff6cc42-6cf9-4016-a0e0-a40cd2b253fb",
+      "name": "Sticky · Reply",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -53,
+        -303
+      ]
+    },
+    {
+      "parameters": {
         "updates": [
           "message"
         ],

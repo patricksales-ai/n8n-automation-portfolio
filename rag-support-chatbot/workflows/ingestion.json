@@ -3,6 +3,54 @@
   "nodes": [
     {
       "parameters": {
+        "content": "## Schedule",
+        "height": 687,
+        "width": 364,
+        "color": 5
+      },
+      "id": "bd18b6c3-2e6f-4654-b3e9-c6c337f5c9b3",
+      "name": "Sticky · Schedule",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1204,
+        17
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Sync Drive\nList + download new files; SQL check skips anything already ingested.",
+        "height": 687,
+        "width": 532,
+        "color": 2
+      },
+      "id": "ebb6daf0-f97b-4738-bfd6-8781c925a57c",
+      "name": "Sticky · Sync Drive",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1568,
+        17
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Chunk + embed → store\nSplit, embed, and write to the vector store.",
+        "height": 687,
+        "width": 587,
+        "color": 3
+      },
+      "id": "829d0df8-fe8c-4e28-9e53-8ecfb36eefd5",
+      "name": "Sticky · Chunk + embed → store",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2100,
+        17
+      ]
+    },
+    {
+      "parameters": {
         "rule": {
           "interval": [
             {
