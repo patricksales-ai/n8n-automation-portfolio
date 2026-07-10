@@ -8,7 +8,7 @@
         "width": 547,
         "color": 5
       },
-      "id": "0aaecad9-5a51-4e7f-8d0f-a7845ea5e7da",
+      "id": "7ab7df05-f2a8-4a90-956a-ba8731aab04f",
       "name": "Sticky · Daily schedule",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -24,7 +24,7 @@
         "width": 869,
         "color": 2
       },
-      "id": "a0039048-e151-436e-9a26-94ba8fc63962",
+      "id": "aec0ce11-9b50-40a2-b614-f62f2b718194",
       "name": "Sticky · Pull & clean contacts",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -40,7 +40,7 @@
         "width": 575,
         "color": 3
       },
-      "id": "1c4dbb1c-e00a-43fe-bfbe-23e4ef9070c5",
+      "id": "e4e78283-a5bc-4271-acef-b939478d3f50",
       "name": "Sticky · Enrich + score",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -56,7 +56,7 @@
         "width": 388,
         "color": 7
       },
-      "id": "a61655c6-1f19-4f2c-81fa-de3719043987",
+      "id": "608f7c41-91eb-4c94-891a-9099f541773d",
       "name": "Sticky · Write back",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -215,8 +215,8 @@
       "name": "OpenAI Chat Model",
       "credentials": {
         "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
-          "name": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL"
+          "id": "SYpGRkU0nCCv3rd3",
+          "name": "OpenAI account"
         }
       }
     },
@@ -255,8 +255,8 @@
       "webhookId": "cf44a3be-92ad-4724-b999-d1c81adc4ef1",
       "credentials": {
         "slackApi": {
-          "id": "REPLACE_WITH_YOUR_SLACK_CREDENTIAL",
-          "name": "REPLACE_WITH_YOUR_SLACK_CREDENTIAL"
+          "id": "1OmcAA2AKHVVunVC",
+          "name": "Slack account"
         }
       }
     },
@@ -343,8 +343,8 @@
       "name": "HTTP Request",
       "credentials": {
         "httpHeaderAuth": {
-          "id": "REPLACE_WITH_YOUR_HUBSPOT_TOKEN_CREDENTIAL",
-          "name": "REPLACE_WITH_YOUR_HUBSPOT_TOKEN_CREDENTIAL"
+          "id": "trHSo3RUnBy8ZqXd",
+          "name": "HubSpot Header Auth Local"
         }
       }
     },
@@ -416,13 +416,12 @@
       "name": "HubSpot Update",
       "credentials": {
         "httpHeaderAuth": {
-          "id": "REPLACE_WITH_YOUR_HUBSPOT_TOKEN_CREDENTIAL",
-          "name": "REPLACE_WITH_YOUR_HUBSPOT_TOKEN_CREDENTIAL"
+          "id": "trHSo3RUnBy8ZqXd",
+          "name": "HubSpot Header Auth Local"
         }
       }
     }
   ],
-  "pinData": {},
   "connections": {
     "Loop Over Items": {
       "main": [
@@ -553,14 +552,9 @@
       ]
     }
   },
-  "active": false,
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
     "availableInMCP": false
-  },
-  "meta": {
-    "templateCredsSetupCompleted": true
-  },
-  "nodeGroups": []
+  }
 }

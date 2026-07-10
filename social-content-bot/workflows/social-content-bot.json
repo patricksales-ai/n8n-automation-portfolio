@@ -1,5 +1,5 @@
 {
-  "name": "Social Media Content Bot",
+  "name": "Build 5 - social-content-bot",
   "nodes": [
     {
       "parameters": {
@@ -8,7 +8,7 @@
         "width": 222,
         "color": 5
       },
-      "id": "02b1d6e2-991b-401e-b2c8-acd5130c37d1",
+      "id": "5e325fda-65c1-450d-8265-5651570cfed8",
       "name": "Sticky · Schedule",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -24,7 +24,7 @@
         "width": 361,
         "color": 2
       },
-      "id": "2f2ca93d-2ff0-437a-8a21-504615766aa7",
+      "id": "fdb46b29-7909-4647-81b3-70c842d5493c",
       "name": "Sticky · Get idea",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -40,7 +40,7 @@
         "width": 628,
         "color": 3
       },
-      "id": "e00e19b8-7f64-4d7c-b1a5-d2499499343d",
+      "id": "58269eac-8f73-44eb-9663-107725db23ef",
       "name": "Sticky · Draft + self-critique",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -56,7 +56,7 @@
         "width": 607,
         "color": 6
       },
-      "id": "725e5b6d-0c18-43bc-a30b-a6f776600d76",
+      "id": "57fae0d2-5b32-4dc5-9d2c-80a2e1c4c84d",
       "name": "Sticky · Human gate",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -72,7 +72,7 @@
         "width": 449,
         "color": 7
       },
-      "id": "c2cd4c4e-9aa3-4480-b439-fce96f760005",
+      "id": "74debffb-0d43-4cef-bd5c-823d6ff77492",
       "name": "Sticky · Publish + log",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -185,10 +185,9 @@
       "parameters": {
         "documentId": {
           "__rl": true,
-          "value": "1BdnAUwHtTruIiQV28RScEp64RHIle9DI4oQQMO17erA",
+          "value": "YOUR_SHEET_ID",
           "mode": "list",
-          "cachedResultName": "content_calendar",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BdnAUwHtTruIiQV28RScEp64RHIle9DI4oQQMO17erA/edit?usp=drivesdk"
+          "cachedResultName": "YOUR_SHEET_ID"
         },
         "sheetName": {
           "__rl": true,
@@ -227,10 +226,9 @@
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "value": "1BdnAUwHtTruIiQV28RScEp64RHIle9DI4oQQMO17erA",
+          "value": "YOUR_SHEET_ID",
           "mode": "list",
-          "cachedResultName": "content_calendar",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1BdnAUwHtTruIiQV28RScEp64RHIle9DI4oQQMO17erA/edit?usp=drivesdk"
+          "cachedResultName": "YOUR_SHEET_ID"
         },
         "sheetName": {
           "__rl": true,
@@ -357,7 +355,7 @@
         "select": "channel",
         "channelId": {
           "__rl": true,
-          "value": "C0BBTD9TCR5",
+          "value": "YOUR_SLACK_CHANNEL_ID",
           "mode": "id"
         },
         "message": "=*New posts ready for review*  —  idea: {{ $('Get row(s) in sheet').first().json.idea }}\n\n*LinkedIn:*\n{{ $json.output.linkedin.text }}\n\n*X:*\n{{ $json.output.x.text }}\n\n*Instagram:*\n{{ $json.output.instagram.caption }}\n{{ $json.output.instagram.hashtags.join(' ') }}",
@@ -493,7 +491,6 @@
       "name": "Normalize Final"
     }
   ],
-  "pinData": {},
   "connections": {
     "OpenAI Chat Model": {
       "ai_languageModel": [
@@ -617,15 +614,9 @@
       ]
     }
   },
-  "active": false,
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
     "availableInMCP": false
-  },
-  "meta": {
-    "templateCredsSetupCompleted": true
-  },
-  "nodeGroups": [],
-  "tags": []
+  }
 }

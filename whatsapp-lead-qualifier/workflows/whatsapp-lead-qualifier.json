@@ -4,65 +4,65 @@
     {
       "parameters": {
         "content": "## New message",
-        "height": 559,
+        "height": 527,
         "width": 539,
         "color": 5
       },
-      "id": "e70bff47-7443-44fe-9a1b-fb64825390d1",
+      "id": "2b3e8df8-1a29-42e3-97c7-88f4ec0403ac",
       "name": "Sticky · New message",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         -364,
-        -191
+        -159
       ]
     },
     {
       "parameters": {
         "content": "## Qualify (BANT agent)\nLoads lead state (resumable per phone), scores with Postgres memory, upserts the lead, replies on WhatsApp.",
-        "height": 559,
+        "height": 527,
         "width": 600,
         "color": 3
       },
-      "id": "16c8325a-d5fb-416b-a5e2-4d7b8cedd90d",
+      "id": "9c7e7e85-f739-47f2-be69-648f74e5a549",
       "name": "Sticky · Qualify (BANT agent)",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         175,
-        -191
+        -159
       ]
     },
     {
       "parameters": {
         "content": "## Hot lead?",
-        "height": 559,
-        "width": 431,
+        "height": 527,
+        "width": 447,
         "color": 6
       },
-      "id": "96eabd09-5a8e-4a6f-8a37-98fa859480a7",
+      "id": "9eb9f15d-c558-4516-86c0-e1a91229844b",
       "name": "Sticky · Hot lead?",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
         775,
-        -191
+        -159
       ]
     },
     {
       "parameters": {
         "content": "## Alert sales\nSlack alert + booking link.",
-        "height": 559,
-        "width": 265,
+        "height": 527,
+        "width": 281,
         "color": 7
       },
-      "id": "c4547879-0d4d-4fa8-9201-9b207dbdea87",
+      "id": "9014f73d-0e6b-4d7f-8de7-8187234d5ed3",
       "name": "Sticky · Alert sales",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1206,
-        -191
+        1222,
+        -159
       ]
     },
     {
@@ -70,7 +70,7 @@
         "promptType": "define",
         "text": "={{ $('Edit Fields').item.json.text }}",
         "options": {
-          "systemMessage": "=You qualify inbound leads over WhatsApp for [YOUR COMPANY]. Be friendly,\nconcise (WhatsApp-length: 1-3 sentences), and ask ONE question at a time.\n\nCollect, in natural order: the person's need, company, budget range,\nwho makes the decision, and timeline. Don't interrogate — weave\nquestions into a normal conversation and acknowledge their answers.\n\nAs you learn each fact, call upsert_lead to save it. Maintain a running\nscore (0-100): need 30, budget 25, authority 20, timeline 25.\n\n- When score >= 70 AND timeline is now/this_quarter: set stage=qualified,\n  call upsert_lead with that stage, and warmly share this booking link:\n  [YOUR BOOKING LINK].\n- When clearly not a fit (no need or no budget): set stage=disqualified,\n  thank them, and offer a newsletter link.\n- Never invent prices, availability, or commitments. If asked something\n  you don't know, say a human will follow up.\n\nCall upsert_lead immediately after every message where the user shares any new detail (need, company, budget, authority, timeline), saving everything known so far — even if incomplete\n\nKnown so far: {{ JSON.stringify($('Load Lead').item.json) }}"
+          "systemMessage": "=You qualify inbound leads over WhatsApp for [YOUR COMPANY]. Be friendly,\nconcise (WhatsApp-length: 1-3 sentences), and ask ONE question at a time.\n\nCollect, in natural order: the person's need, company, budget range,\nwho makes the decision, and timeline. Don't interrogate — weave\nquestions into a normal conversation and acknowledge their answers.\n\nAs you learn each fact, call upsert_lead to save it. Maintain a running\nscore (0-100): need 30, budget 25, authority 20, timeline 25.\n\n- When score >= 70 AND timeline is now/this_quarter: set stage=qualified,\n  call upsert_lead with that stage, and warmly share this booking link:\n  https://calendly.com/fatquicksales0022/30min.\n- When clearly not a fit (no need or no budget): set stage=disqualified,\n  thank them, and offer a newsletter link.\n- Never invent prices, availability, or commitments. If asked something\n  you don't know, say a human will follow up.\n\nCall upsert_lead immediately after every message where the user shares any new detail (need, company, budget, authority, timeline), saving everything known so far — even if incomplete\n\nKnown so far: {{ JSON.stringify($('Load Lead').item.json) }}"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -103,7 +103,7 @@
       "name": "OpenAI Chat Model",
       "credentials": {
         "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
+          "id": "Re9Hguci7X6C0pKF",
           "name": "OpenAI account"
         }
       }
@@ -126,7 +126,7 @@
       "name": "upsert_lead",
       "credentials": {
         "postgres": {
-          "id": "REPLACE_WITH_YOUR_POSTGRES_CREDENTIAL",
+          "id": "NiTuuu92c0seY4qR",
           "name": "Postgres account 2"
         }
       }
@@ -173,7 +173,7 @@
           "__rl": true,
           "value": "YOUR_SLACK_CHANNEL_ID",
           "mode": "list",
-          "cachedResultName": "your-channel"
+          "cachedResultName": "YOUR_SLACK_CHANNEL_ID"
         },
         "text": "= New qualified lead — budget {{ $json.budget }}, timeline {{ $json.timeline }}, score {{ $json.score }}. Need: {{ $json.need }}",
         "otherOptions": {}
@@ -181,15 +181,15 @@
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.5,
       "position": [
-        1296,
-        -96
+        1328,
+        -64
       ],
       "id": "2e27aa98-b00a-4594-a773-e19454c7fd49",
       "name": "Send a message",
-      "webhookId": "83d39ce1-e988-4481-b147-6ff1bb9df5c2",
+      "webhookId": "d57bdaa7-60e1-4a91-815b-38a8c896c201",
       "credentials": {
         "slackOAuth2Api": {
-          "id": "REPLACE_WITH_YOUR_SLACK_CREDENTIAL",
+          "id": "U9wk20H0zyN4b3wz",
           "name": "Slack account"
         }
       }
@@ -219,7 +219,7 @@
       "name": "Get many row",
       "credentials": {
         "supabaseApi": {
-          "id": "REPLACE_WITH_YOUR_SUPABASE_CREDENTIAL",
+          "id": "cbrbs4udSpAXUTzI",
           "name": "Supabase account"
         }
       }
@@ -250,7 +250,7 @@
       "alwaysOutputData": true,
       "credentials": {
         "supabaseApi": {
-          "id": "REPLACE_WITH_YOUR_SUPABASE_CREDENTIAL",
+          "id": "cbrbs4udSpAXUTzI",
           "name": "Supabase account"
         }
       }
@@ -272,7 +272,7 @@
       "name": "Postgres Chat Memory",
       "credentials": {
         "postgres": {
-          "id": "REPLACE_WITH_YOUR_POSTGRES_CREDENTIAL",
+          "id": "NiTuuu92c0seY4qR",
           "name": "Postgres account 2"
         }
       }
@@ -292,10 +292,10 @@
       ],
       "id": "6e04302a-3730-4650-984c-27b739f74b62",
       "name": "WhatsApp Trigger",
-      "webhookId": "6200e992-ff36-4687-b50c-63b7bda08227",
+      "webhookId": "ba88589e-68b5-4e1e-b72b-bf8d9daa9ff2",
       "credentials": {
         "whatsAppTriggerApi": {
-          "id": "REPLACE_WITH_YOUR_WHATSAPP_TRIGGER_CREDENTIAL",
+          "id": "fPJoKuThEujKYuoz",
           "name": "WhatsApp OAuth account"
         }
       }
@@ -332,7 +332,7 @@
     {
       "parameters": {
         "operation": "send",
-        "phoneNumberId": "YOUR_PHONE_NUMBER_ID",
+        "phoneNumberId": "YOUR_VAPI_PHONE_NUMBER_ID",
         "recipientPhoneNumber": "={{ $('Edit Fields').item.json.phone }}",
         "textBody": "={{ $('AI Agent').item.json.output }}",
         "additionalFields": {}
@@ -345,16 +345,15 @@
       ],
       "id": "debd95ea-858a-4a53-b0de-ffc6984f0c02",
       "name": "Send message",
-      "webhookId": "b51ec567-3ba8-48ff-bcb1-78f07a953aa8",
+      "webhookId": "802e7af8-90f4-4568-8c32-a9bbd09707e6",
       "credentials": {
         "whatsAppApi": {
-          "id": "REPLACE_WITH_YOUR_WHATSAPP_CREDENTIAL",
+          "id": "rZUIFviAbdEJGUa4",
           "name": "WhatsApp account 2"
         }
       }
     }
   ],
-  "pinData": {},
   "connections": {
     "OpenAI Chat Model": {
       "ai_languageModel": [
@@ -467,15 +466,11 @@
       ]
     }
   },
-  "active": false,
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
-    "availableInMCP": false
-  },
-  "meta": {
-    "templateCredsSetupCompleted": true
-  },
-  "nodeGroups": [],
-  "tags": []
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner"
+  }
 }

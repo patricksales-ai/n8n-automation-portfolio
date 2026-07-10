@@ -5,64 +5,64 @@
       "parameters": {
         "content": "## Message in\nVoice or text.",
         "height": 783,
-        "width": 222,
+        "width": 266,
         "color": 5
       },
-      "id": "46ece237-6a4b-4613-878f-4dc674248867",
+      "id": "218249fd-3622-4b85-bd0e-53a1caf647ff",
       "name": "Sticky · Message in",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -1356,
-        -303
+        -1548,
+        -95
       ]
     },
     {
       "parameters": {
-        "content": "## Text or voice?",
+        "content": "## Route\nText vs voice.",
         "height": 783,
-        "width": 436,
+        "width": 539,
         "color": 6
       },
-      "id": "738ba98a-6790-4375-a280-ef8fc08ed936",
-      "name": "Sticky · Text or voice?",
+      "id": "32de50d9-b1d3-4966-b2d7-5ece4d993081",
+      "name": "Sticky · Route",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -1134,
-        -303
+        -1282,
+        -95
       ]
     },
     {
       "parameters": {
         "content": "## Transcribe + reason\nWhisper transcribes voice; the agent routes to sub-agents for search, calendar and mail.",
         "height": 783,
-        "width": 645,
+        "width": 705,
         "color": 3
       },
-      "id": "6a4540d2-3380-419b-8175-156dd3cdc9fa",
+      "id": "fc4748ec-b919-400f-8c6d-c7c08bfde831",
       "name": "Sticky · Transcribe + reason",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -698,
-        -303
+        -743,
+        -95
       ]
     },
     {
       "parameters": {
         "content": "## Reply\nText, or generate audio and send it back.",
         "height": 783,
-        "width": 772,
+        "width": 773,
         "color": 7
       },
-      "id": "aff6cc42-6cf9-4016-a0e0-a40cd2b253fb",
+      "id": "4bd0bccc-aa38-4d2d-9af0-e811a96ad1d7",
       "name": "Sticky · Reply",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -53,
-        -303
+        -38,
+        -95
       ]
     },
     {
@@ -75,15 +75,15 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.3,
       "position": [
-        -1296,
-        -16
+        -1488,
+        192
       ],
-      "id": "9b0ff8b1-3fe1-44b9-8d24-7c16b87f181d",
+      "id": "2aa341dc-4826-40e5-9a2b-e4f5646ae111",
       "name": "Telegram Trigger",
       "webhookId": "d56708f7-9926-4e77-b0bf-3ea8949306b2",
       "credentials": {
         "telegramApi": {
-          "id": "REPLACE_WITH_YOUR_TELEGRAM_CREDENTIAL",
+          "id": "9s1U2dq1vlhA4DVm",
           "name": "Telegram account"
         }
       }
@@ -149,10 +149,10 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        -1088,
-        -16
+        -1072,
+        192
       ],
-      "id": "9bd02c7e-e6aa-4679-9e58-79668abc610f",
+      "id": "25ceb0ec-ad25-454d-a571-b71ee8f088e9",
       "name": "Switch"
     },
     {
@@ -172,16 +172,16 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -800,
-        -96
+        -784,
+        112
       ],
-      "id": "7fe29a26-558d-4e2f-8c46-e86df285f62b",
+      "id": "3d377b71-432e-4aaf-a58c-c430ae7a682d",
       "name": "Edit Fields"
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "={{ $json.Text }}",
+        "text": "={{ $json.text || $('Edit Fields').item.json.Text }}",
         "options": {
           "systemMessage": "=# Role\nYou are a assistant with access to multiple tools\n\n# Behavior\nYou respond concisely and succintly in a friendly and approachable style\n\n# Date and Time {{ $now }}\n\n# Tools\nYou have access to multiple tools and always use the approriate one depending on the task.\n\n\n##Gmail tool\nuse this tool everytime you need to do something with mails. If you send a mail, you sign every  email with \"Patrick\" and never use empty placeholder for names.\nEnsure emails are well-formatted with proper body.\n\n##Calendar tool\nuse this tool every time you need to do something with the calendar.\n\n##Search Agent\nuse this tool to search the web, hackernews, and wikipedia."
         }
@@ -189,19 +189,19 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        -432,
-        -96
+        -416,
+        112
       ],
-      "id": "8dce230b-4683-45d7-97cc-9ea9dadfff0d",
+      "id": "ca94a2fe-3d53-4369-b72a-c940446309fb",
       "name": "AI Agent"
     },
     {
       "parameters": {
         "model": {
           "__rl": true,
-          "value": "gpt-4o",
+          "value": "gpt-4o-mini",
           "mode": "list",
-          "cachedResultName": "gpt-4o"
+          "cachedResultName": "gpt-4o-mini"
         },
         "builtInTools": {},
         "options": {}
@@ -209,14 +209,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
       "position": [
-        -432,
-        112
+        -416,
+        320
       ],
-      "id": "6c46e12e-d8f1-41bb-8478-fc21938539df",
+      "id": "37df75d8-d244-4be8-8ab8-115301337186",
       "name": "OpenAI Chat Model",
       "credentials": {
         "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
+          "id": "Re9Hguci7X6C0pKF",
           "name": "OpenAI account"
         }
       }
@@ -230,15 +230,15 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -880,
-        80
+        -864,
+        288
       ],
-      "id": "ed3a1eea-7ea8-46c5-9760-8b296eb97405",
+      "id": "b1a42ece-d821-4259-b343-339582022a4d",
       "name": "Get a file",
       "webhookId": "6a931d1a-56fb-46d6-96e6-49c3ab0ef69e",
       "credentials": {
         "telegramApi": {
-          "id": "REPLACE_WITH_YOUR_TELEGRAM_CREDENTIAL",
+          "id": "9s1U2dq1vlhA4DVm",
           "name": "Telegram account"
         }
       }
@@ -252,14 +252,14 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 2.3,
       "position": [
-        -720,
-        80
+        -704,
+        288
       ],
-      "id": "cbc1d2ef-4a10-4e61-ae5c-2b6ed8b6670f",
+      "id": "cb9bd90b-cba7-4453-99db-6a28185ecd8a",
       "name": "Transcribe a recording",
       "credentials": {
         "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
+          "id": "Re9Hguci7X6C0pKF",
           "name": "OpenAI account"
         }
       }
@@ -273,10 +273,10 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.4,
       "position": [
-        -336,
-        112
+        -320,
+        320
       ],
-      "id": "bf3188a0-f2df-46ea-8f4c-aa61de8b0072",
+      "id": "43798f95-5393-4998-a00f-61f562c16d2b",
       "name": "Simple Memory"
     },
     {
@@ -290,74 +290,18 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        160,
-        -96
+        176,
+        112
       ],
-      "id": "84e11f97-ebc5-4ffe-9f9f-52ba0f313035",
+      "id": "40e64522-9b91-4872-bdce-225bff16f5f8",
       "name": "Send a text message",
       "webhookId": "93c66429-3a34-4803-aad7-218a9b7b252d",
       "credentials": {
         "telegramApi": {
-          "id": "REPLACE_WITH_YOUR_TELEGRAM_CREDENTIAL",
+          "id": "9s1U2dq1vlhA4DVm",
           "name": "Telegram account"
         }
       }
-    },
-    {
-      "parameters": {
-        "description": "Use this tool to search the web, hacker news, and Wikipedia",
-        "workflowId": {
-          "__rl": true,
-          "value": "uwgVpPRQd25YUcOy",
-          "mode": "list",
-          "cachedResultUrl": "/workflow/uwgVpPRQd25YUcOy",
-          "cachedResultName": "Telegram1  sub workflow search"
-        },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
-      "typeVersion": 2.2,
-      "position": [
-        80,
-        320
-      ],
-      "id": "6143defb-08e2-47b8-941a-272ea27d9c20",
-      "name": "Search Agent"
-    },
-    {
-      "parameters": {
-        "description": "This agent is called when there is anything we need to do involving calendar",
-        "workflowId": {
-          "__rl": true,
-          "value": "P7SmloII22A0Uroq",
-          "mode": "list",
-          "cachedResultUrl": "/workflow/P7SmloII22A0Uroq",
-          "cachedResultName": "Sub Calender Agent"
-        },
-        "workflowInputs": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [],
-          "schema": [],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
-      "typeVersion": 2.2,
-      "position": [
-        -224,
-        320
-      ],
-      "id": "17b6ff87-fa94-4665-a5f0-b79cb2e5a420",
-      "name": "Sub Calendar Agent"
     },
     {
       "parameters": {
@@ -381,34 +325,34 @@
       "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
       "typeVersion": 2.2,
       "position": [
-        -64,
-        320
+        -48,
+        528
       ],
-      "id": "e9967c30-d733-4a0a-a424-0508c30b7511",
+      "id": "2d5d04f0-ca58-460d-ad90-a2c93e614558",
       "name": "Call 'Sub Workflow Mails'"
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "=You are yori a funny guy that's answer with seriousness about topics.\n\nYou answer in 1 line.\n\nYour Topic:{{ $json.output }}",
+        "text": "=You are a personal assistant operating inside a Telegram bot. You receive messages\nfrom a single user — either typed text or transcribed voice notes — and reply\nconversationally. Today's date and time should be treated as the current moment;\nalways resolve relative dates (\"tomorrow\", \"next Friday\", \"in two hours\") against it.\n\n## Your tools\n- **Sub Calendar Agent** — use for anything about the user's schedule: creating,\n  reading, updating, or checking events and availability on Google Calendar.\n- **Call 'Sub Workflow Mails'** — use to read, search, draft, or send email.\n- **Search Agent** — use for current information, facts, news, or anything you don't\n  already know or that may have changed since your training.\n\n## How to decide\n1. If the request needs live data, scheduling, or email, call the matching tool.\n2. If it's general conversation, opinion, or something you already know, just answer.\n3. Never invent calendar events, emails, or search results. If a tool returns nothing\n   useful, say so plainly instead of guessing.\n4. You may call more than one tool when a request needs it (e.g. \"find a free slot\n   tomorrow and email Sam to confirm\").\n\n## Before acting\n- For anything that sends or changes something (creating an event, sending an email),\n  confirm the key details back to the user first unless they were fully explicit.\n- When details are missing (time, recipient, subject), ask one short clarifying\n  question rather than assuming.\n\n## Style\n- Keep replies short and natural — this is a chat, often heard as audio. Avoid bullet\n  lists and markdown unless the user asks for structure. Write the way you'd speak.\n- Be warm and direct. No filler, no \"As an AI\" disclaimers.\n- Use the conversation memory to stay consistent with what the user told you earlier.\n\n## Important\n- The user's message may be a voice transcription, so it can contain small errors or\n  odd phrasing — interpret intent charitably.\n- After a tool runs, summarize the result for the user in plain language; don't dump\n  raw tool output.",
         "batching": {}
       },
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.9,
       "position": [
-        -16,
-        -208
+        0,
+        0
       ],
-      "id": "3e139ab9-94e2-429b-aae7-567ebc078b88",
+      "id": "4e497509-14ab-487b-a602-5c6a706f562d",
       "name": "Basic LLM Chain"
     },
     {
       "parameters": {
         "model": {
           "__rl": true,
-          "value": "gpt-4o",
+          "value": "gpt-4o-mini",
           "mode": "list",
-          "cachedResultName": "gpt-4o"
+          "cachedResultName": "gpt-4o-mini"
         },
         "builtInTools": {},
         "options": {}
@@ -416,14 +360,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
       "position": [
-        -16,
-        64
+        0,
+        272
       ],
-      "id": "c197177b-cbfc-42d5-8e52-fc94337811f7",
+      "id": "c0516472-8f9e-4e72-92b8-9973d9ba61ea",
       "name": "OpenAI Chat Model1",
       "credentials": {
         "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
+          "id": "Re9Hguci7X6C0pKF",
           "name": "OpenAI account"
         }
       }
@@ -437,14 +381,14 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 2.3,
       "position": [
-        336,
-        -208
+        352,
+        0
       ],
-      "id": "f6e0f9d6-5a4a-4df9-867b-622597e12340",
+      "id": "61823955-6fb3-41b9-ab92-21512f7feb57",
       "name": "Generate audio",
       "credentials": {
         "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
+          "id": "Re9Hguci7X6C0pKF",
           "name": "OpenAI account"
         }
       }
@@ -459,27 +403,124 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        544,
-        -208
+        560,
+        0
       ],
-      "id": "a3edfe46-0547-4f11-af94-a388a5e9cf13",
+      "id": "31fcd072-0863-4949-b291-7ef157f09d12",
       "name": "Send an audio file",
       "webhookId": "7ee527dc-e930-40f5-9db1-9146783a5354",
       "credentials": {
         "telegramApi": {
-          "id": "REPLACE_WITH_YOUR_TELEGRAM_CREDENTIAL",
+          "id": "9s1U2dq1vlhA4DVm",
           "name": "Telegram account"
         }
       }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "4bd1d921-5a2f-4211-b3b1-5cac27dbd1b8",
+              "leftValue": "={{ $json.message.chat.id }}",
+              "rightValue": 7521461831,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "5ffcc1e9-1366-4433-814f-01815cd93da4",
+              "leftValue": "={{ $json.message.chat.username }}",
+              "rightValue": "fatquick",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1312,
+        192
+      ],
+      "id": "18cb934f-da25-4230-bd5d-cfe0d6016536",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to search the web for current information, news, facts, or anything\nyou don't already know or that may have changed recently. The input should be a\nplain-text search query describing what to look up (e.g. \"latest Anthropic news\").\nReturns the search results as text.",
+        "workflowId": {
+          "__rl": true,
+          "value": "1W81FOpLZBV8Dw4t",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/1W81FOpLZBV8Dw4t",
+          "cachedResultName": "Telegram1  sub workflow search"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        144,
+        528
+      ],
+      "id": "6e2d157d-06b6-4cc6-9de9-3f96919ae04b",
+      "name": "Call 'Telegram1  sub workflow search'"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "QYvGaZRsxmuuxLxy",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/QYvGaZRsxmuuxLxy",
+          "cachedResultName": "Sub Calender Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -272,
+        512
+      ],
+      "id": "23c5c237-2260-4389-8735-a8ebf95ccd68",
+      "name": "Call 'Sub Calender Agent'"
     }
   ],
-  "pinData": {},
   "connections": {
     "Telegram Trigger": {
       "main": [
         [
           {
-            "node": "Switch",
+            "node": "If",
             "type": "main",
             "index": 0
           }
@@ -575,28 +616,6 @@
         ]
       ]
     },
-    "Search Agent": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Sub Calendar Agent": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Call 'Sub Workflow Mails'": {
       "ai_tool": [
         [
@@ -640,16 +659,44 @@
           }
         ]
       ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Telegram1  sub workflow search'": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'Sub Calender Agent'": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "active": false,
   "settings": {
     "executionOrder": "v1",
-    "binaryMode": "separate"
-  },
-  "meta": {
-    "templateCredsSetupCompleted": true
-  },
-  "nodeGroups": [],
-  "tags": []
+    "binaryMode": "separate",
+    "availableInMCP": false
+  }
 }

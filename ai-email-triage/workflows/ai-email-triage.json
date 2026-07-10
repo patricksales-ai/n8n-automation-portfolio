@@ -8,7 +8,7 @@
         "width": 222,
         "color": 5
       },
-      "id": "bc59b419-33d5-4aaf-bfec-f4140f5cee16",
+      "id": "d24aa5ef-2f42-4e0f-b596-99393f35831b",
       "name": "Sticky · 1 · Trigger",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -24,7 +24,7 @@
         "width": 200,
         "color": 2
       },
-      "id": "0074f79c-78ee-4b24-945e-bec9351585e4",
+      "id": "925f30f0-e3c3-48ca-a522-f86b3892e7ba",
       "name": "Sticky · 2 · Normalize",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -40,7 +40,7 @@
         "width": 296,
         "color": 3
       },
-      "id": "f54e4314-9dd7-4d24-a0c9-dc1cbb3ba022",
+      "id": "6f356091-13a8-4a73-984b-e722beb9707f",
       "name": "Sticky · 3 · Classify with AI",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -53,10 +53,10 @@
       "parameters": {
         "content": "## 4 · Route\nSwitch on the category.",
         "height": 1071,
-        "width": 404,
+        "width": 407,
         "color": 6
       },
-      "id": "3478dd7e-9afc-4197-80bf-6e9e3bd1af16",
+      "id": "50ee5810-a4a8-4f4c-be3c-608dacd58adf",
       "name": "Sticky · 4 · Route",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -69,15 +69,15 @@
       "parameters": {
         "content": "## 5 · Act & tag\nSlack the urgent, draft a reply for review, flag leads, file newsletters, bin spam — then tag 'triaged' so nothing is handled twice. Nothing is sent automatically.",
         "height": 1071,
-        "width": 569,
+        "width": 566,
         "color": 7
       },
-      "id": "1c8beabb-99c4-4a2a-8280-2aa65193ec9a",
+      "id": "22904de6-e789-4c1b-9dc6-692fea289ef1",
       "name": "Sticky · 5 · Act & tag",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1270,
+        1273,
         -511
       ]
     },
@@ -147,7 +147,7 @@
       "name": "OpenAI Chat Model",
       "credentials": {
         "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
+          "id": "SYpGRkU0nCCv3rd3",
           "name": "OpenAI account"
         }
       }
@@ -297,13 +297,11 @@
     },
     {
       "parameters": {
-        "authentication": "oAuth2",
         "select": "channel",
         "channelId": {
           "__rl": true,
-          "value": "YOUR_SLACK_CHANNEL_ID",
-          "mode": "list",
-          "cachedResultName": "your-channel"
+          "mode": "id",
+          "value": "YOUR_SLACK_CHANNEL_ID"
         },
         "text": "=🚨 Urgent email from {{ $('Normalize').first().json.from }}\nSubject: {{ $('Normalize').first().json.subject }}\nSummary: {{ $json.output.summary }}\nSuggested action: {{ $json.output.suggested_action }}",
         "otherOptions": {}
@@ -316,10 +314,10 @@
       ],
       "id": "01726be5-21b2-43eb-89d5-33309190e669",
       "name": "Send a message",
-      "webhookId": "73c85893-1721-487b-82c0-746b21e4276e",
+      "webhookId": "abc34a17-096d-4047-bdde-f1984001190c",
       "credentials": {
-        "slackOAuth2Api": {
-          "id": "REPLACE_WITH_YOUR_SLACK_CREDENTIAL",
+        "slackApi": {
+          "id": "1OmcAA2AKHVVunVC",
           "name": "Slack account"
         }
       }
@@ -387,8 +385,8 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.9,
       "position": [
-        1200,
-        -208
+        1232,
+        -224
       ],
       "id": "6605592b-7916-4de2-8830-8982f648183f",
       "name": "Basic LLM Chain"
@@ -414,7 +412,7 @@
       "name": "OpenAI Chat Model1",
       "credentials": {
         "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
+          "id": "SYpGRkU0nCCv3rd3",
           "name": "OpenAI account"
         }
       }
@@ -443,8 +441,8 @@
       "name": "Gmail Trigger",
       "credentials": {
         "gmailOAuth2": {
-          "id": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL",
-          "name": "Gmail OAuth2 API"
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account"
         }
       }
     },
@@ -461,11 +459,11 @@
       ],
       "id": "80cd794a-0c5c-4904-9569-13299ad54464",
       "name": "Mark a message as read",
-      "webhookId": "e2d043ad-53ee-4962-99c1-abafab648165",
+      "webhookId": "64e4e167-8c40-4416-99cd-972391b4b806",
       "credentials": {
         "gmailOAuth2": {
-          "id": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL",
-          "name": "Gmail OAuth2 API"
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account"
         }
       }
     },
@@ -474,7 +472,7 @@
         "operation": "addLabels",
         "messageId": "={{ $('Normalize').first().json.messageId }}",
         "labelIds": [
-          "YOUR_TRIAGED_LABEL_ID"
+          "YOUR_GMAIL_LABEL_ID"
         ]
       },
       "type": "n8n-nodes-base.gmail",
@@ -485,11 +483,11 @@
       ],
       "id": "26ee4321-6b68-4839-8022-b5cc88737f55",
       "name": "Add label to message",
-      "webhookId": "cb3ffca6-3ffb-4fca-ad7c-d17d0dbed8ac",
+      "webhookId": "7ba2baa4-d72f-43e1-8c32-d22de733b359",
       "credentials": {
         "gmailOAuth2": {
-          "id": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL",
-          "name": "Gmail OAuth2 API"
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account"
         }
       }
     },
@@ -506,36 +504,11 @@
       ],
       "id": "bc05b3b3-e004-4228-830c-d3fadb24a638",
       "name": "Delete a message",
-      "webhookId": "87abd1fc-0b37-430d-abed-74c142b7646f",
+      "webhookId": "322f47a6-5765-4892-abe9-96a2a8df75ba",
       "credentials": {
         "gmailOAuth2": {
-          "id": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL",
-          "name": "Gmail OAuth2 API"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "addLabels",
-        "messageId": "={{ $('Normalize').first().json.messageId }}",
-        "labelIds": [
-          "YOUR_URGENT_LABEL_ID",
-          "YOUR_TRIAGED_LABEL_ID"
-        ]
-      },
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.2,
-      "position": [
-        1360,
-        -416
-      ],
-      "id": "3c9c4962-c18c-4b87-8e47-7ae2da74dbaf",
-      "name": "Add label to message1",
-      "webhookId": "e45ea161-c2e0-4441-a403-1a3190cf1645",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL",
-          "name": "Gmail OAuth2 API"
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account"
         }
       }
     },
@@ -556,11 +529,11 @@
       ],
       "id": "6be4d62d-d2c8-4f8e-a296-88075d2fa75e",
       "name": "Create a draft",
-      "webhookId": "c4e385d2-0db7-41bf-ae9c-ef56b14e0a2c",
+      "webhookId": "8e5a553b-f7fd-4308-aa34-805c9ed0a2cb",
       "credentials": {
         "gmailOAuth2": {
-          "id": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL",
-          "name": "Gmail OAuth2 API"
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account"
         }
       }
     },
@@ -569,7 +542,7 @@
         "operation": "addLabels",
         "messageId": "={{ $('Normalize').first().json.messageId }}",
         "labelIds": [
-          "YOUR_TRIAGED_LABEL_ID"
+          "YOUR_GMAIL_LABEL_ID"
         ]
       },
       "type": "n8n-nodes-base.gmail",
@@ -580,23 +553,21 @@
       ],
       "id": "14aa9fbe-d350-4c7d-955f-ebd33702c5a3",
       "name": "Add label to message2",
-      "webhookId": "bf13b1ec-72d9-4ae5-b570-c0c29ed303c0",
+      "webhookId": "b806dc57-f152-456d-bba6-882d7fd6e092",
       "credentials": {
         "gmailOAuth2": {
-          "id": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL",
-          "name": "Gmail OAuth2 API"
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account"
         }
       }
     },
     {
       "parameters": {
-        "authentication": "oAuth2",
         "select": "channel",
         "channelId": {
           "__rl": true,
-          "value": "YOUR_SLACK_CHANNEL_ID",
-          "mode": "list",
-          "cachedResultName": "your-channel"
+          "mode": "id",
+          "value": "YOUR_SLACK_CHANNEL_ID"
         },
         "text": "=💰 New sales lead from {{ $('Normalize').first().json.from }} — {{ $json.output.summary }}",
         "otherOptions": {}
@@ -609,10 +580,10 @@
       ],
       "id": "f6ef77c8-8bdf-44b2-9f33-842ec3fdb44b",
       "name": "Send a message1",
-      "webhookId": "2763373d-5972-432c-ba8f-4f490eb6d408",
+      "webhookId": "9df22644-0ebc-45b1-8f5f-675740538df8",
       "credentials": {
-        "slackOAuth2Api": {
-          "id": "REPLACE_WITH_YOUR_SLACK_CREDENTIAL",
+        "slackApi": {
+          "id": "1OmcAA2AKHVVunVC",
           "name": "Slack account"
         }
       }
@@ -622,7 +593,7 @@
         "operation": "addLabels",
         "messageId": "={{ $('Normalize').first().json.messageId }}",
         "labelIds": [
-          "YOUR_TRIAGED_LABEL_ID"
+          "YOUR_GMAIL_LABEL_ID"
         ]
       },
       "type": "n8n-nodes-base.gmail",
@@ -633,11 +604,11 @@
       ],
       "id": "109a8006-432c-424b-a1a7-9422c4e3a9c6",
       "name": "Add label to message3",
-      "webhookId": "2b55e7b4-fbd6-4867-8f52-03742d8828ae",
+      "webhookId": "74cc55a4-4d40-43fe-8a29-31a163e25b39",
       "credentials": {
         "gmailOAuth2": {
-          "id": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL",
-          "name": "Gmail OAuth2 API"
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account"
         }
       }
     },
@@ -646,7 +617,7 @@
         "operation": "addLabels",
         "messageId": "={{ $('Normalize').first().json.messageId }}",
         "labelIds": [
-          "YOUR_TRIAGED_LABEL_ID"
+          "YOUR_GMAIL_LABEL_ID"
         ]
       },
       "type": "n8n-nodes-base.gmail",
@@ -657,16 +628,39 @@
       ],
       "id": "b100381c-3b98-43b7-b0c1-39c5ea636ddc",
       "name": "Add label to message4",
-      "webhookId": "db058d06-cebe-45c6-b6fc-3e03a76e9994",
+      "webhookId": "431861c1-2549-447b-aaf4-2d8a6639a9ef",
       "credentials": {
         "gmailOAuth2": {
-          "id": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL",
-          "name": "Gmail OAuth2 API"
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $('Normalize').first().json.messageId }}",
+        "labelIds": [
+          "YOUR_GMAIL_LABEL_ID"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1392,
+        -416
+      ],
+      "id": "559996d9-508b-4b66-a3cd-a65e254cc2f1",
+      "name": "Add label to message5",
+      "webhookId": "8117cdab-f493-44d3-8ba2-565b9da12c71",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account"
         }
       }
     }
   ],
-  "pinData": {},
   "connections": {
     "OpenAI Chat Model": {
       "ai_languageModel": [
@@ -784,7 +778,7 @@
       "main": [
         [
           {
-            "node": "Add label to message1",
+            "node": "Add label to message5",
             "type": "main",
             "index": 0
           }
@@ -825,13 +819,9 @@
       ]
     }
   },
-  "active": false,
   "settings": {
     "executionOrder": "v1",
-    "binaryMode": "separate"
-  },
-  "meta": {
-    "templateCredsSetupCompleted": true
-  },
-  "nodeGroups": []
+    "binaryMode": "separate",
+    "availableInMCP": false
+  }
 }

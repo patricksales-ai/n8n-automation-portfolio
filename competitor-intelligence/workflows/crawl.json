@@ -1,5 +1,5 @@
 {
-  "name": "Competitor Intel - Crawl",
+  "name": "Build 2 — Crawl",
   "nodes": [
     {
       "parameters": {
@@ -8,7 +8,7 @@
         "width": 575,
         "color": 5
       },
-      "id": "c5e9cba4-0fe6-4adb-bb23-f2e8c48647bf",
+      "id": "ced5f869-0717-48a6-adcb-85b104e90ccc",
       "name": "Sticky · Daily schedule",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -24,7 +24,7 @@
         "width": 884,
         "color": 2
       },
-      "id": "2809fe6f-c47c-4201-b7b0-1e32caee4f3d",
+      "id": "36efdf41-9845-4ae3-8776-e2cde3ae277a",
       "name": "Sticky · Fetch each competitor",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -40,7 +40,7 @@
         "width": 663,
         "color": 6
       },
-      "id": "2d31803f-f673-4a52-9299-38c49efa7363",
+      "id": "76e799d7-4577-4365-9359-099505fe3b7b",
       "name": "Sticky · Only if changed",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -56,7 +56,7 @@
         "width": 559,
         "color": 3
       },
-      "id": "7cb1d737-e81b-4c67-bb25-14c51e928c36",
+      "id": "d58c1e59-056f-4ffc-9296-6d21e5f78945",
       "name": "Sticky · Summarize the change",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -72,7 +72,7 @@
         "width": 882,
         "color": 7
       },
-      "id": "2e698d5c-d05e-42d8-b97a-86562c47cc08",
+      "id": "9fe6cdd9-2205-4968-96bc-2e89e1e0cbc4",
       "name": "Sticky · Store",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -100,27 +100,6 @@
       ],
       "id": "aff33913-7fab-49d3-a50d-b9e778a403ac",
       "name": "Schedule Trigger"
-    },
-    {
-      "parameters": {
-        "operation": "getAll",
-        "tableId": "competitors",
-        "returnAll": true
-      },
-      "type": "n8n-nodes-base.supabase",
-      "typeVersion": 1,
-      "position": [
-        -144,
-        -432
-      ],
-      "id": "40b79dba-842d-41cf-bd2a-dd763799bc3b",
-      "name": "Get many rows",
-      "credentials": {
-        "supabaseApi": {
-          "id": "REPLACE_WITH_YOUR_SUPABASE_CREDENTIAL",
-          "name": "Supabase account"
-        }
-      }
     },
     {
       "parameters": {
@@ -408,7 +387,7 @@
       "name": "OpenAI Chat Model",
       "credentials": {
         "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
+          "id": "SYpGRkU0nCCv3rd3",
           "name": "OpenAI account"
         }
       }
@@ -459,8 +438,8 @@
       "name": "Create a row",
       "credentials": {
         "supabaseApi": {
-          "id": "REPLACE_WITH_YOUR_SUPABASE_CREDENTIAL",
-          "name": "Supabase account"
+          "id": "TAlfwmKz0t5ZcdoB",
+          "name": "Supabase API Local"
         }
       }
     },
@@ -504,8 +483,8 @@
       "name": "Update a row",
       "credentials": {
         "supabaseApi": {
-          "id": "REPLACE_WITH_YOUR_SUPABASE_CREDENTIAL",
-          "name": "Supabase account"
+          "id": "TAlfwmKz0t5ZcdoB",
+          "name": "Supabase API Local"
         }
       }
     },
@@ -530,8 +509,8 @@
       "name": "Supabase Vector Store",
       "credentials": {
         "supabaseApi": {
-          "id": "REPLACE_WITH_YOUR_SUPABASE_CREDENTIAL",
-          "name": "Supabase account"
+          "id": "TAlfwmKz0t5ZcdoB",
+          "name": "Supabase API Local"
         }
       }
     },
@@ -549,7 +528,7 @@
       "name": "Embeddings OpenAI",
       "credentials": {
         "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
+          "id": "SYpGRkU0nCCv3rd3",
           "name": "OpenAI account"
         }
       }
@@ -652,26 +631,35 @@
       ],
       "id": "4d4c2efa-c2ea-48d5-8edd-c5109e87ac00",
       "name": "Build Document"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "competitors",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -144,
+        -432
+      ],
+      "id": "dca001b4-d1db-4287-92ed-3fcaf4b63b77",
+      "name": "Get many rows",
+      "credentials": {
+        "supabaseApi": {
+          "id": "TAlfwmKz0t5ZcdoB",
+          "name": "Supabase API Local"
+        }
+      }
     }
   ],
-  "pinData": {},
   "connections": {
     "Schedule Trigger": {
       "main": [
         [
           {
             "node": "Get many rows",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get many rows": {
-      "main": [
-        [
-          {
-            "node": "Loop Over Items",
             "type": "main",
             "index": 0
           }
@@ -850,17 +838,22 @@
           }
         ]
       ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "active": false,
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
     "availableInMCP": false
-  },
-  "meta": {
-    "templateCredsSetupCompleted": true
-  },
-  "nodeGroups": [],
-  "tags": []
+  }
 }

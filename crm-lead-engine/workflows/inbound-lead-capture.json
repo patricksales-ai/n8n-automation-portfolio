@@ -8,7 +8,7 @@
         "width": 390,
         "color": 5
       },
-      "id": "0c1b9f55-6511-46ce-bc40-0f55f8e2d705",
+      "id": "e287271d-ae8b-49d1-a79d-f15d0eeb3e7c",
       "name": "Sticky · New email",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -24,7 +24,7 @@
         "width": 480,
         "color": 3
       },
-      "id": "181fd6dc-3678-440b-868a-97f6eef2805e",
+      "id": "520771bb-7a8a-467d-8611-26987611bb33",
       "name": "Sticky · Qualify the lead",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -37,10 +37,10 @@
       "parameters": {
         "content": "## Route by temperature",
         "height": 863,
-        "width": 646,
+        "width": 648,
         "color": 6
       },
-      "id": "94447335-b6ff-49db-b335-cc4c6ef6d623",
+      "id": "4280107f-8ae3-4c79-8ce4-1b86f1e8bff2",
       "name": "Sticky · Route by temperature",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -53,15 +53,15 @@
       "parameters": {
         "content": "## Capture + reply\nUpsert into HubSpot, label, auto-reply to hot/warm, alert Slack.",
         "height": 863,
-        "width": 1071,
+        "width": 1069,
         "color": 7
       },
-      "id": "1ee08096-326a-4f0e-a66f-c3e4bdaa813c",
+      "id": "44468652-a297-404d-9935-71a1fc78302c",
       "name": "Sticky · Capture + reply",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1456,
+        1458,
         -383
       ]
     },
@@ -86,8 +86,8 @@
       "name": "Gmail Trigger",
       "credentials": {
         "gmailOAuth2": {
-          "id": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL",
-          "name": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL"
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account"
         }
       }
     },
@@ -106,11 +106,11 @@
       ],
       "id": "b3e90948-647e-4e1b-bbba-ed11e2be85b2",
       "name": "Get a message",
-      "webhookId": "cde9db4c-bd7d-4b83-afd0-86438c7f40e6",
+      "webhookId": "7baea07a-2cc8-42a7-8c0b-7191e6f98481",
       "credentials": {
         "gmailOAuth2": {
-          "id": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL",
-          "name": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL"
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account"
         }
       }
     },
@@ -137,8 +137,8 @@
       "name": "OpenAI Chat Model",
       "credentials": {
         "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
-          "name": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL"
+          "id": "SYpGRkU0nCCv3rd3",
+          "name": "OpenAI account"
         }
       }
     },
@@ -255,36 +255,10 @@
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://api.hubapi.com/crm/v3/objects/contacts/batch/upsert",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={\n  \"inputs\": [\n    {\n      \"idProperty\": \"email\",\n      \"id\": \"{{ $json.output.contact_email }}\",\n      \"properties\": {\n        \"email\": \"{{ $json.output.contact_email }}\",\n        \"firstname\": \"{{ $json.output.contact_name.split(' ')[0] }}\",\n        \"lastname\": \"{{ $json.output.contact_name.split(' ').slice(1).join(' ') }}\",\n        \"company\": \"{{ $json.output.company_name }}\",\n        \"phone\": \"{{ $json.output.phone }}\",\n        \"lifecyclestage\": \"lead\",\n        \"lead_temperature\": \"{{ $json.output.lead_temperature }}\",\n        \"ai_summary\": \"{{ $json.output.summary }}\",\n        \"data_quality_score\": \"{{ $json.output.data_quality_score }}\",\n        \"ai_enriched\": \"true\"\n      }\n    }\n  ]\n}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.4,
-      "position": [
-        1072,
-        -112
-      ],
-      "id": "26d1bd55-d795-40cc-8f3e-2c57f9b107ed",
-      "name": "HubSpot Upsert Lead",
-      "credentials": {
-        "httpHeaderAuth": {
-          "id": "REPLACE_WITH_YOUR_HUBSPOT_TOKEN_CREDENTIAL",
-          "name": "REPLACE_WITH_YOUR_HUBSPOT_TOKEN_CREDENTIAL"
-        }
-      }
-    },
-    {
-      "parameters": {
         "operation": "addLabels",
         "messageId": "={{ $('Get a message').item.json.id }}",
         "labelIds": [
-          "Label_6311329281531910045"
+          "YOUR_GMAIL_LABEL_ID"
         ]
       },
       "type": "n8n-nodes-base.gmail",
@@ -295,23 +269,21 @@
       ],
       "id": "d80a5fde-e23a-4c86-a767-ded1b43fe666",
       "name": "Add label to message",
-      "webhookId": "c8d17389-935c-48d7-820f-d4f1169d6aa8",
+      "webhookId": "8861db7f-3ac8-4581-a5df-02ca90aa4769",
       "credentials": {
         "gmailOAuth2": {
-          "id": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL",
-          "name": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL"
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account"
         }
       }
     },
     {
       "parameters": {
-        "authentication": "oAuth2",
         "select": "channel",
         "channelId": {
           "__rl": true,
           "value": "YOUR_SLACK_CHANNEL_ID",
-          "mode": "list",
-          "cachedResultName": "your-channel"
+          "mode": "id"
         },
         "text": "=🆕 New {{ $('Lead Qualifier').item.json.output.lead_temperature }} lead\n👤 {{ $('Lead Qualifier').item.json.output.contact_name }} — {{ $('Lead Qualifier').item.json.output.company_name }}\n📧 {{ $('Lead Qualifier').item.json.output.contact_email }}\n💬 {{ $('Lead Qualifier').item.json.output.intent }}\n📊 Data quality: {{ $('Lead Qualifier').item.json.output.data_quality_score }}/100\n{{ ['hot','warm'].includes($('Lead Qualifier').item.json.output.lead_temperature) ? '✅ Auto-reply sent — please review the thread' : '❄️ No auto-reply (cold lead)' }}",
         "otherOptions": {}
@@ -324,11 +296,11 @@
       ],
       "id": "a02ddbe3-8735-42e6-9afa-20136eb8692a",
       "name": "Send a message",
-      "webhookId": "b1850b2e-005e-473c-99d9-e1044e7c0f9c",
+      "webhookId": "c16ce01d-2aee-49eb-8926-5d579cd66352",
       "credentials": {
-        "slackOAuth2Api": {
-          "id": "REPLACE_WITH_YOUR_SLACK_CREDENTIAL",
-          "name": "REPLACE_WITH_YOUR_SLACK_CREDENTIAL"
+        "slackApi": {
+          "id": "1OmcAA2AKHVVunVC",
+          "name": "Slack account"
         }
       }
     },
@@ -422,7 +394,7 @@
         "operation": "addLabels",
         "messageId": "={{ $('Get a message').item.json.id }}",
         "labelIds": [
-          "Label_6315408975277736370"
+          "YOUR_GMAIL_LABEL_ID"
         ]
       },
       "type": "n8n-nodes-base.gmail",
@@ -433,11 +405,11 @@
       ],
       "id": "ed9fd3c3-dbb2-43e9-9841-5ffd54b3e8f8",
       "name": "Add label to message1",
-      "webhookId": "c8d17389-935c-48d7-820f-d4f1169d6aa8",
+      "webhookId": "8861db7f-3ac8-4581-a5df-02ca90aa4769",
       "credentials": {
         "gmailOAuth2": {
-          "id": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL",
-          "name": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL"
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account"
         }
       }
     },
@@ -446,7 +418,7 @@
         "operation": "addLabels",
         "messageId": "={{ $('Get a message').item.json.id }}",
         "labelIds": [
-          "Label_8979653220111601172"
+          "YOUR_GMAIL_LABEL_ID"
         ]
       },
       "type": "n8n-nodes-base.gmail",
@@ -457,11 +429,11 @@
       ],
       "id": "291ee560-aff8-4e94-9f0e-f2d670294f53",
       "name": "Add label to message2",
-      "webhookId": "c8d17389-935c-48d7-820f-d4f1169d6aa8",
+      "webhookId": "8861db7f-3ac8-4581-a5df-02ca90aa4769",
       "credentials": {
         "gmailOAuth2": {
-          "id": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL",
-          "name": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL"
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account"
         }
       }
     },
@@ -501,8 +473,8 @@
       "name": "OpenAI Chat Model1",
       "credentials": {
         "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
-          "name": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL"
+          "id": "SYpGRkU0nCCv3rd3",
+          "name": "OpenAI account"
         }
       }
     },
@@ -522,23 +494,21 @@
       ],
       "id": "49174590-9a6e-446b-bbe4-ebe3481ff4f9",
       "name": "Reply to a message",
-      "webhookId": "b8543cd5-fb17-4b1c-94a0-143e8d595506",
+      "webhookId": "989431e6-2ce6-43ff-b026-f319b4776e3c",
       "credentials": {
         "gmailOAuth2": {
-          "id": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL",
-          "name": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL"
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account"
         }
       }
     },
     {
       "parameters": {
-        "authentication": "oAuth2",
         "select": "channel",
         "channelId": {
           "__rl": true,
           "value": "YOUR_SLACK_CHANNEL_ID",
-          "mode": "list",
-          "cachedResultName": "your-channel"
+          "mode": "id"
         },
         "text": "=🆕 New {{ $('Lead Qualifier').item.json.output.lead_temperature }} lead\n👤 {{ $('Lead Qualifier').item.json.output.contact_name }} — {{ $('Lead Qualifier').item.json.output.company_name }}\n📧 {{ $('Lead Qualifier').item.json.output.contact_email }}\n💬 {{ $('Lead Qualifier').item.json.output.intent }}\n📊 Data quality: {{ $('Lead Qualifier').item.json.output.data_quality_score }}/100\n{{ ['hot','warm'].includes($('Lead Qualifier').item.json.output.lead_temperature) ? '✅ Auto-reply sent — please review the thread' : '❄️ No auto-reply (cold lead)' }}",
         "otherOptions": {}
@@ -551,16 +521,41 @@
       ],
       "id": "24638d9b-32d2-4370-a0ea-9da4a4fbe057",
       "name": "Send a message1",
-      "webhookId": "b1850b2e-005e-473c-99d9-e1044e7c0f9c",
+      "webhookId": "c16ce01d-2aee-49eb-8926-5d579cd66352",
       "credentials": {
-        "slackOAuth2Api": {
-          "id": "REPLACE_WITH_YOUR_SLACK_CREDENTIAL",
-          "name": "REPLACE_WITH_YOUR_SLACK_CREDENTIAL"
+        "slackApi": {
+          "id": "1OmcAA2AKHVVunVC",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.hubapi.com/crm/v3/objects/contacts/batch/upsert",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"inputs\": [\n    {\n      \"idProperty\": \"email\",\n      \"id\": \"{{ $json.output.contact_email }}\",\n      \"properties\": {\n        \"email\": \"{{ $json.output.contact_email }}\",\n        \"firstname\": \"{{ $json.output.contact_name.split(' ')[0] }}\",\n        \"lastname\": \"{{ $json.output.contact_name.split(' ').slice(1).join(' ') }}\",\n        \"company\": \"{{ $json.output.company_name }}\",\n        \"phone\": \"{{ $json.output.phone }}\",\n        \"lifecyclestage\": \"lead\",\n        \"lead_temperature\": \"{{ $json.output.lead_temperature }}\",\n        \"ai_summary\": \"{{ $json.output.summary }}\",\n        \"data_quality_score\": \"{{ $json.output.data_quality_score }}\",\n        \"ai_enriched\": \"true\"\n      }\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1104,
+        -112
+      ],
+      "id": "bcb4e071-82df-433e-9cc1-58ba57bee8cf",
+      "name": "HubSpot Upsert Lead1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "trHSo3RUnBy8ZqXd",
+          "name": "HubSpot Header Auth Local"
         }
       }
     }
   ],
-  "pinData": {},
   "connections": {
     "Gmail Trigger": {
       "main": [
@@ -610,18 +605,7 @@
       "main": [
         [
           {
-            "node": "HubSpot Upsert Lead",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "HubSpot Upsert Lead": {
-      "main": [
-        [
-          {
-            "node": "Switch",
+            "node": "HubSpot Upsert Lead1",
             "type": "main",
             "index": 0
           }
@@ -718,15 +702,22 @@
           }
         ]
       ]
+    },
+    "HubSpot Upsert Lead1": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "active": false,
   "settings": {
     "executionOrder": "v1",
-    "binaryMode": "separate"
-  },
-  "meta": {
-    "templateCredsSetupCompleted": true
-  },
-  "nodeGroups": []
+    "binaryMode": "separate",
+    "availableInMCP": false
+  }
 }

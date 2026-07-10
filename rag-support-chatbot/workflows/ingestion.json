@@ -1,14 +1,14 @@
 {
-  "name": "RAG Support — Ingestion (Drive → Supabase)",
+  "name": "Build 4 - RAG Support — Ingestion (Drive → Supabase)",
   "nodes": [
     {
       "parameters": {
         "content": "## Schedule",
         "height": 687,
-        "width": 364,
+        "width": 368,
         "color": 5
       },
-      "id": "bd18b6c3-2e6f-4654-b3e9-c6c337f5c9b3",
+      "id": "03d004c0-f4ab-47dc-8dad-073a5181f589",
       "name": "Sticky · Schedule",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -21,15 +21,15 @@
       "parameters": {
         "content": "## Sync Drive\nList + download new files; SQL check skips anything already ingested.",
         "height": 687,
-        "width": 532,
+        "width": 600,
         "color": 2
       },
-      "id": "ebb6daf0-f97b-4738-bfd6-8781c925a57c",
+      "id": "abda534a-2f78-4696-96be-91402f199c59",
       "name": "Sticky · Sync Drive",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1568,
+        1572,
         17
       ]
     },
@@ -37,15 +37,15 @@
       "parameters": {
         "content": "## Chunk + embed → store\nSplit, embed, and write to the vector store.",
         "height": 687,
-        "width": 587,
+        "width": 515,
         "color": 3
       },
-      "id": "829d0df8-fe8c-4e28-9e53-8ecfb36eefd5",
+      "id": "f2efbd0f-1d52-4501-9108-7d2823f5876c",
       "name": "Sticky · Chunk + embed → store",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        2100,
+        2172,
         17
       ]
     },
@@ -76,10 +76,9 @@
         "filter": {
           "folderId": {
             "__rl": true,
-            "value": "YOUR_DRIVE_FOLDER",
+            "value": "YOUR_DRIVE_FOLDER_ID",
             "mode": "list",
-            "cachedResultName": "Your support docs folder",
-            "cachedResultUrl": "https://drive.google.com/drive/folders/YOUR_DRIVE_FOLDER"
+            "cachedResultName": "YOUR_DRIVE_FOLDER_ID"
           }
         },
         "options": {}
@@ -87,15 +86,15 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        1632,
+        1664,
         112
       ],
       "id": "06bb29ef-37ab-4eac-84b9-1476aa8e1db1",
       "name": "Search files and folders",
       "credentials": {
         "googleDriveOAuth2Api": {
-          "id": "REPLACE_WITH_YOUR_GOOGLE_DRIVE_CREDENTIAL",
-          "name": "Google Drive OAuth2 API"
+          "id": "7qbp6h6nyqUmVNmI",
+          "name": "Google Drive account"
         }
       }
     },
@@ -119,8 +118,8 @@
       "name": "Download file",
       "credentials": {
         "googleDriveOAuth2Api": {
-          "id": "REPLACE_WITH_YOUR_GOOGLE_DRIVE_CREDENTIAL",
-          "name": "Google Drive OAuth2 API"
+          "id": "7qbp6h6nyqUmVNmI",
+          "name": "Google Drive account"
         }
       }
     },
@@ -159,8 +158,8 @@
       "name": "Supabase Vector Store1",
       "credentials": {
         "supabaseApi": {
-          "id": "REPLACE_WITH_YOUR_SUPABASE_CREDENTIAL",
-          "name": "Supabase account"
+          "id": "TAlfwmKz0t5ZcdoB",
+          "name": "Supabase API Local"
         }
       }
     },
@@ -187,7 +186,7 @@
       "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
       "typeVersion": 1.1,
       "position": [
-        2400,
+        2480,
         352
       ],
       "id": "410cad38-5b0f-40a3-a453-797fdc6a61ce",
@@ -202,7 +201,7 @@
       "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
       "typeVersion": 1,
       "position": [
-        2400,
+        2480,
         544
       ],
       "id": "41697df1-40b2-4c81-974c-5aade160ff7c",
@@ -215,14 +214,14 @@
       "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
       "typeVersion": 1.2,
       "position": [
-        2000,
+        2384,
         352
       ],
       "id": "f9566979-4fe0-471d-93ba-89d880d0ecc0",
       "name": "Embeddings OpenAI1",
       "credentials": {
         "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
+          "id": "SYpGRkU0nCCv3rd3",
           "name": "OpenAI account"
         }
       }
@@ -244,13 +243,12 @@
       "alwaysOutputData": true,
       "credentials": {
         "postgres": {
-          "id": "REPLACE_WITH_YOUR_POSTGRES_CREDENTIAL",
-          "name": "Postgres account 2"
+          "id": "IxhHw1xeHq7a4xYh",
+          "name": "Supabase Local"
         }
       }
     }
   ],
-  "pinData": {},
   "connections": {
     "Schedule Trigger": {
       "main": [
@@ -341,15 +339,9 @@
       ]
     }
   },
-  "active": false,
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
     "availableInMCP": false
-  },
-  "meta": {
-    "templateCredsSetupCompleted": true
-  },
-  "nodeGroups": [],
-  "tags": []
+  }
 }

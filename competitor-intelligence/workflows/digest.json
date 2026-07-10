@@ -1,14 +1,14 @@
 {
-  "name": "Competitor Intel - Digest",
+  "name": "Build 2 - Digest",
   "nodes": [
     {
       "parameters": {
         "content": "## Weekly schedule",
-        "height": 559,
-        "width": 274,
+        "height": 575,
+        "width": 270,
         "color": 5
       },
-      "id": "c5e688e2-6bc3-46bc-8e22-7d1803f76e2e",
+      "id": "50015905-9446-4db7-8753-0997a8036fde",
       "name": "Sticky · Weekly schedule",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -20,48 +20,48 @@
     {
       "parameters": {
         "content": "## Gather the week\nPull the week's changes and aggregate.",
-        "height": 559,
-        "width": 296,
+        "height": 575,
+        "width": 312,
         "color": 2
       },
-      "id": "ef02c5bc-c6a8-40f8-af3a-86b0b4f9d547",
+      "id": "a18f4f25-5d45-4876-9783-4f4af1eb45a7",
       "name": "Sticky · Gather the week",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        214,
+        210,
         -191
       ]
     },
     {
       "parameters": {
         "content": "## Write the brief\nSectioned weekly summary.",
-        "height": 559,
-        "width": 324,
+        "height": 575,
+        "width": 328,
         "color": 3
       },
-      "id": "201a25d8-5d2b-46c1-a9a3-e9606e334b0a",
+      "id": "d547fcd2-4315-4449-93f5-199c8c2d2c63",
       "name": "Sticky · Write the brief",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        510,
+        522,
         -191
       ]
     },
     {
       "parameters": {
         "content": "## Deliver\nEmail + Slack.",
-        "height": 559,
-        "width": 301,
+        "height": 575,
+        "width": 285,
         "color": 7
       },
-      "id": "0e4476d9-932b-468e-8e9f-218ff6b02325",
+      "id": "77c1a71f-ea4c-4de6-b647-1901b9fb8254",
       "name": "Sticky · Deliver",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        834,
+        850,
         -191
       ]
     },
@@ -87,41 +87,6 @@
     },
     {
       "parameters": {
-        "operation": "getAll",
-        "tableId": "intel_log",
-        "matchType": "allFilters",
-        "filters": {
-          "conditions": [
-            {
-              "keyName": "created_at",
-              "condition": "gt",
-              "keyValue": "={{ $now.minus(7,'days').toISO() }}"
-            },
-            {
-              "keyName": "significance",
-              "condition": "neq",
-              "keyValue": "low"
-            }
-          ]
-        }
-      },
-      "type": "n8n-nodes-base.supabase",
-      "typeVersion": 1,
-      "position": [
-        208,
-        0
-      ],
-      "id": "9f543864-5b27-4344-9ab6-e6fbb5b603fc",
-      "name": "Get many rows",
-      "credentials": {
-        "supabaseApi": {
-          "id": "REPLACE_WITH_YOUR_SUPABASE_CREDENTIAL",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
         "aggregate": "aggregateAllItemData",
         "destinationFieldName": "items",
         "options": {}
@@ -138,7 +103,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=You are a competitive analyst. The items below are competitor changes across THREE separate businesses, tagged by a \"brand\" field:\n- Brand A (weddings)\n- Brand B (Australian property investment)\n- Brand C (high-ticket sales training)\n\nWrite a weekly intel brief ORGANIZED INTO THREE SECTIONS — one per brand, in that order. Use the brand name as each section heading. Under each brand, cover: (1) the most important moves, (2) any pricing/product/offer changes, (3) a short watch list. Cite each competitor by name. Only use the evidence in the items — do not speculate. If a brand has no notable items this week, write \"No significant moves this week.\" under its heading.\n\nItems (each tagged with its brand): {{ JSON.stringify($json.items) }}",
+        "text": "=You are a competitive analyst. The items below are competitor changes across THREE separate businesses, tagged by a \"brand\" field:\n- Wedded Wonderland (weddings)\n- Liviti Property (Australian property investment)\n- Closers Cult (high-ticket sales training)\n\nWrite a weekly intel brief ORGANIZED INTO THREE SECTIONS — one per brand, in that order. Use the brand name as each section heading. Under each brand, cover: (1) the most important moves, (2) any pricing/product/offer changes, (3) a short watch list. Cite each competitor by name. Only use the evidence in the items — do not speculate. If a brand has no notable items this week, write \"No significant moves this week.\" under its heading.\n\nItems (each tagged with its brand): {{ JSON.stringify($json.items) }}",
         "batching": {}
       },
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
@@ -164,14 +129,14 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.3,
       "position": [
-        560,
-        208
+        624,
+        224
       ],
       "id": "03f2bdf4-a110-4a90-84e4-bdbdd33cb73c",
       "name": "OpenAI Chat Model",
       "credentials": {
         "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
+          "id": "SYpGRkU0nCCv3rd3",
           "name": "OpenAI account"
         }
       }
@@ -192,23 +157,21 @@
       ],
       "id": "f981db35-8b17-434e-aeb5-8ce801b0b52a",
       "name": "Send a message",
-      "webhookId": "49c4047a-c1cb-4ca7-b0ac-483024834e9e",
+      "webhookId": "492fc44e-169e-4969-9b68-cf7e016d66fa",
       "credentials": {
         "gmailOAuth2": {
-          "id": "REPLACE_WITH_YOUR_GMAIL_CREDENTIAL",
-          "name": "Gmail OAuth2 API"
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account"
         }
       }
     },
     {
       "parameters": {
-        "authentication": "oAuth2",
         "select": "channel",
         "channelId": {
           "__rl": true,
           "value": "YOUR_SLACK_CHANNEL_ID",
-          "mode": "list",
-          "cachedResultName": "your-channel"
+          "mode": "id"
         },
         "text": "={{ $json.text }}",
         "otherOptions": {}
@@ -221,33 +184,56 @@
       ],
       "id": "703cb9d4-546b-45a9-89b0-ba40086c4833",
       "name": "Send a message1",
-      "webhookId": "9816d900-e852-4071-83db-6ae37045d2bd",
+      "webhookId": "8ff94ef1-b8ce-4c66-8ae0-60f7e2f95908",
       "credentials": {
-        "slackOAuth2Api": {
-          "id": "REPLACE_WITH_YOUR_SLACK_CREDENTIAL",
+        "slackApi": {
+          "id": "1OmcAA2AKHVVunVC",
           "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "intel_log",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "created_at",
+              "condition": "gt",
+              "keyValue": "={{ $now.minus(7,'days').toISO() }}"
+            },
+            {
+              "keyName": "significance",
+              "condition": "neq",
+              "keyValue": "low"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        192,
+        0
+      ],
+      "id": "227c1a33-7949-4582-b50b-ee321049c2fd",
+      "name": "Get many rows",
+      "credentials": {
+        "supabaseApi": {
+          "id": "TAlfwmKz0t5ZcdoB",
+          "name": "Supabase API Local"
         }
       }
     }
   ],
-  "pinData": {},
   "connections": {
     "Schedule Trigger": {
       "main": [
         [
           {
             "node": "Get many rows",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get many rows": {
-      "main": [
-        [
-          {
-            "node": "Aggregate",
             "type": "main",
             "index": 0
           }
@@ -291,17 +277,22 @@
           }
         ]
       ]
+    },
+    "Get many rows": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "active": false,
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
     "availableInMCP": false
-  },
-  "meta": {
-    "templateCredsSetupCompleted": true
-  },
-  "nodeGroups": [],
-  "tags": []
+  }
 }

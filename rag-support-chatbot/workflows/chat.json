@@ -1,5 +1,5 @@
 {
-  "name": "RAG Support — Chatbot",
+  "name": "Build 4 - RAG Support — Chatbot",
   "nodes": [
     {
       "parameters": {
@@ -8,7 +8,7 @@
         "width": 242,
         "color": 5
       },
-      "id": "c6e1ce46-1669-42ac-adaf-42194361bde2",
+      "id": "1dcdebf6-3462-49ea-bb8a-20e186d1aa45",
       "name": "Sticky · Question",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -24,7 +24,7 @@
         "width": 409,
         "color": 3
       },
-      "id": "8e0ba25d-2ef3-4570-8630-c1673af722bb",
+      "id": "4216921d-586d-4d95-b054-015432e6fbaf",
       "name": "Sticky · Retrieve + answer",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -69,7 +69,7 @@
       "name": "OpenAI Chat Model",
       "credentials": {
         "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
+          "id": "SYpGRkU0nCCv3rd3",
           "name": "OpenAI account"
         }
       }
@@ -112,8 +112,8 @@
       "name": "search_docs",
       "credentials": {
         "supabaseApi": {
-          "id": "REPLACE_WITH_YOUR_SUPABASE_CREDENTIAL",
-          "name": "Supabase account"
+          "id": "TAlfwmKz0t5ZcdoB",
+          "name": "Supabase API Local"
         }
       }
     },
@@ -131,7 +131,7 @@
       "name": "Embeddings OpenAI",
       "credentials": {
         "openAiApi": {
-          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL",
+          "id": "SYpGRkU0nCCv3rd3",
           "name": "OpenAI account"
         }
       }
@@ -148,10 +148,9 @@
       ],
       "id": "c2b9aa74-c4c0-4695-bf32-7ed603993f42",
       "name": "Chat Trigger",
-      "webhookId": "a2cda2bb-aa4d-47d9-bb23-aab0c006ecce"
+      "webhookId": "3b64184a-e697-4678-ab7a-4e9fbf5d5369"
     }
   ],
-  "pinData": {},
   "connections": {
     "OpenAI Chat Model": {
       "ai_languageModel": [
@@ -209,15 +208,9 @@
       ]
     }
   },
-  "active": false,
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
     "availableInMCP": false
-  },
-  "meta": {
-    "templateCredsSetupCompleted": true
-  },
-  "nodeGroups": [],
-  "tags": []
+  }
 }

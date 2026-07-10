@@ -1,289 +1,243 @@
-[
-  {
-    "updatedAt": "2026-07-09T22:35:34.090Z",
-    "createdAt": "2026-07-09T14:51:51.420Z",
-    "id": "Kfp06BQZGbAqIojQ",
-    "name": "Outbound Feedback Bot — Dialer",
-    "description": null,
-    "active": false,
-    "isArchived": false,
-    "nodes": [
-      {
-        "parameters": {
-          "content": "## Start dial\nManual / scheduled kick-off.",
-          "height": 255,
-          "width": 310,
-          "color": 5
-        },
-        "id": "fe476354-ea87-47a6-b3e6-e1af356c9f11",
-        "name": "Sticky · Start dial",
-        "type": "n8n-nodes-base.stickyNote",
-        "typeVersion": 1,
-        "position": [
-          -236,
-          -95
-        ]
+{
+  "name": "Outbound Feedback Bot — Dialer",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Start dial\nManual / scheduled kick-off.",
+        "height": 255,
+        "width": 310,
+        "color": 5
       },
-      {
-        "parameters": {
-          "content": "## Lead list + DNC guard\nLoad leads and skip anyone on the do-not-call list before dialing.",
-          "height": 255,
-          "width": 400,
-          "color": 2
-        },
-        "id": "11d8f9c0-9ef0-4b12-8feb-8ececad93cd8",
-        "name": "Sticky · Lead list + DNC guard",
-        "type": "n8n-nodes-base.stickyNote",
-        "typeVersion": 1,
-        "position": [
-          74,
-          -95
-        ]
+      "id": "e543668e-87bc-4b46-9185-42ea8ff89f38",
+      "name": "Sticky · Start dial",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -236,
+        -95
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Lead list + DNC guard\nLoad leads and skip anyone on the do-not-call list before dialing.",
+        "height": 255,
+        "width": 400,
+        "color": 2
       },
-      {
-        "parameters": {
-          "content": "## Place AI call\nHTTP → Vapi (GPT-4o-mini voice over Twilio).",
-          "height": 255,
-          "width": 325,
-          "color": 3
-        },
-        "id": "fc70bc43-2c55-4b6b-b075-eb16e174c7ec",
-        "name": "Sticky · Place AI call",
-        "type": "n8n-nodes-base.stickyNote",
-        "typeVersion": 1,
-        "position": [
-          474,
-          -95
-        ]
+      "id": "3c4378b8-6ae0-44db-9fb1-0c054610c8ba",
+      "name": "Sticky · Lead list + DNC guard",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        74,
+        -95
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Place AI call\nHTTP → Vapi (GPT-4o-mini voice over Twilio).",
+        "height": 255,
+        "width": 325,
+        "color": 3
       },
-      {
-        "parameters": {
-          "documentId": {
-            "__rl": true,
-            "value": "YOUR_SHEET_ID",
-            "mode": "list",
-            "cachedResultName": "Outbound Call Log",
-            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=drivesdk"
-          },
-          "sheetName": {
-            "__rl": true,
-            "value": 1374242549,
-            "mode": "list",
-            "cachedResultName": "Sheet2",
-            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=1374242549"
-          },
-          "options": {}
+      "id": "dd48d1f5-a168-400d-ac21-cf1c8c213db6",
+      "name": "Sticky · Place AI call",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        474,
+        -95
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_SHEET_ID"
         },
-        "type": "n8n-nodes-base.googleSheets",
-        "typeVersion": 4.7,
-        "position": [
-          208,
-          0
-        ],
-        "id": "06828e68-afee-45af-8aca-4a4d6d3012d2",
-        "name": "Get row(s) in sheet",
-        "executeOnce": true,
-        "credentials": {
-          "googleSheetsOAuth2Api": {
-            "id": "yMqkk4M0kF50KIC0",
-            "name": "Google Sheets account"
-          }
+        "sheetName": {
+          "__rl": true,
+          "value": 1374242549,
+          "mode": "list",
+          "cachedResultName": "Sheet2",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YWGe4IpQGyPtr5-GlM3QZkxLurxCdlXsX0MXQDzgvE0/edit#gid=1374242549"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "06828e68-afee-45af-8aca-4a4d6d3012d2",
+      "name": "Get row(s) in sheet",
+      "executeOnce": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "yMqkk4M0kF50KIC0",
+          "name": "Google Sheets account"
         }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.vapi.ai/call",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  assistantId: \"89dccc48-1ae9-4526-82bb-6a25eda99d5f\",\n  phoneNumberId: \"d5959d0f-4f65-45a9-ac4a-9a6ef79cbbc8\",\n  customer: { number: String($json.phone).startsWith('+') ? String($json.phone) : '+' + String($json.phone) },\n  assistantOverrides: {\n    variableValues: { customerName: $json.name, business: $json.business }\n  }\n}) }}",
+        "options": {}
       },
-      {
-        "parameters": {
-          "method": "POST",
-          "url": "=https://api.vapi.ai/call",
-          "authentication": "genericCredentialType",
-          "genericAuthType": "httpHeaderAuth",
-          "sendBody": true,
-          "specifyBody": "json",
-          "jsonBody": "={{ JSON.stringify({\n  assistantId: \"YOUR_ASSISTANT_ID\",\n  phoneNumberId: \"YOUR_PHONE_NUMBER_ID\",\n  customer: { number: String($json.phone).startsWith('+') ? String($json.phone) : '+' + String($json.phone) },\n  assistantOverrides: {\n    variableValues: { customerName: $json.name, business: $json.business }\n  }\n}) }}",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.httpRequest",
-        "typeVersion": 4.4,
-        "position": [
-          624,
-          0
-        ],
-        "id": "df283f82-b976-4a0a-b1b3-5f88c000703c",
-        "name": "HTTP Request",
-        "credentials": {
-          "httpHeaderAuth": {
-            "id": "mV2e0zHo28aBSvle",
-            "name": "Vapi Header"
-          }
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        624,
+        0
+      ],
+      "id": "df283f82-b976-4a0a-b1b3-5f88c000703c",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "mV2e0zHo28aBSvle",
+          "name": "Vapi Header"
         }
-      },
-      {
-        "parameters": {
-          "documentId": {
-            "__rl": true,
-            "value": "YOUR_SHEET_ID",
-            "mode": "list",
-            "cachedResultName": "Outbound Call Log",
-            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=drivesdk"
-          },
-          "sheetName": {
-            "__rl": true,
-            "value": 247554161,
-            "mode": "list",
-            "cachedResultName": "Do Not Call",
-            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=247554161"
-          },
-          "filtersUI": {
-            "values": []
-          },
-          "options": {}
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "YOUR_SHEET_ID"
         },
-        "type": "n8n-nodes-base.googleSheets",
-        "typeVersion": 4.7,
-        "position": [
-          0,
-          0
-        ],
-        "id": "22ed1199-d53c-4aba-9dd7-a304adec3b44",
-        "name": "Get DNC",
-        "alwaysOutputData": true,
-        "credentials": {
-          "googleSheetsOAuth2Api": {
-            "id": "yMqkk4M0kF50KIC0",
-            "name": "Google Sheets account"
-          }
-        }
+        "sheetName": {
+          "__rl": true,
+          "value": 247554161,
+          "mode": "list",
+          "cachedResultName": "Do Not Call",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YWGe4IpQGyPtr5-GlM3QZkxLurxCdlXsX0MXQDzgvE0/edit#gid=247554161"
+        },
+        "filtersUI": {
+          "values": []
+        },
+        "options": {}
       },
-      {
-        "parameters": {
-          "conditions": {
-            "options": {
-              "caseSensitive": true,
-              "leftValue": "",
-              "typeValidation": "strict",
-              "version": 3
-            },
-            "conditions": [
-              {
-                "id": "f89fb3d4-98a1-45ef-9b6d-d234014d73f8",
-                "leftValue": true,
-                "rightValue": "={{ !$('Get DNC').all().map(i => String(i.json.phone).replace(/\\D/g,'')).includes(String($json.phone).replace(/\\D/g,'')) }}",
-                "operator": {
-                  "type": "boolean",
-                  "operation": "equals"
-                }
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        0,
+        0
+      ],
+      "id": "22ed1199-d53c-4aba-9dd7-a304adec3b44",
+      "name": "Get DNC",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "yMqkk4M0kF50KIC0",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f89fb3d4-98a1-45ef-9b6d-d234014d73f8",
+              "leftValue": true,
+              "rightValue": "={{ !$('Get DNC').all().map(i => String(i.json.phone).replace(/\\D/g,'')).includes(String($json.phone).replace(/\\D/g,'')) }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
               }
-            ],
-            "combinator": "and"
-          },
-          "options": {}
+            }
+          ],
+          "combinator": "and"
         },
-        "type": "n8n-nodes-base.filter",
-        "typeVersion": 2.3,
-        "position": [
-          416,
-          0
-        ],
-        "id": "8222948a-392f-4516-acf8-4a0d896f0541",
-        "name": "Not on DNC"
+        "options": {}
       },
-      {
-        "parameters": {},
-        "type": "n8n-nodes-base.manualTrigger",
-        "typeVersion": 1,
-        "position": [
-          -176,
-          0
-        ],
-        "id": "a58cf083-7077-4141-996c-9da022672065",
-        "name": "When clicking ‘Execute workflow’"
-      }
-    ],
-    "connections": {
-      "Get row(s) in sheet": {
-        "main": [
-          [
-            {
-              "node": "Not on DNC",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Not on DNC": {
-        "main": [
-          [
-            {
-              "node": "HTTP Request",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Get DNC": {
-        "main": [
-          [
-            {
-              "node": "Get row(s) in sheet",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "When clicking ‘Execute workflow’": {
-        "main": [
-          [
-            {
-              "node": "Get DNC",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      }
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "8222948a-392f-4516-acf8-4a0d896f0541",
+      "name": "Not on DNC"
     },
-    "settings": {
-      "executionOrder": "v1",
-      "binaryMode": "separate",
-      "availableInMCP": false
-    },
-    "staticData": null,
-    "meta": {
-      "templateCredsSetupCompleted": true
-    },
-    "nodeGroups": [],
-    "pinData": {},
-    "versionId": "cc15dc5a-c80e-46db-9977-596d55bb5607",
-    "activeVersionId": null,
-    "versionCounter": 38,
-    "triggerCount": 0,
-    "sourceWorkflowId": null,
-    "tags": [],
-    "shared": [
-      {
-        "updatedAt": "2026-07-09T14:51:51.425Z",
-        "createdAt": "2026-07-09T14:51:51.425Z",
-        "role": "workflow:owner",
-        "workflowId": "Kfp06BQZGbAqIojQ",
-        "projectId": "PlPV7NzkP8IUO5iX",
-        "project": {
-          "updatedAt": "2026-07-05T01:59:27.501Z",
-          "createdAt": "2026-07-05T01:57:50.631Z",
-          "id": "PlPV7NzkP8IUO5iX",
-          "name": "Patrick Sales <you@example.com>",
-          "type": "personal",
-          "icon": null,
-          "description": null,
-          "customTelemetryTags": [],
-          "creatorId": "915728a1-cf61-4d3a-b6be-54603facefe9"
-        }
-      }
-    ],
-    "versionMetadata": {
-      "name": null,
-      "description": null
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        0
+      ],
+      "id": "a58cf083-7077-4141-996c-9da022672065",
+      "name": "When clicking ‘Execute workflow’"
     }
+  ],
+  "connections": {
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Not on DNC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Not on DNC": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get DNC": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get DNC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
   }
-]
+}
