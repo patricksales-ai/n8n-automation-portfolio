@@ -127,3 +127,65 @@ transfer all work outbound too, with zero duplicated logic.
   in-memory state doesn't.
 - **Guard model dates** — always roll a hallucinated past date forward so nothing books in the
   past.
+
+---
+
+## Workflow 5 — Vapi Booking Adapter (realtime upgrade)
+
+When the front desk runs on **Vapi** instead of Twilio, the assistant lives in Vapi's dashboard
+and calls a **`book_appointment` tool** whenever it's ready to book. Vapi delivers that tool call
+to a server URL as a POST, waits for a result, and speaks whatever comes back. This workflow is
+that server — a thin **adapter** between Vapi's tool-call format and the existing Smart Booking
+brain.
+
+**1. Webhook** (`/vapi-book`, POST) — Vapi posts the tool call here.
+
+**2. Extract** (Code) — pulls the three arguments the model filled (`name`, `service`,
+`startTime`) out of `message.toolCalls[0].function.arguments`, the tool-call id out of
+`...[0].id`, and the caller's number out of `message.call.customer.number` (empty on web test
+calls, present on real phone calls).
+
+**3. Call Booking** (HTTP Request) — POSTs `{name, service, startTime, phone}` to the **same**
+Smart Booking webhook (`/webhook/vfd-book`) the Twilio agent uses. Round-robin, availability,
+calendar, and sheet all happen there, unchanged. The response is captured as text into
+`confirmation`; On-Error = Continue so a booking hiccup can't hang the call.
+
+**4. Format Result** (Code) — wraps the confirmation in the exact shape Vapi expects back:
+`{ results: [ { toolCallId, result } ] }`. The `toolCallId` **must** match the incoming one or
+Vapi discards the result.
+
+**5. Respond to Webhook** — returns that JSON. Vapi reads `result` and the assistant speaks it
+("Booked haircut for … with Stylist …").
+
+> **Why an adapter instead of pointing Vapi straight at the booking webhook?** Vapi's tool-call
+> payload is nested (`message.toolCalls[…].function.arguments`) and its expected response is a
+> specific `results[]` shape — different from the flat body Smart Booking speaks. The adapter is
+> the translation layer, and it's the only new "glue" the realtime upgrade needed.
+
+---
+
+## Workflow 6 — Vapi Inbound Call Logger
+
+Vapi can POST a **report at the end of every call**. This workflow turns that into a row in a
+Google Sheet.
+
+**1. Webhook** (`/vfd-inbound-log`, POST) — Vapi's Server URL points here; it fires several event
+types during and after a call.
+
+**2. Filter** — keeps only `message.type === "end-of-call-report"` and drops the noisy
+status/speech updates.
+
+**3. Get Call** (HTTP Request) — GETs the full call from the Vapi API
+(`/call/{{ x-call-id header }}`). The end-of-call report is light; the full call object carries
+the **transcript** and **recording URL**. API reads are free, so this costs nothing.
+
+**4. Normalizer** (Code) — flattens the call into 9 columns: `ended_at, caller_number, call_type,
+ended_reason, cost, summary, recording_url, transcript, call_id`.
+
+**5. Append row in sheet** (Google Sheets) — appends to the **Inbound Call Log** sheet with
+auto-map (the 9 field names match the header row 1:1).
+
+> **Free testing trick.** Because API reads are free, you can replay the whole logger without
+> making a call: POST the webhook with an `x-call-id` header of any past call id and a body of
+> `{"message":{"type":"end-of-call-report"}}`. It re-fetches that real call and runs the whole
+> chain on real data.

@@ -90,6 +90,48 @@ Sheets.
 
 ---
 
+## ⚡ Vapi realtime upgrade (inbound)
+
+The Twilio flow above is **turn-based** — every turn is a `<Gather>` → webhook → response
+round-trip, with the pauses you'd expect from request/response. To get the **natural,
+low-latency conversation** clients expect from a modern AI receptionist, the same front desk
+was put behind **[Vapi](https://vapi.ai)**, a realtime (streaming speech-to-speech) voice
+platform.
+
+The point worth noticing: **the booking engine didn't change.** Because Smart Booking already
+runs as its own top-level `/webhook/vfd-book`, the Vapi assistant reuses it *verbatim* — the
+decoupled design from the Twilio build paid off directly.
+
+```
+Phone ─▶ Vapi assistant ─▶ book_appointment (tool) ─▶ Vapi Booking Adapter ─▶ Smart Booking
+(realtime)  Deepgram +        transfer_call (tool)        (n8n webhook)        (same brain:
+            gpt-4o-mini +          │                                            round-robin +
+            streamed voice         │                                            availability)
+                                   └▶ end-of-call report ─▶ Inbound Call Logger ─▶ Google Sheet
+```
+
+- **~840 ms end-to-end latency** (Deepgram transcription + `gpt-4o-mini` + streamed voice) —
+  it feels like talking to a person, not navigating a phone tree.
+- **Same deterministic booking** — a thin **adapter** translates Vapi's tool-call format into
+  the existing booking webhook and wraps the confirmation back into Vapi's tool-result shape,
+  so the assistant speaks the real result (with the assigned stylist).
+- **Native transfer** — a Vapi **Transfer Call** tool replaces the Twilio `<<TRANSFER>>` string
+  convention.
+- **Every call logged** — Vapi posts an end-of-call report; a logger re-fetches the full call
+  (free) for transcript + recording and appends one row per call to a sheet.
+
+### New workflows
+
+| File | Role |
+|------|------|
+| [`vapi-booking-adapter.json`](workflows/vapi-booking-adapter.json) | Bridges the Vapi assistant's `book_appointment` tool to the existing Smart Booking brain — extracts the tool args + caller number, calls the booking webhook, and returns the confirmation in Vapi's tool-result format. |
+| [`vapi-inbound-logger.json`](workflows/vapi-inbound-logger.json) | Catches Vapi's end-of-call report, re-fetches the full call from the Vapi API, and appends `ended_at / caller_number / cost / summary / recording_url / transcript / …` to a Google Sheet. |
+
+> The Vapi assistant itself (model, voice, system prompt, and the two tools) is configured in
+> the Vapi dashboard — these two workflows are the n8n side of the integration.
+
+---
+
 ## Notes
 
 - Phone numbers, host URLs, calendar IDs, and credentials in the JSON are placeholders or
