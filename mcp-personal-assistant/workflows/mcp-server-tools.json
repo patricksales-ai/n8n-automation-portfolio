@@ -150,7 +150,7 @@
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "N8N Test 1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1SoL8vsc75pIHTm8LJ7REO9X2yJrxhjSE6sT585k2ocg/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=0"
         },
         "options": {}
       },

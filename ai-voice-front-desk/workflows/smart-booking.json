@@ -78,7 +78,7 @@
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1IFAdgceqZFeIzZH1QR_CpoWiFl2GBnXVn96PPLEbGZA/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=0"
         },
         "options": {}
       },
@@ -140,7 +140,7 @@
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1IFAdgceqZFeIzZH1QR_CpoWiFl2GBnXVn96PPLEbGZA/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=0"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -351,7 +351,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Build Candidates — round-robin order, reading booking details from the webhook body.\nconst body = $('Booking Webhook').first().json.body;\nconst name = body.name;\nconst service = body.service;\n\nlet start = DateTime.fromISO(body.startTime, { zone: 'Asia/Manila' });\n// Date guard: if the model produced a past date (e.g. the 2023 hallucination),\n// roll the year forward so a booking can never land in the past.\nconst now = DateTime.now().setZone('Asia/Manila');\nwhile (start < now) { start = start.plus({ years: 1 }); }\n\nconst startISO = start.toISO();\nconst endISO   = start.plus({ minutes: 30 }).toISO();\n\nconst realRows = $input.all().filter(i => i.json && i.json.Name);\nconst idx = realRows.length % 3;\n\nconst stylists = [\n  { stylistName: 'Stylist A', calendarId: 'YOUR_CALENDAR_ID' },\n  { stylistName: 'Stylist B', calendarId: 'bb0915931df59c658f62a1cd22d7906ad0fe1fcddc5a10a27abd39514214ccb8@group.calendar.google.com' },\n  { stylistName: 'Stylist C', calendarId: '3b5a30cfd028461b373be9a685b1e255b0898de55d3b227b85053c3c7655dab7@group.calendar.google.com' },\n];\n\nreturn [0, 1, 2].map((offset) => {\n  const s = stylists[(idx + offset) % 3];\n  return {\n    json: {\n      preference: offset, stylistName: s.stylistName, calendarId: s.calendarId,\n      name, service, startTime: startISO, endTime: endISO,\n    },\n  };\n});"
+        "jsCode": "// Build Candidates — round-robin order, reading booking details from the webhook body.\nconst body = $('Booking Webhook').first().json.body;\nconst name = body.name;\nconst service = body.service;\n\nlet start = DateTime.fromISO(body.startTime, { zone: 'Asia/Manila' });\n// Date guard: if the model produced a past date (e.g. the 2023 hallucination),\n// roll the year forward so a booking can never land in the past.\nconst now = DateTime.now().setZone('Asia/Manila');\nwhile (start < now) { start = start.plus({ years: 1 }); }\n\nconst startISO = start.toISO();\nconst endISO   = start.plus({ minutes: 30 }).toISO();\n\nconst realRows = $input.all().filter(i => i.json && i.json.Name);\nconst idx = realRows.length % 3;\n\nconst stylists = [\n  { stylistName: 'Stylist A', calendarId: 'YOUR_CALENDAR_ID' },\n  { stylistName: 'Stylist B', calendarId: 'YOUR_CALENDAR_ID' },\n  { stylistName: 'Stylist C', calendarId: 'YOUR_CALENDAR_ID' },\n];\n\nreturn [0, 1, 2].map((offset) => {\n  const s = stylists[(idx + offset) % 3];\n  return {\n    json: {\n      preference: offset, stylistName: s.stylistName, calendarId: s.calendarId,\n      name, service, startTime: startISO, endTime: endISO,\n    },\n  };\n});"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,

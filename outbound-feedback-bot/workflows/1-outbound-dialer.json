@@ -62,7 +62,7 @@
           "value": 1374242549,
           "mode": "list",
           "cachedResultName": "Sheet2",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YWGe4IpQGyPtr5-GlM3QZkxLurxCdlXsX0MXQDzgvE0/edit#gid=1374242549"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=1374242549"
         },
         "options": {}
       },
@@ -90,7 +90,7 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({\n  assistantId: \"89dccc48-1ae9-4526-82bb-6a25eda99d5f\",\n  phoneNumberId: \"d5959d0f-4f65-45a9-ac4a-9a6ef79cbbc8\",\n  customer: { number: String($json.phone).startsWith('+') ? String($json.phone) : '+' + String($json.phone) },\n  assistantOverrides: {\n    variableValues: { customerName: $json.name, business: $json.business }\n  }\n}) }}",
+        "jsonBody": "={{ JSON.stringify({\n  assistantId: \"YOUR_ASSISTANT_ID\",\n  phoneNumberId: \"YOUR_PHONE_NUMBER_ID\",\n  customer: { number: String($json.phone).startsWith('+') ? String($json.phone) : '+' + String($json.phone) },\n  assistantOverrides: {\n    variableValues: { customerName: $json.name, business: $json.business }\n  }\n}) }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -121,7 +121,7 @@
           "value": 247554161,
           "mode": "list",
           "cachedResultName": "Do Not Call",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YWGe4IpQGyPtr5-GlM3QZkxLurxCdlXsX0MXQDzgvE0/edit#gid=247554161"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=247554161"
         },
         "filtersUI": {
           "values": []

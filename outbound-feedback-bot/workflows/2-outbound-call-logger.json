@@ -161,7 +161,7 @@
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YWGe4IpQGyPtr5-GlM3QZkxLurxCdlXsX0MXQDzgvE0/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=0"
         },
         "columns": {
           "mappingMode": "autoMapInputData",
@@ -509,7 +509,7 @@
           "value": 247554161,
           "mode": "list",
           "cachedResultName": "Do Not Call",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1YWGe4IpQGyPtr5-GlM3QZkxLurxCdlXsX0MXQDzgvE0/edit#gid=247554161"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=247554161"
         },
         "columns": {
           "mappingMode": "defineBelow",
