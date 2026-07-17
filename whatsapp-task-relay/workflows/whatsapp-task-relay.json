@@ -1,0 +1,357 @@
+{
+  "name": "TaskRelay — WhatsApp Task Router",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 1. Intake\nClient texts a task to the WhatsApp Business number. Meta's **Cloud API** delivers it to n8n as a webhook (subscribed to `messages`).\n\n**Edit Fields** normalizes any message type into:\n`client_phone` · `client_name` · `msg_type` · `text`\n\n`text` falls back to an image/video **caption**, so a photo or clip with the task in the caption still works.",
+        "height": 527,
+        "width": 539,
+        "color": 5
+      },
+      "id": "f6970378-1d2a-4cc9-b60e-73bac65ebd20",
+      "name": "Sticky · New message",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 2. Extract the task (AI)\n**gpt-4o-mini** turns free-form client chat into structured data.\n\nUses **Response Format = JSON Object** on the model plus a **Normalize** Code node — *not* the Structured Output Parser, which is unreliable on self-hosted n8n.\n\nOutput: `{ is_task, title, client, type, priority, summary }`\n\n`priority` is emitted as **High / Medium / Low** to match Monday's native labels exactly — no mapping code, no duplicate labels.",
+        "height": 527,
+        "width": 600,
+        "color": 3
+      },
+      "id": "d230ed57-2244-40b8-baea-021694728e05",
+      "name": "Sticky · Qualify (BANT agent)",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        176,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 3. Is it actually a task?\nGates out chit-chat — \"thanks\", \"ok\", \"got it\" come back `is_task: false` and stop here.\n\nOnly real requests continue to Slack + Monday.",
+        "height": 527,
+        "width": 447,
+        "color": 6
+      },
+      "id": "e4a23dce-dcdc-44d6-94e5-9bf50116bd1e",
+      "name": "Sticky · Hot lead?",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        784,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 4. Notify + file\n**Slack** — instant alert to the team channel.\n\n**Monday.com** — `create_item` via GraphQL (HTTP Request + Header Auth), mapped to the board's real column IDs.\n\nBoth hang off the IF's `true` output: the task is announced *and* filed.",
+        "height": 527,
+        "width": 281,
+        "color": 7
+      },
+      "id": "2614f902-35f9-4b26-8195-891612678efc",
+      "name": "Sticky · Alert sales",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_object"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        288,
+        208
+      ],
+      "id": "c713f078-a853-49c6-8f26-226e348ca3d2",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "SYpGRkU0nCCv3rd3",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        -304,
+        0
+      ],
+      "id": "0eac8a20-c336-4c6a-ab25-b3d4f90145ab",
+      "name": "WhatsApp Trigger",
+      "webhookId": "f41536c3-de4d-48bb-9896-1029c1094d19",
+      "credentials": {
+        "whatsAppTriggerApi": {
+          "id": "tfSGKYrop74ppHqG",
+          "name": "WhatsApp OAuth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "45c8384a-3ab6-4896-a5bc-976389c4bcde",
+              "name": "client_phone",
+              "value": "={{ $json.messages[0].from }}",
+              "type": "string"
+            },
+            {
+              "id": "20b41c41-50a9-4e4c-94d6-69832107ddc3",
+              "name": "client_name",
+              "value": "={{ $json.contacts[0].profile.name }}",
+              "type": "string"
+            },
+            {
+              "id": "9ffceb9f-815a-4094-a5e6-255ff3378ca0",
+              "name": "msg_type",
+              "value": "={{ $json.messages[0].type }}",
+              "type": "string"
+            },
+            {
+              "id": "b59683d8-fdac-46d7-9923-053b8dda4e89",
+              "name": "=text",
+              "value": "={{ $json.messages[0].text?.body ?? $json.messages[0].image?.caption ?? $json.messages[0].video?.caption ?? '' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -96,
+        0
+      ],
+      "id": "cb0f82a4-391b-403d-bf87-294cd7b21d2b",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "YOUR_SLACK_CHANNEL_ID",
+          "mode": "list",
+          "cachedResultName": "all-n8n-portfolio"
+        },
+        "text": "=🔧 *New task from {{ $('Normalize').item.json.output.client }}*  ({{ $('Edit Fields').item.json.client_phone }})\n\n*{{ $('Normalize').item.json.output.title }}*  ·  priority: {{ $('Normalize').item.json.output.priority }}  ·  type: {{ $('Normalize').item.json.output.type }}\n\n{{ $('Normalize').item.json.output.summary }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.5,
+      "position": [
+        1328,
+        -64
+      ],
+      "id": "34b33bc6-734e-4caa-bc59-76b02ce0e7f0",
+      "name": "Send a message",
+      "webhookId": "66679211-2bf3-4777-868a-7cb16abc2098",
+      "credentials": {
+        "slackApi": {
+          "id": "1OmcAA2AKHVVunVC",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a task-extraction assistant for a marketing agency. A client sent this WhatsApp message. Extract a structured task from it.\n\nClient name: {{ $json.client_name }}\nClient phone: {{ $json.client_phone }}\nMessage type: {{ $json.msg_type }}\nMessage: {{ $json.text }}\n\nRules:\n- is_task: true if this is a real actionable request. false for chit-chat/acknowledgements (\"ok\", \"thanks\", \"got it\").\n- title: short imperative task title, max 8 words.\n- client: the COMPANY name only, stripped of any personal name. E.g. from \"Mike - Apex Roofing\" return \"Apex Roofing\".\n- type: one of \"task\", \"question\", \"urgent\", \"other\".\n- priority: exactly one of \"High\", \"Medium\", or \"Low\". Use \"High\" if a deadline is near or urgency words are used; \"Low\" for FYI/no action needed; \"Medium\" otherwise.\n- summary: 1-2 sentences including any budget, deadline, or targeting details.\n\nRespond ONLY with json in exactly this shape:\n{\"output\":{\"is_task\":true,\"title\":\"\",\"client\":\"\",\"type\":\"task\",\"priority\":\"Medium\",\"summary\":\"\"}}",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        336,
+        0
+      ],
+      "id": "2dc121f5-c387-4586-8bf5-f2b523a2c140",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = $input.item.json;\nlet o = typeof j.text === 'string'\n  ? JSON.parse(j.text.replace(/```json\\s*/gi, '').replace(/```/g, '').trim())\n  : j;\nif (!o.output) o = { output: o };\nreturn { json: o };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        0
+      ],
+      "id": "a56dcf46-272b-465d-bc64-d9b944510a52",
+      "name": "Normalize"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5e5664a9-77cc-4cac-b871-eb8c410633f3",
+              "leftValue": "={{ $json.output.is_task }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        896,
+        0
+      ],
+      "id": "fa887dbf-65da-498e-9d8f-4696d5de0f22",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.monday.com/v2",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {\n  \"query\": \"mutation ($board: ID!, $name: String!, $cols: JSON!) { create_item (board_id: $board, item_name: $name, column_values: $cols, create_labels_if_missing: true) { id name } }\",\n  \"variables\": {\n    \"board\": \"YOUR_MONDAY_BOARD_ID\",\n    \"name\": $('Normalize').item.json.output.title,\n    \"cols\": JSON.stringify({\n      \"project_status\": { \"label\": \"New\" },\n      \"priority\": { \"label\": $('Normalize').item.json.output.priority },\n      \"text\": $('Normalize').item.json.output.summary,\n      \"text_mm5avj0\": $('Normalize').item.json.output.client,\n      \"text_mm5ava7h\": $('Normalize').item.json.output.type\n    })\n  }\n} }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1328,
+        96
+      ],
+      "id": "f7c06930-f61b-46cb-aec2-305942225624",
+      "name": "Create Monday Item",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "7EXYqrUcfSDBJqWN",
+          "name": "Monday Header Auth"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Normalize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create Monday Item",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

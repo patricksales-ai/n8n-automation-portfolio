@@ -1,0 +1,25 @@
+{
+  "_comment": "A realistic WhatsApp Business Cloud API inbound payload, as the n8n WhatsApp Trigger emits it (Meta's entry[0].changes[0].value object). Paste this into the WhatsApp Trigger's 'set mock data' to run the whole pipeline without a Meta account. All identifiers are fake.",
+  "messaging_product": "whatsapp",
+  "metadata": {
+    "display_phone_number": "15550001234",
+    "phone_number_id": "123456789012345"
+  },
+  "contacts": [
+    {
+      "profile": { "name": "Mike - Apex Roofing" },
+      "wa_id": "16505551234"
+    }
+  ],
+  "messages": [
+    {
+      "from": "16505551234",
+      "id": "wamid.HBgLMTY1MDU1NTEyMzQ",
+      "timestamp": "1752600000",
+      "type": "text",
+      "text": {
+        "body": "Hey can you get the new roofing ad campaign live by Friday? Budget is $2k, target homeowners in Dallas."
+      }
+    }
+  ]
+}
