@@ -1,0 +1,1119 @@
+{
+  "name": "SmartDispatch \u2014 Dispatch",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -1040,
+        0
+      ],
+      "id": "e47e5576-c522-4872-9992-11d1878943a5",
+      "name": "When chat message received",
+      "webhookId": "42ca2363-3627-4219-ad6a-535da078a90f"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chatInput }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are an HVAC / field-service dispatcher. Read the customer's message and return ONLY json in this exact shape, nothing else:\n{\"output\":\n{\"customer_name\":\"\",\"contact\":\"\",\"customer_email\":\"\",\"address\":\"\",\"appliance\":\"\",\"skill_required\":\"\",\"issue_summary\":\"\",\"urgency\":\"\",\"urgency_reasoning\":\"\",\"missing_info\":[]}}\n\nRules:\n- \"urgency\" MUST be exactly one of: \"Emergency\", \"Within-24h\", \"This-week\".\n  - Emergency = safety risk or total failure: burning smell, smoke, gas, sparking, water damage, or no cooling/heating in extreme conditions.\n  - Within-24h = broken but not dangerous.\n  - This-week = routine, maintenance, or scheduled service.\n- \"urgency_reasoning\" = one short sentence explaining the tier.\n- \"customer_email\" = the customer's email address if given, else empty string.\n- Put any field the customer did NOT provide into \"missing_info\" as its field name (e.g. \"address\", \"customer_email\"). Never invent an address, email, or contact number.\n- \"appliance\" = the equipment mentioned in plain English (e.g. \"air conditioner\", \"heater\"). \"issue_summary\" = a short plain-English description.\n- \"skill_required\" MUST be exactly one of: \"aircon\", \"refrigeration\", \"heating\", \"ventilation\", \"electrical\", \"other\". Always infer it from the appliance/problem (never leave blank, never put it in missing_info). Map to the SINGLE closest trade skill:\n  - aircon = air conditioner, AC, split-type, window unit, cooling not working\n  - refrigeration = fridge, freezer, ref, chiller, cold room, walk-in\n  - heating = furnace, heater, boiler, no heat\n  - ventilation = exhaust, airflow, ducting, ventilation\n  - electrical = wiring, breaker, outlet, no power, electrical fault\n  - other = anything unclear or not a field-service job"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        -624,
+        0
+      ],
+      "id": "96ca7174-5011-4724-a483-d10047d214ce",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -624,
+        224
+      ],
+      "id": "da557a0d-9563-46a7-87bb-ed2b3bff4bfa",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "SYpGRkU0nCCv3rd3",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const j = $input.item.json;\nlet o = typeof j.text === 'string'\n  ? JSON.parse(j.text.replace(/```json\\s*/gi, '').replace(/```/g, '').trim())\n  : j;\nif (!o.output) o = { output: o };\nreturn { json: o };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -304,
+        0
+      ],
+      "id": "af0aa014-b068-463c-a4a4-174af595e2a2",
+      "name": "Normalize"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "SmartDispatch",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Technicians ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -80,
+        0
+      ],
+      "id": "d58adca9-bb08-4735-8ff8-df2e7be0eb46",
+      "name": "[Technicians]",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "yMqkk4M0kF50KIC0",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $json.calendar_id }}",
+          "mode": "id"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.toISO() }}",
+        "timeMax": "={{ $now.plus({ hours: 2 }).toISO() }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        304,
+        0
+      ],
+      "id": "6e3c5afb-4e81-4e26-915f-a69f69ffee4b",
+      "name": "Get many events",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "cbpTHgNL1Qh9uhoP",
+          "name": "Google Calendar account Local"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const cal = $input.all();\nconst candidates = $('matcher').all().map(c => c.json);\n\n// Case A: matcher found nobody with the right area+skill\nif (candidates.length === 1 && candidates[0]._noMatch) {\n  return [{ json: { _escalate: true, _reason: 'no_match', job: candidates[0].job } }];\n}\n\n// Mark a candidate busy if the calendar returned a real event for it\nconst busy = {};\nfor (const item of cal) {\n  const idx = item.pairedItem?.item ?? item.pairedItem ?? 0;\n  if (item.json && item.json.id) busy[idx] = true;   // a real event = booked\n}\n\n// Case B: return the first candidate with no conflicting event\nfor (let i = 0; i < candidates.length; i++) {\n  if (!busy[i]) return [{ json: { ...candidates[i], _escalate: false } }];\n}\n\n// Case C: candidates existed but every one is busy\nreturn [{ json: { _escalate: true, _reason: 'all_busy', job: candidates[0].job } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        0
+      ],
+      "id": "0b896444-63c5-4818-90b4-320c0380f8a7",
+      "name": "Pick first free"
+    },
+    {
+      "parameters": {
+        "jsCode": "const job = $('Normalize').first().json.output;\n\nconst norm = (s) => String(s ?? '')\n  .split(',')\n  .map(v => v.trim().toLowerCase())\n  .filter(Boolean);\n\nconst jobArea  = String(job.address ?? '').toLowerCase();\nconst jobSkill = String(job.skill_required ?? '').toLowerCase();\n\nconst candidates = $input.all()\n  .map(item => {\n    const t = item.json;\n    const areas  = norm(t.areas);\n    const skills = norm(t.skills);\n    const areaMatch  = areas.some(a => jobArea.includes(a));\n    const skillMatch = skills.includes(jobSkill);\n    const score = (areaMatch ? 1 : 0) + (skillMatch ? 1 : 0);\n    return { json: { ...t, _areaMatch: areaMatch, _skillMatch: skillMatch, _score: score, job } };\n  })\n  .filter(c => c.json._areaMatch && c.json._skillMatch)\n  .sort((a, b) => b.json._score - a.json._score);\n\nif (candidates.length === 0) {\n  // no area+skill match \u2014 emit a marker so the chain keeps flowing.\n  // calendar_id = your primary calendar just to keep the Calendar node happy;\n  // Pick first free ignores the calendar result for markers.\n  return [{ json: { _noMatch: true, job, calendar_id: 'you@example.com' } }];\n}\nreturn candidates;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        96,
+        0
+      ],
+      "id": "7327a3f1-fbbc-4dd5-a63f-434c91448bd8",
+      "name": "matcher"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "Emergency",
+                    "rightValue": "={{ $('Normalize').first().json.output.urgency }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "ab2996fa-abd7-4150-acd3-291f17fcb2d0"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "8b3a75b1-3c61-4236-99f5-5c43ac827d15",
+                    "leftValue": "=Within-24h",
+                    "rightValue": "={{ $('Normalize').first().json.output.urgency }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "6c440161-76dc-48fa-8560-c1e891e61c2a",
+                    "leftValue": "This-week",
+                    "rightValue": "={{ $('Normalize').first().json.output.urgency }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        928,
+        -16
+      ],
+      "id": "ebae4e8a-52b4-4325-aa82-2e0d65858ca0",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $json.calendar_id }}",
+          "mode": "id"
+        },
+        "start": "={{ $now.plus({ hours: 1 }).toISO() }}",
+        "end": "={{ $now.plus({ hours: 2 }).toISO() }}",
+        "additionalFields": {
+          "description": "={{ $json.job.issue_summary }}\nContact: {{ $json.job.contact }}\nAddress: {{ $json.job.address }}",
+          "summary": "={{ $json.job.appliance }} \u2014 {{ $json.job.customer_name }} ({{ $json.job.urgency }})"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1152,
+        0
+      ],
+      "id": "40c579e7-18a4-4488-a5df-a6482b568488",
+      "name": "Create an event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "cbpTHgNL1Qh9uhoP",
+          "name": "Google Calendar account Local"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "SmartDispatch",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1071314260,
+          "mode": "list",
+          "cachedResultName": "Job",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=1071314260"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "job_id": "={{ $json.id }} ",
+            "date": "={{ $now.toISO() }}",
+            "customer": "={{ $('Pick first free').first().json.job.customer_name }}",
+            "contact": "={{ $('Pick first free').first().json.job.contact }}",
+            "address": "={{ $('Pick first free').first().json.job.address }}",
+            "issue": "={{ $('Pick first free').first().json.job.issue_summary }}",
+            "urgency": "={{ $('Pick first free').first().json.job.urgency }}",
+            "assigned_tech": "={{ $('Pick first free').first().json.name }}",
+            "status": "BOOKED",
+            "calendar_event_id": "={{ $json.id }}",
+            "customer_email": "={{ $('Pick first free').first().json.job.customer_email }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "job_id",
+              "displayName": "job_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer",
+              "displayName": "customer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "contact",
+              "displayName": "contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "address",
+              "displayName": "address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "issue",
+              "displayName": "issue",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "urgency",
+              "displayName": "urgency",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "assigned_tech",
+              "displayName": "assigned_tech",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "price",
+              "displayName": "price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "calendar_event_id",
+              "displayName": "calendar_event_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_email",
+              "displayName": "customer_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1360,
+        0
+      ],
+      "id": "997d20dd-b4d4-42ff-90f7-bb9f080c0066",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "yMqkk4M0kF50KIC0",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Pick first free').first().json.job.customer_email || 'you@example.com' }}",
+        "subject": "={{ $('Pick first free').first().json.name }} is booked for your {{ $('Pick first free').first().json.job.appliance }} issue",
+        "emailType": "text",
+        "message": "=Hi {{ $('Pick first free').first().json.job.customer_name }},\n\nThanks for getting in touch. We've booked {{ $('Pick first free').first().json.name }} to look at your {{ $('Pick first free').first().json.job.appliance }}.\n\nIssue: {{ $('Pick first free').first().json.job.issue_summary }}\nAddress: {{ $('Pick first free').first().json.job.address }}\n\nYour technician should arrive within the hour. We'll call {{ $('Pick first free').first().json.job.contact }} if anything changes.\n\n- SmartDispatch",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1568,
+        0
+      ],
+      "id": "61b43470-ebaf-44aa-a5b3-bc6f8ce1e408",
+      "name": "customer confirmation",
+      "webhookId": "d00792c2-c0bf-4158-9f5e-bba12bb69f23",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account Local"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "you@example.com",
+        "subject": "={{ $('Pick first free').first().json.job.urgency === 'Emergency' ? '\ud83d\udea8 ' : '' }}New job: {{ $('Pick first free').first().json.name }} -> {{ $('Pick first free').first().json.job.customer_name }} ({{ $('Pick first free').first().json.job.urgency }})",
+        "emailType": "text",
+        "message": "=New job booked.\n\nTech:      {{ $('Pick first free').first().json.name }}\nCustomer:  {{ $('Pick first free').first().json.job.customer_name }}\nContact:   {{ $('Pick first free').first().json.job.contact }}\nAddress:   {{ $('Pick first free').first().json.job.address }}\nAppliance: {{ $('Pick first free').first().json.job.appliance }}\nUrgency:   {{ $('Pick first free').first().json.job.urgency }}\nIssue:     {{ $('Pick first free').first().json.job.issue_summary }}\n\nEvent ID:  {{ $('Create an event').first().json.id }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1568,
+        176
+      ],
+      "id": "b53ad84d-701c-4f02-a721-2e57ee9e26a5",
+      "name": "ops alert",
+      "webhookId": "f6ab5be0-f753-443e-a521-d444b7dcca87",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account Local"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6d9c2ce8-570c-4ffa-9aa9-f5e3eebc5685",
+              "leftValue": "={{ $json._escalate }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        720,
+        0
+      ],
+      "id": "69ad89b3-2a3f-49d3-8f14-c0ee83d9347a",
+      "name": "Tech available?"
+    },
+    {
+      "parameters": {
+        "sendTo": "you@example.com",
+        "subject": "=\u26a0 NO TECH AVAILABLE - {{ $('Append row in sheet (escalated)').first().json.customer }} ({{ $('Append row in sheet (escalated)').first().json.urgency }})",
+        "emailType": "text",
+        "message": "=Manual assignment needed - no technician could be auto-dispatched.\n\nReason:    {{ $('Tech available?').first().json._reason === 'no_match' ? 'No tech matches the area + skill' : 'All matching techs are busy' }}\nCustomer:  {{ $('Append row in sheet (escalated)').first().json.customer }}\nContact:   {{ $('Append row in sheet (escalated)').first().json.contact }}\nAddress:   {{ $('Append row in sheet (escalated)').first().json.address }}\nAppliance: {{ $('Tech available?').first().json.job.appliance }}\nUrgency:   {{ $('Append row in sheet (escalated)').first().json.urgency }}\nIssue:     {{ $('Append row in sheet (escalated)').first().json.issue }}\n\nJob ID:    {{ $('Append row in sheet (escalated)').first().json.job_id }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1136,
+        208
+      ],
+      "id": "135edeed-6090-406f-866f-fc487853d96f",
+      "name": "Send a message",
+      "webhookId": "3c490ca3-ef8a-43f3-aa0e-417e7b587d6f",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account Local"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "SmartDispatch",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1071314260,
+          "mode": "list",
+          "cachedResultName": "Job",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=1071314260"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "job_id": "=ESC-{{ $now.toMillis() }}",
+            "date": "={{ $now.toISO() }}",
+            "customer": "={{ $json.job.customer_name }}",
+            "contact": "={{ $json.job.contact }}",
+            "address": "={{ $json.job.address }}",
+            "issue": "={{ $json.job.issue_summary }}",
+            "urgency": "={{ $json.job.urgency }}",
+            "assigned_tech": "UNASSIGNED",
+            "status": "ESCALATED",
+            "customer_email": "={{ $json.job.customer_email }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "job_id",
+              "displayName": "job_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer",
+              "displayName": "customer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "contact",
+              "displayName": "contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "address",
+              "displayName": "address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "issue",
+              "displayName": "issue",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "urgency",
+              "displayName": "urgency",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "assigned_tech",
+              "displayName": "assigned_tech",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "price",
+              "displayName": "price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "calendar_event_id",
+              "displayName": "calendar_event_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_email",
+              "displayName": "customer_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        928,
+        208
+      ],
+      "id": "9e04356d-654a-4ebc-a7a0-6cad5f067b4b",
+      "name": "Append row in sheet (escalated)",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "yMqkk4M0kF50KIC0",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "maxResults": 1,
+        "filters": {
+          "labelIds": [
+            "YOUR_GMAIL_LABEL_ID"
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -1040,
+        192
+      ],
+      "id": "46a27df5-883b-4b03-ba4c-e4515b818ba2",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account Local"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const j = item.json;\n  const from = j.from?.text || j.from?.value?.[0]?.address || '';\n  const subject = j.subject || '';\n  const body = (j.text || '').trim();\n  const chatInput = `From: ${from}\\nSubject: ${subject}\\n\\n${body}`.trim();\n  return { json: { chatInput } };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -864,
+        192
+      ],
+      "id": "ae07b39f-f015-4ee5-96e4-1d47456d766b",
+      "name": "Parse email"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -1040,
+        -144
+      ],
+      "id": "5c5ba1e0-d5b1-4c28-abfa-5dcefdce03f6",
+      "name": "Telegram Trigger",
+      "webhookId": "c3c70a51-faab-45aa-95fd-aa78f83b2d4d",
+      "credentials": {
+        "telegramApi": {
+          "id": "rqFhlu5OjDSWLNzT",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const m = item.json.message || {};\n  const from = m.from || {};\n  const name = [from.first_name, from.last_name].filter(Boolean).join(' ');\n  const handle = from.username ? `@${from.username}` : '';\n  const sender = [name, handle].filter(Boolean).join(' ');\n  const text = m.text || '';\n  const chatInput = `From: ${sender} (Telegram)\\n${text}`.trim();\n  return { json: { chatInput, telegram_chat_id: m.chat?.id } };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -832,
+        -144
+      ],
+      "id": "474908fc-44c8-477f-b1c2-81d4f9855802",
+      "name": "Parse telegram"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b51edf62-700d-412d-b995-51ea9956a56c",
+              "leftValue": "={{ $('Parse telegram').isExecuted }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1552,
+        -272
+      ],
+      "id": "d2ea015c-d800-4c47-bb87-7c0754b9da52",
+      "name": "From Telegram?f"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Parse telegram').first().json.telegram_chat_id }}",
+        "text": "=Hi {{ $('Pick first free').first().json.job.customer_name }}, you're booked. {{ $('Pick first free').first().json.name }} will handle your {{ $('Pick first free').first().json.job.appliance }} issue and will be in touch shortly. \u2014 SmartDispatch",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1760,
+        -368
+      ],
+      "id": "7f1bdbbf-9685-407a-805a-48767acbaffe",
+      "name": "Send a text message",
+      "webhookId": "64dd1ce6-288b-42fd-bf35-abf72ddc1d2e",
+      "credentials": {
+        "telegramApi": {
+          "id": "rqFhlu5OjDSWLNzT",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Normalize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "[Technicians]": {
+      "main": [
+        [
+          {
+            "node": "matcher",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize": {
+      "main": [
+        [
+          {
+            "node": "[Technicians]",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many events": {
+      "main": [
+        [
+          {
+            "node": "Pick first free",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "matcher": {
+      "main": [
+        [
+          {
+            "node": "Get many events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pick first free": {
+      "main": [
+        [
+          {
+            "node": "Tech available?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Create an event",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create an event",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create an event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an event": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "customer confirmation",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "ops alert",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "From Telegram?f",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tech available?": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet (escalated)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet (escalated)": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Parse email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse email": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Parse telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse telegram": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "From Telegram?f": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  }
+}

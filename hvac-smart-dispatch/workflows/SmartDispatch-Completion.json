@@ -1,0 +1,581 @@
+{
+  "name": "SmartDispatch \u2014 Completion",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e4e9705a-0df4-42a1-a904-508ae8f6d70c",
+      "name": "When chat message received",
+      "webhookId": "871a6df6-0161-4d34-bb48-173fbc73024a"
+    },
+    {
+      "parameters": {
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are a dispatch completion parser for an HVAC field-service company.\nA technician sends a short message when they finish a job. Extract the job details as JSON.\n\nReturn ONLY this JSON shape:\n{\n  \"customer_name\": \"the customer the job was for, or empty string if not stated\",\n  \"completion_notes\": \"what the tech did, one short sentence\",\n  \"parts_used\": \"parts replaced/installed, or empty string if none\",\n  \"parts_cost\": 0\n}\n\nRules:\n- parts_cost is a NUMBER in pesos (no currency symbol, no commas). If the tech gives a parts price, use it. If no parts, 0.\n- customer_name is the person's name only (e.g. \"Ana\"), not the appliance.\n- Never invent a price. If unstated, parts_cost = 0."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        208,
+        0
+      ],
+      "id": "46a4927c-8f1b-4c0f-989e-07a8297c8531",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_object"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        144,
+        208
+      ],
+      "id": "7c69ce2e-f40e-4b68-8411-03393eed82b3",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "SYpGRkU0nCCv3rd3",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Basic LLM Chain returns the model's text; parse it to a clean object.\nconst raw = $input.first().json;\nlet out = raw.output ?? raw.text ?? raw;\nif (typeof out === 'string') {\n  out = JSON.parse(out.replace(/```json|```/g, '').trim());\n}\nreturn [{ json: { output: out } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        0
+      ],
+      "id": "794cee9c-b283-4d94-afd1-531526853375",
+      "name": "Normalize"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "SmartDispatch",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1071314260,
+          "mode": "list",
+          "cachedResultName": "Job",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=1071314260"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "customer",
+              "lookupValue": "={{ $('Normalize').first().json.output.customer_name }}"
+            },
+            {
+              "lookupColumn": "status",
+              "lookupValue": "BOOKED"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        768,
+        0
+      ],
+      "id": "bb214271-13b0-48a1-837f-663a974b7e7c",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "yMqkk4M0kF50KIC0",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const job  = $input.first().json;\nconst comp = $('Normalize').first().json.output;\n\nconst BASE = 800;\nconst URGENCY_PREMIUM = {\n  'Emergency':  1500,\n  'Within-24h':  500,\n  'This-week':     0,\n};\n\nconst premium = URGENCY_PREMIUM[job.urgency] ?? 0;\nconst parts   = Number(comp.parts_cost) || 0;\nconst total   = BASE + premium + parts;\n\nreturn [{\n  json: {\n    job_id:           job.job_id,\n    customer:         job.customer,\n    customer_email:   job.customer_email,\n    contact:          job.contact,\n    address:          job.address,\n    issue:            job.issue,\n    urgency:          job.urgency,\n    assigned_tech:    job.assigned_tech,\n    completion_notes: comp.completion_notes,\n    parts_used:       comp.parts_used,\n    base:             BASE,\n    urgency_premium:  premium,\n    parts_cost:       parts,\n    total:            total,\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        976,
+        0
+      ],
+      "id": "8e77e5d6-8bf2-483d-886c-4c886b2d2b64",
+      "name": "Price calc"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Price calc').first().json.customer_email || 'you@example.com' }}",
+        "subject": "=Your SmartDispatch invoice - PHP {{ $('Price calc').first().json.total }}",
+        "message": "=<p>Hi {{ $('Price calc').first().json.customer }},</p>\n\n<p>Your service is complete. Here is your invoice.</p>\n\n<p>\n<strong>Job:</strong> {{ $('Price calc').first().json.issue }}<br>\n<strong>Technician:</strong> {{ $('Price calc').first().json.assigned_tech }}<br>\n<strong>Work done:</strong> {{ $('Price calc').first().json.completion_notes }}\n</p>\n\n<table cellpadding=\"6\" style=\"border-collapse:collapse; font-family:Arial,sans-serif;\">\n  <tr><td>Call-out fee</td><td style=\"text-align:right;\">PHP {{ $('Price calc').first().json.base }}</td></tr>\n  <tr><td>Urgency ({{ $('Price calc').first().json.urgency }})</td><td style=\"text-align:right;\">PHP {{ $('Price calc').first().json.urgency_premium }}</td></tr>\n  <tr><td>Parts ({{ $('Price calc').first().json.parts_used }})</td><td style=\"text-align:right;\">PHP {{ $('Price calc').first().json.parts_cost }}</td></tr>\n  <tr>\n    <td style=\"border-top:2px solid #333;\"><strong>Total due</strong></td>\n    <td style=\"border-top:2px solid #333; text-align:right;\"><strong>PHP {{ $('Price calc').first().json.total }}</strong></td>\n  </tr>\n</table>\n\n<p style=\"color:#888; font-size:12px;\">Job ref: {{ $('Price calc').first().json.job_id }}</p>\n\n<p>Thank you for choosing SmartDispatch.</p>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1392,
+        0
+      ],
+      "id": "682078ee-89da-42ad-9362-69aceee4e55c",
+      "name": "Send a message",
+      "webhookId": "ac649d9b-cc9f-43a2-b6ca-51337755884e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account Local"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "SmartDispatch",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1071314260,
+          "mode": "list",
+          "cachedResultName": "Job",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=1071314260"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "job_id": "={{ $json.job_id }}",
+            "status": "DONE",
+            "price": "={{ $json.total }}"
+          },
+          "matchingColumns": [
+            "job_id"
+          ],
+          "schema": [
+            {
+              "id": "job_id",
+              "displayName": "job_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "customer",
+              "displayName": "customer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "contact",
+              "displayName": "contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "address",
+              "displayName": "address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "issue",
+              "displayName": "issue",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "urgency",
+              "displayName": "urgency",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "assigned_tech",
+              "displayName": "assigned_tech",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "price",
+              "displayName": "price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "calendar_event_id",
+              "displayName": "calendar_event_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1184,
+        0
+      ],
+      "id": "7db2d0ad-dc19-45dd-a02a-bd943fffaf70",
+      "name": "mark DONE + price",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "yMqkk4M0kF50KIC0",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "SmartDispatch",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1071314260,
+          "mode": "list",
+          "cachedResultName": "Job",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=1071314260"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "job_id": "={{ $('Price calc').first().json.job_id }}",
+            "status": "INVOICED"
+          },
+          "matchingColumns": [
+            "job_id"
+          ],
+          "schema": [
+            {
+              "id": "job_id",
+              "displayName": "job_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "customer",
+              "displayName": "customer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "contact",
+              "displayName": "contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "address",
+              "displayName": "address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "issue",
+              "displayName": "issue",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "urgency",
+              "displayName": "urgency",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "assigned_tech",
+              "displayName": "assigned_tech",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "price",
+              "displayName": "price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "calendar_event_id",
+              "displayName": "calendar_event_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1600,
+        0
+      ],
+      "id": "093b695e-9e2f-482d-b506-0d3379433734",
+      "name": "mark INVOICED",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "yMqkk4M0kF50KIC0",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Normalize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Price calc",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Price calc": {
+      "main": [
+        [
+          {
+            "node": "mark DONE + price",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mark DONE + price": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "mark INVOICED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  }
+}

@@ -1,0 +1,4 @@
+# raw / unsanitized exports — never commit
+*_raw.json
+*_raw.txt
+*.raw.json
