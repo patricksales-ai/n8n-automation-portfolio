@@ -1,0 +1,8 @@
+# never commit an un-sanitized blueprint export
+*raw*.json
+*.local.json
+Integration*.json
+
+# os / editor cruft
+.DS_Store
+Thumbs.db
