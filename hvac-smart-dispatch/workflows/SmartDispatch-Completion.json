@@ -486,7 +486,7 @@
       "parameters": {
         "content": "## 🧾 SmartDispatch - Job Completion & Invoice\nTech marks a job done -> AI summarizes the work -> logs to Sheets -> generates + emails the invoice. Hands off to CashChaser once the invoice lands in Xero.\n**OpenAI - Google Sheets - Gmail**",
         "height": 150,
-        "width": 760,
+        "width": 940,
         "color": 7
       },
       "id": "9ce35d00-433a-4a93-a0d8-16e4d144342e",
@@ -495,7 +495,71 @@
       "typeVersion": 1,
       "position": [
         0,
-        -260
+        -420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 1 - Tech reports the job done\nFree-text completion message in; an LLM chain reads what was actually performed.",
+        "height": 150,
+        "width": 420,
+        "color": 4
+      },
+      "id": "5cb3d499-9adf-4a47-b056-c59a27b1e675",
+      "name": "SN 1 done",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -30,
+        -230
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 2 - Extract + find the job\nNormalize pins the shape, then the job row is looked up in the sheet by its id.",
+        "height": 150,
+        "width": 430,
+        "color": 3
+      },
+      "id": "d1b52e64-10ac-4fe5-9ac4-76415fabb989",
+      "name": "SN 2 lookup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        510,
+        -230
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 3 - Price it\nApplies the rate card to the work performed - labour, parts, callout.",
+        "height": 150,
+        "width": 200,
+        "color": 2
+      },
+      "id": "7dd7c09b-4966-4db0-bb19-eca8f1c0b0d5",
+      "name": "SN 3 price",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        940,
+        -230
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 4 - Invoice + close out\nWrites DONE + price, emails the invoice, then flips the row to INVOICED.\n(Once that invoice exists in Xero, CashChaser takes over.)",
+        "height": 150,
+        "width": 520,
+        "color": 5
+      },
+      "id": "bb3e0bd2-6332-4018-94ea-daa3248ba474",
+      "name": "SN 4 invoice",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        -230
       ]
     }
   ],

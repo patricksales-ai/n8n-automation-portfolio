@@ -883,7 +883,7 @@
       "parameters": {
         "content": "## 🔧 SmartDispatch - AI Field-Service Triage & Dispatch\nJob request (chat / email / Telegram) -> AI triages urgency + trade -> matches an available technician from the roster -> books the slot -> notifies tech + customer.\n**OpenAI - Google Sheets - Google Calendar - Gmail - Telegram**",
         "height": 150,
-        "width": 760,
+        "width": 1000,
         "color": 7
       },
       "id": "9885f00e-6b79-4eb3-885a-bc0df4cff93c",
@@ -892,7 +892,103 @@
       "typeVersion": 1,
       "position": [
         -1040,
-        -628
+        -820
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 1 - Any channel in\nChat, Gmail or Telegram. Each trigger has a small parser that normalizes its payload, so everything downstream is channel-agnostic.",
+        "height": 175,
+        "width": 470,
+        "color": 4
+      },
+      "id": "737ce04c-2cfd-42ee-abe3-28c89ce1e51a",
+      "name": "SN 1 channels",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1080,
+        -620
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 2 - AI triage\nOne LLM chain reads the free-text request and classifies urgency + the trade/skill required, then Normalize forces a consistent shape.",
+        "height": 175,
+        "width": 400,
+        "color": 6
+      },
+      "id": "124946b5-2814-4dbd-b6e4-76436c712494",
+      "name": "SN 2 triage",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -680,
+        -620
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 3 - Match a technician\nFilters the roster sheet by required skill, then checks each candidate's calendar and picks the first genuinely free tech.",
+        "height": 175,
+        "width": 800,
+        "color": 3
+      },
+      "id": "caf3c683-f364-4a34-a763-a317aaf9f2f3",
+      "name": "SN 3 match",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -140,
+        -620
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 4 - Available? book : escalate\nIf nobody is free the job is logged as escalated and a human is emailed instead of silently dropping it.",
+        "height": 175,
+        "width": 400,
+        "color": 2
+      },
+      "id": "533388d6-d3c5-4542-97e0-bc898cc9a134",
+      "name": "SN 4 gate",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        690,
+        -620
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 5 - Book + log\nCreates the calendar event for the chosen tech and appends the job row (status BOOKED).",
+        "height": 175,
+        "width": 380,
+        "color": 5
+      },
+      "id": "47c577a9-1f20-498c-973c-f28374b77a8b",
+      "name": "SN 5 book",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1110,
+        -620
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 6 - Notify everyone\nCustomer confirmation + ops alert, and if the request came from Telegram the reply goes back down that channel too.",
+        "height": 175,
+        "width": 440,
+        "color": 5
+      },
+      "id": "404942dd-f31f-4dc0-af06-99ee06b7e204",
+      "name": "SN 6 notify",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1510,
+        -620
       ]
     }
   ],
