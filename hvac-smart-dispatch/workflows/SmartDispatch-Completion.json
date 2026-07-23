@@ -1,5 +1,5 @@
 {
-  "name": "SmartDispatch \u2014 Completion",
+  "name": "SmartDispatch — Completion",
   "nodes": [
     {
       "parameters": {
@@ -481,6 +481,22 @@
           "name": "Google Sheets account"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "## 🧾 SmartDispatch - Job Completion & Invoice\nTech marks a job done -> AI summarizes the work -> logs to Sheets -> generates + emails the invoice. Hands off to CashChaser once the invoice lands in Xero.\n**OpenAI - Google Sheets - Gmail**",
+        "height": 150,
+        "width": 760,
+        "color": 7
+      },
+      "id": "9ce35d00-433a-4a93-a0d8-16e4d144342e",
+      "name": "SN header",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -260
+      ]
     }
   ],
   "connections": {

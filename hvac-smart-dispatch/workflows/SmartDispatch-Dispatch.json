@@ -1,5 +1,5 @@
 {
-  "name": "SmartDispatch \u2014 Dispatch",
+  "name": "SmartDispatch — Dispatch",
   "nodes": [
     {
       "parameters": {
@@ -153,7 +153,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const job = $('Normalize').first().json.output;\n\nconst norm = (s) => String(s ?? '')\n  .split(',')\n  .map(v => v.trim().toLowerCase())\n  .filter(Boolean);\n\nconst jobArea  = String(job.address ?? '').toLowerCase();\nconst jobSkill = String(job.skill_required ?? '').toLowerCase();\n\nconst candidates = $input.all()\n  .map(item => {\n    const t = item.json;\n    const areas  = norm(t.areas);\n    const skills = norm(t.skills);\n    const areaMatch  = areas.some(a => jobArea.includes(a));\n    const skillMatch = skills.includes(jobSkill);\n    const score = (areaMatch ? 1 : 0) + (skillMatch ? 1 : 0);\n    return { json: { ...t, _areaMatch: areaMatch, _skillMatch: skillMatch, _score: score, job } };\n  })\n  .filter(c => c.json._areaMatch && c.json._skillMatch)\n  .sort((a, b) => b.json._score - a.json._score);\n\nif (candidates.length === 0) {\n  // no area+skill match \u2014 emit a marker so the chain keeps flowing.\n  // calendar_id = your primary calendar just to keep the Calendar node happy;\n  // Pick first free ignores the calendar result for markers.\n  return [{ json: { _noMatch: true, job, calendar_id: 'you@example.com' } }];\n}\nreturn candidates;"
+        "jsCode": "const job = $('Normalize').first().json.output;\n\nconst norm = (s) => String(s ?? '')\n  .split(',')\n  .map(v => v.trim().toLowerCase())\n  .filter(Boolean);\n\nconst jobArea  = String(job.address ?? '').toLowerCase();\nconst jobSkill = String(job.skill_required ?? '').toLowerCase();\n\nconst candidates = $input.all()\n  .map(item => {\n    const t = item.json;\n    const areas  = norm(t.areas);\n    const skills = norm(t.skills);\n    const areaMatch  = areas.some(a => jobArea.includes(a));\n    const skillMatch = skills.includes(jobSkill);\n    const score = (areaMatch ? 1 : 0) + (skillMatch ? 1 : 0);\n    return { json: { ...t, _areaMatch: areaMatch, _skillMatch: skillMatch, _score: score, job } };\n  })\n  .filter(c => c.json._areaMatch && c.json._skillMatch)\n  .sort((a, b) => b.json._score - a.json._score);\n\nif (candidates.length === 0) {\n  // no area+skill match — emit a marker so the chain keeps flowing.\n  // calendar_id = your primary calendar just to keep the Calendar node happy;\n  // Pick first free ignores the calendar result for markers.\n  return [{ json: { _noMatch: true, job, calendar_id: 'you@example.com' } }];\n}\nreturn candidates;"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -260,7 +260,7 @@
         "end": "={{ $now.plus({ hours: 2 }).toISO() }}",
         "additionalFields": {
           "description": "={{ $json.job.issue_summary }}\nContact: {{ $json.job.contact }}\nAddress: {{ $json.job.address }}",
-          "summary": "={{ $json.job.appliance }} \u2014 {{ $json.job.customer_name }} ({{ $json.job.urgency }})"
+          "summary": "={{ $json.job.appliance }} — {{ $json.job.customer_name }} ({{ $json.job.urgency }})"
         }
       },
       "type": "n8n-nodes-base.googleCalendar",
@@ -482,7 +482,7 @@
     {
       "parameters": {
         "sendTo": "you@example.com",
-        "subject": "={{ $('Pick first free').first().json.job.urgency === 'Emergency' ? '\ud83d\udea8 ' : '' }}New job: {{ $('Pick first free').first().json.name }} -> {{ $('Pick first free').first().json.job.customer_name }} ({{ $('Pick first free').first().json.job.urgency }})",
+        "subject": "={{ $('Pick first free').first().json.job.urgency === 'Emergency' ? '🚨 ' : '' }}New job: {{ $('Pick first free').first().json.name }} -> {{ $('Pick first free').first().json.job.customer_name }} ({{ $('Pick first free').first().json.job.urgency }})",
         "emailType": "text",
         "message": "=New job booked.\n\nTech:      {{ $('Pick first free').first().json.name }}\nCustomer:  {{ $('Pick first free').first().json.job.customer_name }}\nContact:   {{ $('Pick first free').first().json.job.contact }}\nAddress:   {{ $('Pick first free').first().json.job.address }}\nAppliance: {{ $('Pick first free').first().json.job.appliance }}\nUrgency:   {{ $('Pick first free').first().json.job.urgency }}\nIssue:     {{ $('Pick first free').first().json.job.issue_summary }}\n\nEvent ID:  {{ $('Create an event').first().json.id }}",
         "options": {
@@ -542,7 +542,7 @@
     {
       "parameters": {
         "sendTo": "you@example.com",
-        "subject": "=\u26a0 NO TECH AVAILABLE - {{ $('Append row in sheet (escalated)').first().json.customer }} ({{ $('Append row in sheet (escalated)').first().json.urgency }})",
+        "subject": "=⚠ NO TECH AVAILABLE - {{ $('Append row in sheet (escalated)').first().json.customer }} ({{ $('Append row in sheet (escalated)').first().json.urgency }})",
         "emailType": "text",
         "message": "=Manual assignment needed - no technician could be auto-dispatched.\n\nReason:    {{ $('Tech available?').first().json._reason === 'no_match' ? 'No tech matches the area + skill' : 'All matching techs are busy' }}\nCustomer:  {{ $('Append row in sheet (escalated)').first().json.customer }}\nContact:   {{ $('Append row in sheet (escalated)').first().json.contact }}\nAddress:   {{ $('Append row in sheet (escalated)').first().json.address }}\nAppliance: {{ $('Tech available?').first().json.job.appliance }}\nUrgency:   {{ $('Append row in sheet (escalated)').first().json.urgency }}\nIssue:     {{ $('Append row in sheet (escalated)').first().json.issue }}\n\nJob ID:    {{ $('Append row in sheet (escalated)').first().json.job_id }}",
         "options": {
@@ -858,7 +858,7 @@
     {
       "parameters": {
         "chatId": "={{ $('Parse telegram').first().json.telegram_chat_id }}",
-        "text": "=Hi {{ $('Pick first free').first().json.job.customer_name }}, you're booked. {{ $('Pick first free').first().json.name }} will handle your {{ $('Pick first free').first().json.job.appliance }} issue and will be in touch shortly. \u2014 SmartDispatch",
+        "text": "=Hi {{ $('Pick first free').first().json.job.customer_name }}, you're booked. {{ $('Pick first free').first().json.name }} will handle your {{ $('Pick first free').first().json.job.appliance }} issue and will be in touch shortly. — SmartDispatch",
         "additionalFields": {
           "appendAttribution": false
         }
@@ -878,6 +878,22 @@
           "name": "Telegram account"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "## 🔧 SmartDispatch - AI Field-Service Triage & Dispatch\nJob request (chat / email / Telegram) -> AI triages urgency + trade -> matches an available technician from the roster -> books the slot -> notifies tech + customer.\n**OpenAI - Google Sheets - Google Calendar - Gmail - Telegram**",
+        "height": 150,
+        "width": 760,
+        "color": 7
+      },
+      "id": "9885f00e-6b79-4eb3-885a-bc0df4cff93c",
+      "name": "SN header",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1040,
+        -628
+      ]
     }
   ],
   "connections": {

@@ -3,70 +3,6 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Booking request\nCalled by the voice agent with the desired time.",
-        "height": 559,
-        "width": 416,
-        "color": 5
-      },
-      "id": "19060f50-a887-46b4-a995-d51abafa7092",
-      "name": "Sticky · Booking request",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -1772,
-        -287
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Find a free slot\nRound-robin across staff + availability guard — no double-booking.",
-        "height": 559,
-        "width": 600,
-        "color": 2
-      },
-      "id": "4db0c576-b54a-4e14-a9b0-e945c270a290",
-      "name": "Sticky · Find a free slot",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -1356,
-        -287
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Slot free?",
-        "height": 559,
-        "width": 548,
-        "color": 6
-      },
-      "id": "09307c1a-d535-4b99-bf72-425485eb9382",
-      "name": "Sticky · Slot free?",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -756,
-        -287
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Book & confirm\nCreates the event, logs it, and SMS-confirms the caller.",
-        "height": 559,
-        "width": 815,
-        "color": 7
-      },
-      "id": "31362c0d-852a-4e7a-80a6-3d4c0878b627",
-      "name": "Sticky · Book & confirm",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -208,
-        -287
-      ]
-    },
-    {
-      "parameters": {
         "documentId": {
           "__rl": true,
           "value": "YOUR_SHEET_ID",
@@ -408,6 +344,70 @@
       ],
       "id": "41ef8672-46fd-4cc0-9ac3-08f6dd59c1cf",
       "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "content": "## 🗓️ VFD - Smart Booking\nRound-robin booking engine: checks staff availability across Google Calendars, picks the next free person, creates the event, and returns a spoken confirmation.\n**Google Calendar - Google Sheets - Twilio - webhook**",
+        "height": 559,
+        "width": 416,
+        "color": 7
+      },
+      "id": "19060f50-a887-46b4-a995-d51abafa7092",
+      "name": "Sticky · Booking request",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1772,
+        -287
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Find a free slot\nRound-robin across staff + availability guard — no double-booking.",
+        "height": 559,
+        "width": 600,
+        "color": 2
+      },
+      "id": "4db0c576-b54a-4e14-a9b0-e945c270a290",
+      "name": "Sticky · Find a free slot",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1356,
+        -287
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Slot free?",
+        "height": 559,
+        "width": 548,
+        "color": 6
+      },
+      "id": "09307c1a-d535-4b99-bf72-425485eb9382",
+      "name": "Sticky · Slot free?",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -756,
+        -287
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Book & confirm\nCreates the event, logs it, and SMS-confirms the caller.",
+        "height": 559,
+        "width": 815,
+        "color": 7
+      },
+      "id": "31362c0d-852a-4e7a-80a6-3d4c0878b627",
+      "name": "Sticky · Book & confirm",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        -287
+      ]
     }
   ],
   "connections": {

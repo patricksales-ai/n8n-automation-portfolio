@@ -3,70 +3,6 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Call turn in\nTwilio posts each caller utterance.",
-        "height": 543,
-        "width": 228,
-        "color": 5
-      },
-      "id": "35a17172-8b44-4efb-bc67-0766cc3172b7",
-      "name": "Sticky · Call turn in",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -60,
-        -175
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## AI voice agent (the brain)\nGPT-4o-mini + memory. Qualifies and books mid-call via the booking tool.",
-        "height": 543,
-        "width": 296,
-        "color": 3
-      },
-      "id": "a7576ed8-782f-462f-bda6-a2c3339cd39f",
-      "name": "Sticky · AI voice agent (the brain)",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        168,
-        -175
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Transfer?\nDetects a request for a human.",
-        "height": 543,
-        "width": 378,
-        "color": 6
-      },
-      "id": "ab18df16-bcdc-46ed-a22a-cd0055d868c2",
-      "name": "Sticky · Transfer?",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        464,
-        -175
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Respond\nSpeaks the reply, or hands off to a live person.",
-        "height": 543,
-        "width": 309,
-        "color": 7
-      },
-      "id": "3de68d74-f6f3-41b5-aa0b-0a2a1e0d9dbc",
-      "name": "Sticky · Respond",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        842,
-        -175
-      ]
-    },
-    {
-      "parameters": {
         "httpMethod": "POST",
         "path": "voice-respond",
         "responseMode": "responseNode",
@@ -230,6 +166,70 @@
       ],
       "id": "21c58c40-54e8-448c-bddb-c6afa730c115",
       "name": "Respond Transfer"
+    },
+    {
+      "parameters": {
+        "content": "## 🎙️ VFD - AI Voice Agent (the brain)\nDrives the phone conversation: caller speech -> AI agent (books, answers FAQs, qualifies, routes) with memory -> books via an HTTP tool -> returns TwiML. Core of the AI voice front desk.\n**OpenAI agent - Twilio TwiML - webhook**",
+        "height": 543,
+        "width": 228,
+        "color": 7
+      },
+      "id": "35a17172-8b44-4efb-bc67-0766cc3172b7",
+      "name": "Sticky · Call turn in",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        -176
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## AI voice agent (the brain)\nGPT-4o-mini + memory. Qualifies and books mid-call via the booking tool.",
+        "height": 543,
+        "width": 296,
+        "color": 3
+      },
+      "id": "a7576ed8-782f-462f-bda6-a2c3339cd39f",
+      "name": "Sticky · AI voice agent (the brain)",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        176,
+        -176
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Transfer?\nDetects a request for a human.",
+        "height": 543,
+        "width": 378,
+        "color": 6
+      },
+      "id": "ab18df16-bcdc-46ed-a22a-cd0055d868c2",
+      "name": "Sticky · Transfer?",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        464,
+        -176
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Respond\nSpeaks the reply, or hands off to a live person.",
+        "height": 543,
+        "width": 309,
+        "color": 7
+      },
+      "id": "3de68d74-f6f3-41b5-aa0b-0a2a1e0d9dbc",
+      "name": "Sticky · Respond",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        848,
+        -176
+      ]
     }
   ],
   "connections": {

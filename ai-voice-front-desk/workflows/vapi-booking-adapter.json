@@ -87,65 +87,65 @@
     },
     {
       "parameters": {
-        "content": "## VFD — Vapi Booking Adapter\nBridges the Vapi voice assistant's `book_appointment` tool to the existing **Smart Booking** brain over HTTP (the top-level `/webhook/vfd-book`). One booking engine now serves BOTH the Twilio and the Vapi front-ends.",
-        "height": 90,
+        "content": "## 🔌 VFD - Vapi Booking Adapter\nBridges the Vapi realtime voice assistant to the n8n booking backend - maps Vapi tool-calls to the booking webhook and returns results in Vapi's {results:[{toolCallId,result}]} shape.\n**Vapi - webhook**",
+        "height": 234,
         "width": 1080,
         "color": 7
       },
-      "id": "1c9f9637-4eb7-4b6c-91c7-4287598a6fc7",
+      "id": "b274cbcd-f1e0-441c-8b7e-efa42822d554",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -740,
-        -270
+        -736,
+        -416
       ]
     },
     {
       "parameters": {
         "content": "### 1 · Receive & extract\nVapi POSTs the tool-call here. **Extract** pulls `name` / `service` / `startTime` from the LLM's tool arguments, plus the caller's number from the call object (empty on web test calls, filled on real PSTN).",
-        "height": 150,
+        "height": 438,
         "width": 400,
         "color": 5
       },
-      "id": "6f1eeb9f-0bef-4876-ab9a-6fbceceff609",
+      "id": "68b0aeef-cbcb-4cc1-be9b-b031f3e2d879",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -740,
+        -736,
         -160
       ]
     },
     {
       "parameters": {
         "content": "### 2 · Book\n**Call Booking** POSTs into the Smart Booking brain → round-robin across 3 stylist calendars + availability guard (no double-booking).",
-        "height": 150,
+        "height": 438,
         "width": 200,
         "color": 4
       },
-      "id": "0574386c-8050-4f38-9956-aac7b03db985",
+      "id": "e37a3ea4-d6dd-4307-b884-1bbc7c23c94b",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -330,
+        -336,
         -160
       ]
     },
     {
       "parameters": {
         "content": "### 3 · Respond to Vapi\n**Format Result** wraps the confirmation in Vapi's required `{results:[{toolCallId, result}]}` shape, then **Respond to Webhook** returns it so the assistant speaks the confirmation aloud.",
-        "height": 150,
+        "height": 438,
         "width": 400,
         "color": 6
       },
-      "id": "eadc6791-3d68-44dd-aa63-9005f2e0ed29",
+      "id": "1eb61a3a-e787-4f2e-9854-d05737ff7ad2",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -120,
+        -128,
         -160
       ]
     }

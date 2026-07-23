@@ -3,86 +3,6 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Schedule",
-        "height": 479,
-        "width": 222,
-        "color": 5
-      },
-      "id": "5e325fda-65c1-450d-8265-5651570cfed8",
-      "name": "Sticky · Schedule",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -60,
-        -111
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Get idea\nNext idea from the sheet.",
-        "height": 479,
-        "width": 361,
-        "color": 2
-      },
-      "id": "fdb46b29-7909-4647-81b3-70c842d5493c",
-      "name": "Sticky · Get idea",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        162,
-        -111
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Draft + self-critique\nTwo LLM passes — write, then refine for quality.",
-        "height": 479,
-        "width": 628,
-        "color": 3
-      },
-      "id": "58269eac-8f73-44eb-9663-107725db23ef",
-      "name": "Sticky · Draft + self-critique",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        523,
-        -111
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Human gate\nSlack Approve / Decline before anything is posted.",
-        "height": 479,
-        "width": 607,
-        "color": 6
-      },
-      "id": "57fae0d2-5b32-4dc5-9d2c-80a2e1c4c84d",
-      "name": "Sticky · Human gate",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        1151,
-        -111
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Publish + log\nAyrshare posts it, then the live link is written back to the sheet.",
-        "height": 479,
-        "width": 449,
-        "color": 7
-      },
-      "id": "74debffb-0d43-4cef-bd5c-823d6ff77492",
-      "name": "Sticky · Publish + log",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        1758,
-        -111
-      ]
-    },
-    {
-      "parameters": {
         "promptType": "define",
         "text": "=Turn the idea below into platform-tailored posts.\n\nIdea: {{ $json.idea }}",
         "messages": {
@@ -489,6 +409,86 @@
       ],
       "id": "1815aefd-c2e6-4b7d-9b4d-f8c8d1277115",
       "name": "Normalize Final"
+    },
+    {
+      "parameters": {
+        "content": "## ✍️ Build 5 - Social Content Bot\nScheduled: AI drafts + refines social posts, logs them to Google Sheets, publishes via HTTP, and pings Slack for review.\n**OpenAI - Google Sheets - Slack - HTTP**",
+        "height": 479,
+        "width": 222,
+        "color": 7
+      },
+      "id": "5e325fda-65c1-450d-8265-5651570cfed8",
+      "name": "Sticky · Schedule",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -111
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Get idea\nNext idea from the sheet.",
+        "height": 479,
+        "width": 361,
+        "color": 2
+      },
+      "id": "fdb46b29-7909-4647-81b3-70c842d5493c",
+      "name": "Sticky · Get idea",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        162,
+        -111
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Draft + self-critique\nTwo LLM passes — write, then refine for quality.",
+        "height": 479,
+        "width": 628,
+        "color": 3
+      },
+      "id": "58269eac-8f73-44eb-9663-107725db23ef",
+      "name": "Sticky · Draft + self-critique",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        523,
+        -111
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Human gate\nSlack Approve / Decline before anything is posted.",
+        "height": 479,
+        "width": 607,
+        "color": 6
+      },
+      "id": "57fae0d2-5b32-4dc5-9d2c-80a2e1c4c84d",
+      "name": "Sticky · Human gate",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1151,
+        -111
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Publish + log\nAyrshare posts it, then the live link is written back to the sheet.",
+        "height": 479,
+        "width": 449,
+        "color": 7
+      },
+      "id": "74debffb-0d43-4cef-bd5c-823d6ff77492",
+      "name": "Sticky · Publish + log",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1758,
+        -111
+      ]
     }
   ],
   "connections": {

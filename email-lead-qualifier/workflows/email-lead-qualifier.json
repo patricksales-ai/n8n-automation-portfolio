@@ -3,86 +3,6 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## New email",
-        "height": 815,
-        "width": 378,
-        "color": 5
-      },
-      "id": "b0de26ec-3820-4e3e-855a-5e2f8efb92cf",
-      "name": "Sticky · New email",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -60,
-        -447
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Normalize",
-        "height": 815,
-        "width": 244,
-        "color": 2
-      },
-      "id": "ec1b429f-9cd9-4835-a584-7e8dc3ee4d83",
-      "name": "Sticky · Normalize",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        318,
-        -447
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## BANT score\nBudget · authority · need · timeline → score + stage.",
-        "height": 815,
-        "width": 272,
-        "color": 3
-      },
-      "id": "74ad8309-0c3b-4490-b0c4-d14728a2e862",
-      "name": "Sticky · BANT score",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        562,
-        -447
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Route\nhot / warm / dismiss.",
-        "height": 815,
-        "width": 576,
-        "color": 6
-      },
-      "id": "f1ecc0ba-af1b-4c8c-8d8b-499132e20a10",
-      "name": "Sticky · Route",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        834,
-        -447
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Save · alert · reply\nCapture to DB + tracker sheet, Slack alert, label, temperature-aware auto-reply. The warm path captures incomplete inquiries instead of dropping them.",
-        "height": 815,
-        "width": 1181,
-        "color": 7
-      },
-      "id": "081aca99-ae2a-4357-a1f6-b695180dc092",
-      "name": "Sticky · Save · alert · reply",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        1410,
-        -447
-      ]
-    },
-    {
-      "parameters": {
         "pollTimes": {
           "item": [
             {
@@ -943,6 +863,86 @@
           "name": "Supabase Local"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "## 🎯 Build 7 - Email Lead Qualifier\nInbound Gmail leads scored + qualified by AI, routed by tier, logged to Sheets/Postgres, with AI-drafted replies and Slack alerts.\n**OpenAI - Gmail - Google Sheets - Postgres - Slack**",
+        "height": 815,
+        "width": 378,
+        "color": 7
+      },
+      "id": "b0de26ec-3820-4e3e-855a-5e2f8efb92cf",
+      "name": "Sticky · New email",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -447
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Normalize",
+        "height": 815,
+        "width": 244,
+        "color": 2
+      },
+      "id": "ec1b429f-9cd9-4835-a584-7e8dc3ee4d83",
+      "name": "Sticky · Normalize",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        318,
+        -447
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## BANT score\nBudget · authority · need · timeline → score + stage.",
+        "height": 815,
+        "width": 272,
+        "color": 3
+      },
+      "id": "74ad8309-0c3b-4490-b0c4-d14728a2e862",
+      "name": "Sticky · BANT score",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        562,
+        -447
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Route\nhot / warm / dismiss.",
+        "height": 815,
+        "width": 576,
+        "color": 6
+      },
+      "id": "f1ecc0ba-af1b-4c8c-8d8b-499132e20a10",
+      "name": "Sticky · Route",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        834,
+        -447
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Save · alert · reply\nCapture to DB + tracker sheet, Slack alert, label, temperature-aware auto-reply. The warm path captures incomplete inquiries instead of dropping them.",
+        "height": 815,
+        "width": 1181,
+        "color": 7
+      },
+      "id": "081aca99-ae2a-4357-a1f6-b695180dc092",
+      "name": "Sticky · Save · alert · reply",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1410,
+        -447
+      ]
     }
   ],
   "connections": {

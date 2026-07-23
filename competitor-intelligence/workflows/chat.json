@@ -3,38 +3,6 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Question",
-        "height": 495,
-        "width": 276,
-        "color": 5
-      },
-      "id": "70b104fa-5d51-4873-9ad1-818fd82e15e1",
-      "name": "Sticky · Question",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -60,
-        -95
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Answer from intel\nAgent retrieves over pgvector and answers only from logged changes.",
-        "height": 495,
-        "width": 487,
-        "color": 3
-      },
-      "id": "f514d1dd-f724-4643-bd5e-94c655f67d40",
-      "name": "Sticky · Answer from intel",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        216,
-        -95
-      ]
-    },
-    {
-      "parameters": {
         "public": true,
         "options": {}
       },
@@ -147,6 +115,38 @@
           "name": "Supabase API Local"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "## 💬 Build 2 - Knowledge-Base Chat (RAG)\nChat agent answers questions over the crawled content - retrieves from the Supabase vector store with conversation memory.\n**OpenAI agent - Supabase vector store - window memory**",
+        "height": 495,
+        "width": 276,
+        "color": 7
+      },
+      "id": "70b104fa-5d51-4873-9ad1-818fd82e15e1",
+      "name": "Sticky · Question",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -95
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Answer from intel\nAgent retrieves over pgvector and answers only from logged changes.",
+        "height": 495,
+        "width": 487,
+        "color": 3
+      },
+      "id": "f514d1dd-f724-4643-bd5e-94c655f67d40",
+      "name": "Sticky · Answer from intel",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        216,
+        -95
+      ]
     }
   ],
   "connections": {

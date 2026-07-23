@@ -3,70 +3,6 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## New message",
-        "height": 527,
-        "width": 539,
-        "color": 5
-      },
-      "id": "2b3e8df8-1a29-42e3-97c7-88f4ec0403ac",
-      "name": "Sticky · New message",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -364,
-        -159
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Qualify (BANT agent)\nLoads lead state (resumable per phone), scores with Postgres memory, upserts the lead, replies on WhatsApp.",
-        "height": 527,
-        "width": 600,
-        "color": 3
-      },
-      "id": "9c7e7e85-f739-47f2-be69-648f74e5a549",
-      "name": "Sticky · Qualify (BANT agent)",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        175,
-        -159
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Hot lead?",
-        "height": 527,
-        "width": 447,
-        "color": 6
-      },
-      "id": "9eb9f15d-c558-4516-86c0-e1a91229844b",
-      "name": "Sticky · Hot lead?",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        775,
-        -159
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Alert sales\nSlack alert + booking link.",
-        "height": 527,
-        "width": 281,
-        "color": 7
-      },
-      "id": "9014f73d-0e6b-4d7f-8de7-8187234d5ed3",
-      "name": "Sticky · Alert sales",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        1222,
-        -159
-      ]
-    },
-    {
-      "parameters": {
         "promptType": "define",
         "text": "={{ $('Edit Fields').item.json.text }}",
         "options": {
@@ -352,6 +288,70 @@
           "name": "WhatsApp account 2"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "## 📱 Build 3 - WhatsApp Lead Qualifier\nInbound WhatsApp message -> AI agent qualifies the lead, stores it in Postgres/Supabase with chat memory -> Slack alert + WhatsApp reply.\n**OpenAI agent - WhatsApp - Postgres memory - Supabase - Slack**",
+        "height": 527,
+        "width": 539,
+        "color": 7
+      },
+      "id": "2b3e8df8-1a29-42e3-97c7-88f4ec0403ac",
+      "name": "Sticky · New message",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -364,
+        -159
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Qualify (BANT agent)\nLoads lead state (resumable per phone), scores with Postgres memory, upserts the lead, replies on WhatsApp.",
+        "height": 527,
+        "width": 600,
+        "color": 3
+      },
+      "id": "9c7e7e85-f739-47f2-be69-648f74e5a549",
+      "name": "Sticky · Qualify (BANT agent)",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        175,
+        -159
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Hot lead?",
+        "height": 527,
+        "width": 447,
+        "color": 6
+      },
+      "id": "9eb9f15d-c558-4516-86c0-e1a91229844b",
+      "name": "Sticky · Hot lead?",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        775,
+        -159
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Alert sales\nSlack alert + booking link.",
+        "height": 527,
+        "width": 281,
+        "color": 7
+      },
+      "id": "9014f73d-0e6b-4d7f-8de7-8187234d5ed3",
+      "name": "Sticky · Alert sales",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1222,
+        -159
+      ]
     }
   ],
   "connections": {

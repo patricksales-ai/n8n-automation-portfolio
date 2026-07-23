@@ -3,54 +3,6 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Start dial\nManual / scheduled kick-off.",
-        "height": 255,
-        "width": 310,
-        "color": 5
-      },
-      "id": "e543668e-87bc-4b46-9185-42ea8ff89f38",
-      "name": "Sticky · Start dial",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -236,
-        -95
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Lead list + DNC guard\nLoad leads and skip anyone on the do-not-call list before dialing.",
-        "height": 255,
-        "width": 400,
-        "color": 2
-      },
-      "id": "3c4378b8-6ae0-44db-9fb1-0c054610c8ba",
-      "name": "Sticky · Lead list + DNC guard",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        74,
-        -95
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Place AI call\nHTTP → Vapi (GPT-4o-mini voice over Twilio).",
-        "height": 255,
-        "width": 325,
-        "color": 3
-      },
-      "id": "dd48d1f5-a168-400d-ac21-cf1c8c213db6",
-      "name": "Sticky · Place AI call",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        474,
-        -95
-      ]
-    },
-    {
-      "parameters": {
         "documentId": {
           "__rl": true,
           "value": "YOUR_SHEET_ID",
@@ -187,6 +139,54 @@
       ],
       "id": "a58cf083-7077-4141-996c-9da022672065",
       "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "content": "## ☎️ FeedbackVoice - Outbound Dialer\nReads a call list from Sheets -> places outbound calls via Vapi/Twilio (AI voice agent runs the feedback/qualification script) -> logs status back.\n**Vapi - Twilio - Google Sheets**",
+        "height": 351,
+        "width": 310,
+        "color": 7
+      },
+      "id": "e543668e-87bc-4b46-9185-42ea8ff89f38",
+      "name": "Sticky · Start dial",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        -96
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Lead list + DNC guard\nLoad leads and skip anyone on the do-not-call list before dialing.",
+        "height": 351,
+        "width": 400,
+        "color": 2
+      },
+      "id": "3c4378b8-6ae0-44db-9fb1-0c054610c8ba",
+      "name": "Sticky · Lead list + DNC guard",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        80,
+        -96
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Place AI call\nHTTP → Vapi (GPT-4o-mini voice over Twilio).",
+        "height": 351,
+        "width": 325,
+        "color": 3
+      },
+      "id": "dd48d1f5-a168-400d-ac21-cf1c8c213db6",
+      "name": "Sticky · Place AI call",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        480,
+        -96
+      ]
     }
   ],
   "connections": {

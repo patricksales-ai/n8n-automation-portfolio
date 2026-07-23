@@ -3,86 +3,6 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Daily schedule",
-        "height": 671,
-        "width": 575,
-        "color": 5
-      },
-      "id": "ced5f869-0717-48a6-adcb-85b104e90ccc",
-      "name": "Sticky · Daily schedule",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -476,
-        -703
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Fetch each competitor\nLoad the watch-list, loop, pull each RSS feed / page.",
-        "height": 671,
-        "width": 884,
-        "color": 2
-      },
-      "id": "36efdf41-9845-4ae3-8776-e2cde3ae277a",
-      "name": "Sticky · Fetch each competitor",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        99,
-        -703
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Only if changed\nHash-diff against the last snapshot — keeps it cents/day.",
-        "height": 671,
-        "width": 663,
-        "color": 6
-      },
-      "id": "76e799d7-4577-4365-9359-099505fe3b7b",
-      "name": "Sticky · Only if changed",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        983,
-        -703
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Summarize the change\nWhat changed, how significant, what it implies.",
-        "height": 671,
-        "width": 559,
-        "color": 3
-      },
-      "id": "d58c1e59-056f-4ffc-9296-6d21e5f78945",
-      "name": "Sticky · Summarize the change",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        1646,
-        -703
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Store\nLog the row + embed into the vector store.",
-        "height": 671,
-        "width": 882,
-        "color": 7
-      },
-      "id": "9fe6cdd9-2205-4968-96bc-2e89e1e0cbc4",
-      "name": "Sticky · Store",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        2205,
-        -703
-      ]
-    },
-    {
-      "parameters": {
         "rule": {
           "interval": [
             {
@@ -652,6 +572,86 @@
           "name": "Supabase API Local"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "## 🕷️ Build 2 - Web Content Crawler & Vectorizer\nScheduled RSS/website crawl -> hash-dedupe -> AI extracts structured info -> chunk + embed -> Supabase vector store. Feeds the Build 2 chat + digest.\n**OpenAI - text-embedding - Supabase vector store**",
+        "height": 671,
+        "width": 575,
+        "color": 7
+      },
+      "id": "ced5f869-0717-48a6-adcb-85b104e90ccc",
+      "name": "Sticky · Daily schedule",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -476,
+        -703
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Fetch each competitor\nLoad the watch-list, loop, pull each RSS feed / page.",
+        "height": 671,
+        "width": 884,
+        "color": 2
+      },
+      "id": "36efdf41-9845-4ae3-8776-e2cde3ae277a",
+      "name": "Sticky · Fetch each competitor",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        99,
+        -703
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Only if changed\nHash-diff against the last snapshot — keeps it cents/day.",
+        "height": 671,
+        "width": 663,
+        "color": 6
+      },
+      "id": "76e799d7-4577-4365-9359-099505fe3b7b",
+      "name": "Sticky · Only if changed",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        983,
+        -703
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Summarize the change\nWhat changed, how significant, what it implies.",
+        "height": 671,
+        "width": 559,
+        "color": 3
+      },
+      "id": "d58c1e59-056f-4ffc-9296-6d21e5f78945",
+      "name": "Sticky · Summarize the change",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1646,
+        -703
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Store\nLog the row + embed into the vector store.",
+        "height": 671,
+        "width": 882,
+        "color": 7
+      },
+      "id": "9fe6cdd9-2205-4968-96bc-2e89e1e0cbc4",
+      "name": "Sticky · Store",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2205,
+        -703
+      ]
     }
   ],
   "connections": {

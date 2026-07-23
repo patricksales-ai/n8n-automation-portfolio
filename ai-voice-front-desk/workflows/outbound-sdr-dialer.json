@@ -2,54 +2,6 @@
   "name": "VFD — Outbound Call (Twilio)",
   "nodes": [
     {
-      "parameters": {
-        "content": "## Start dial\nManual / scheduled kick-off.",
-        "height": 255,
-        "width": 222,
-        "color": 5
-      },
-      "id": "0939696f-9cdc-45dd-803c-3263d49564cd",
-      "name": "Sticky · Start dial",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -60,
-        -95
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Lead list\nPulls the next lead from the sheet.",
-        "height": 255,
-        "width": 208,
-        "color": 2
-      },
-      "id": "0a839faa-cc39-401b-abf6-dd908718d882",
-      "name": "Sticky · Lead list",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        162,
-        -95
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Place the call\nTwilio dials the lead with a personalized pitch.",
-        "height": 255,
-        "width": 221,
-        "color": 7
-      },
-      "id": "6955e63f-0fe7-4d6f-921f-7a31e31ccc66",
-      "name": "Sticky · Place the call",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        370,
-        -95
-      ]
-    },
-    {
       "parameters": {},
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -115,6 +67,54 @@
           "name": "Google Sheets account"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "## 📤 VFD - Outbound Call\nPlaces outbound Twilio calls from a Sheets list (manual trigger).\n**Twilio - Google Sheets**",
+        "height": 255,
+        "width": 222,
+        "color": 7
+      },
+      "id": "0939696f-9cdc-45dd-803c-3263d49564cd",
+      "name": "Sticky · Start dial",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -95
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Lead list\nPulls the next lead from the sheet.",
+        "height": 255,
+        "width": 208,
+        "color": 2
+      },
+      "id": "0a839faa-cc39-401b-abf6-dd908718d882",
+      "name": "Sticky · Lead list",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        162,
+        -95
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Place the call\nTwilio dials the lead with a personalized pitch.",
+        "height": 255,
+        "width": 221,
+        "color": 7
+      },
+      "id": "6955e63f-0fe7-4d6f-921f-7a31e31ccc66",
+      "name": "Sticky · Place the call",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        370,
+        -95
+      ]
     }
   ],
   "connections": {

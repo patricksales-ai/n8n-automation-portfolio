@@ -212,44 +212,44 @@
     },
     {
       "parameters": {
-        "content": "## VFD — Inbound Call Logger\nLogs every finished call to Google Sheets. Vapi posts an end-of-call report; we re-fetch the full call (free) for the transcript + recording, flatten it, and append one row per call.",
-        "height": 90,
+        "content": "## 📇 VFD - Inbound Call Logger\nLogs inbound call events + transcripts to Google Sheets for reporting.\n**Vapi - Google Sheets - webhook**",
+        "height": 202,
         "width": 1080,
         "color": 7
       },
-      "id": "b64a13cb-bae3-4889-a20a-b92734569d19",
+      "id": "3c6aea71-648b-4eab-9897-13191e2e2a6f",
       "name": "Sticky Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -20,
-        -270
+        -16,
+        -384
       ]
     },
     {
       "parameters": {
         "content": "### 1 · Receive & filter\nVapi's Server URL posts many event types here. **Filter** keeps only `end-of-call-report` and drops the noisy status/speech updates.",
-        "height": 150,
+        "height": 486,
         "width": 400,
         "color": 5
       },
-      "id": "3c1aa597-e21c-49b0-a716-9f4817d8c961",
+      "id": "4fb80573-00e0-49b7-8edf-b396959360d6",
       "name": "Sticky Note1",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -20,
+        -16,
         -160
       ]
     },
     {
       "parameters": {
         "content": "### 2 · Re-fetch (free)\n**Get Call** does a GET on the Vapi API using the `x-call-id` header — the full transcript + recording URL come back here. (API reads are free; only placing calls costs.)",
-        "height": 150,
+        "height": 486,
         "width": 200,
         "color": 4
       },
-      "id": "a219c3b7-171e-4091-b761-fc2d42ea9ef9",
+      "id": "ae64fa45-0e47-4727-97c4-fe0dc802079b",
       "name": "Sticky Note2",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -261,16 +261,16 @@
     {
       "parameters": {
         "content": "### 3 · Normalize & log\n**Normalizer** flattens 9 fields (ended_at, caller_number, cost, summary, recording_url, transcript, …) → **Append** to the Inbound Call Log sheet via auto-map.",
-        "height": 150,
+        "height": 486,
         "width": 440,
         "color": 6
       },
-      "id": "3acc1d3a-ccf4-434a-be8c-635e04cb31d7",
+      "id": "db32a7ec-efd6-4dbf-be55-5ce2e381e9d2",
       "name": "Sticky Note3",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        610,
+        624,
         -160
       ]
     }

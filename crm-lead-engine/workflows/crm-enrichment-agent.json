@@ -3,70 +3,6 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Daily schedule",
-        "height": 655,
-        "width": 547,
-        "color": 5
-      },
-      "id": "7ab7df05-f2a8-4a90-956a-ba8731aab04f",
-      "name": "Sticky · Daily schedule",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        212,
-        -383
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Pull & clean contacts\nFetch HubSpot contacts, split, filter, normalize.",
-        "height": 655,
-        "width": 869,
-        "color": 2
-      },
-      "id": "aec0ce11-9b50-40a2-b614-f62f2b718194",
-      "name": "Sticky · Pull & clean contacts",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        759,
-        -383
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Enrich + score\nInfer company / seniority / segment from what's already there; score data quality.",
-        "height": 655,
-        "width": 575,
-        "color": 3
-      },
-      "id": "e4e78283-a5bc-4271-acef-b939478d3f50",
-      "name": "Sticky · Enrich + score",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        1628,
-        -383
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Write back\nUpdate HubSpot + Slack digest.",
-        "height": 655,
-        "width": 388,
-        "color": 7
-      },
-      "id": "608f7c41-91eb-4c94-891a-9099f541773d",
-      "name": "Sticky · Write back",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        2203,
-        -383
-      ]
-    },
-    {
-      "parameters": {
         "options": {}
       },
       "type": "n8n-nodes-base.splitInBatches",
@@ -420,6 +356,70 @@
           "name": "HubSpot Header Auth Local"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "## 🧩 Build 8 - CRM Enrichment & Scoring\nScheduled sweep of CRM contacts -> AI enriches + scores each against your ICP -> writes back to HubSpot, flags hot leads to Slack.\n**OpenAI - HubSpot API - Slack**",
+        "height": 655,
+        "width": 547,
+        "color": 7
+      },
+      "id": "7ab7df05-f2a8-4a90-956a-ba8731aab04f",
+      "name": "Sticky · Daily schedule",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        212,
+        -383
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Pull & clean contacts\nFetch HubSpot contacts, split, filter, normalize.",
+        "height": 655,
+        "width": 869,
+        "color": 2
+      },
+      "id": "aec0ce11-9b50-40a2-b614-f62f2b718194",
+      "name": "Sticky · Pull & clean contacts",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        759,
+        -383
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Enrich + score\nInfer company / seniority / segment from what's already there; score data quality.",
+        "height": 655,
+        "width": 575,
+        "color": 3
+      },
+      "id": "e4e78283-a5bc-4271-acef-b939478d3f50",
+      "name": "Sticky · Enrich + score",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1628,
+        -383
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Write back\nUpdate HubSpot + Slack digest.",
+        "height": 655,
+        "width": 388,
+        "color": 7
+      },
+      "id": "608f7c41-91eb-4c94-891a-9099f541773d",
+      "name": "Sticky · Write back",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2203,
+        -383
+      ]
     }
   ],
   "connections": {

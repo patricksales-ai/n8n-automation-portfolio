@@ -1,1015 +1,1015 @@
 {
- "name": "CashChaser",
- "nodes": [
-  {
-   "parameters": {
-    "operation": "getAll",
-    "organizationId": "YOUR_XERO_TENANT_ID",
-    "options": {}
-   },
-   "type": "n8n-nodes-base.xero",
-   "typeVersion": 1,
-   "position": [
-    416,
-    0
-   ],
-   "id": "59fe10dc-24b3-416d-9445-d518fe2d6547",
-   "name": "Get many invoices",
-   "credentials": {
-    "xeroOAuth2Api": {
-     "id": "MkHHi7MDrDBtGqwY",
-     "name": "Xero account"
-    }
-   }
-  },
-  {
-   "parameters": {
-    "jsCode": "const today = new Date();\ntoday.setHours(0, 0, 0, 0);\n\nconst results = [];\n\nfor (const item of $input.all()) {\n  const inv = item.json;\n\n  // only unpaid, approved invoices\n  if (inv.Status !== 'AUTHORISED') continue;\n  if (!(inv.AmountDue > 0)) continue;\n  if (!inv.DueDateString) continue;\n\n  const due = new Date(inv.DueDateString);\n  due.setHours(0, 0, 0, 0);\n\n  const daysOverdue = Math.floor((today - due) / 86400000);\n  if (daysOverdue <= 0) continue; // not overdue yet\n\n  // tone-ladder tier\n  let tier;\n  if (daysOverdue >= 30) tier = 'final';   // 30d+\n  else if (daysOverdue >= 14) tier = 'firm';   // 14\u201329d\n  else if (daysOverdue >= 7) tier = 'friendly'; // 7\u201313d\n  else continue; // 1\u20136d overdue: too soon to chase\n\n  results.push({\n    json: {\n      invoiceId: inv.InvoiceID,\n      invoiceNumber: inv.InvoiceNumber,\n      amountDue: inv.AmountDue,\n      currency: inv.CurrencyCode,\n      dueDate: inv.DueDateString.substring(0, 10),\n      daysOverdue,\n      tier,\n      contactId: inv.Contact?.ContactID,\n      contactName: inv.Contact?.Name,\n    },\n  });\n}\n\nreturn results;"
-   },
-   "type": "n8n-nodes-base.code",
-   "typeVersion": 2,
-   "position": [
-    624,
-    0
-   ],
-   "id": "30aff4a2-ea9d-4079-8007-33637b155c84",
-   "name": "Tier invoices"
-  },
-  {
-   "parameters": {
-    "modelId": {
-     "__rl": true,
-     "value": "gpt-4o-mini",
-     "mode": "list",
-     "cachedResultName": "GPT-4O-MINI"
-    },
-    "responses": {
-     "values": [
-      {
-       "role": "system",
-       "content": "=You are the accounts-receivable assistant for Demo Company, writing payment-reminder emails to customers. Return ONLY a JSON object with exactly two keys: \"subject\" and \"body\". \"body\" is plain text (no markdown), 90\u2013140 words, signed off from \"The Demo Company Accounts Team\". Never invent facts beyond those provided; use the exact invoice number, amount, and due date given. Match tone strictly to the tier:\n- friendly: warm and appreciative, a gentle nudge, assume good faith.\n- firm: professional and direct, a clear request to pay now, reference how overdue it is.\n- final: serious, state this is a final reminder before the account may be escalated, remain professional and non-threatening."
+  "name": "CashChaser",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "getAll",
+        "organizationId": "YOUR_XERO_TENANT_ID",
+        "options": {}
       },
-      {
-       "content": "=Tier: {{ $json.tier }}\nCustomer: {{ $json.contactName }}\nInvoice number: {{ $json.invoiceNumber }}\nAmount due: {{ $json.currency }} {{ $json.amountDue }}\nDue date: {{ $json.dueDate }}\nDays overdue: {{ $json.daysOverdue }}"
+      "type": "n8n-nodes-base.xero",
+      "typeVersion": 1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "59fe10dc-24b3-416d-9445-d518fe2d6547",
+      "name": "Get many invoices",
+      "credentials": {
+        "xeroOAuth2Api": {
+          "id": "MkHHi7MDrDBtGqwY",
+          "name": "Xero account"
+        }
       }
-     ]
     },
-    "builtInTools": {},
-    "options": {
-     "textFormat": {
-      "textOptions": {
-       "type": "json_object"
+    {
+      "parameters": {
+        "jsCode": "const today = new Date();\ntoday.setHours(0, 0, 0, 0);\n\nconst results = [];\n\nfor (const item of $input.all()) {\n  const inv = item.json;\n\n  // only unpaid, approved invoices\n  if (inv.Status !== 'AUTHORISED') continue;\n  if (!(inv.AmountDue > 0)) continue;\n  if (!inv.DueDateString) continue;\n\n  const due = new Date(inv.DueDateString);\n  due.setHours(0, 0, 0, 0);\n\n  const daysOverdue = Math.floor((today - due) / 86400000);\n  if (daysOverdue <= 0) continue; // not overdue yet\n\n  // tone-ladder tier\n  let tier;\n  if (daysOverdue >= 30) tier = 'final';   // 30d+\n  else if (daysOverdue >= 14) tier = 'firm';   // 14–29d\n  else if (daysOverdue >= 7) tier = 'friendly'; // 7–13d\n  else continue; // 1–6d overdue: too soon to chase\n\n  results.push({\n    json: {\n      invoiceId: inv.InvoiceID,\n      invoiceNumber: inv.InvoiceNumber,\n      amountDue: inv.AmountDue,\n      currency: inv.CurrencyCode,\n      dueDate: inv.DueDateString.substring(0, 10),\n      daysOverdue,\n      tier,\n      contactId: inv.Contact?.ContactID,\n      contactName: inv.Contact?.Name,\n    },\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "30aff4a2-ea9d-4079-8007-33637b155c84",
+      "name": "Tier invoices"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "=You are the accounts-receivable assistant for Demo Company, writing payment-reminder emails to customers. Return ONLY a JSON object with exactly two keys: \"subject\" and \"body\". \"body\" is plain text (no markdown), 90–140 words, signed off from \"The Demo Company Accounts Team\". Never invent facts beyond those provided; use the exact invoice number, amount, and due date given. Match tone strictly to the tier:\n- friendly: warm and appreciative, a gentle nudge, assume good faith.\n- firm: professional and direct, a clear request to pay now, reference how overdue it is.\n- final: serious, state this is a final reminder before the account may be escalated, remain professional and non-threatening."
+            },
+            {
+              "content": "=Tier: {{ $json.tier }}\nCustomer: {{ $json.contactName }}\nInvoice number: {{ $json.invoiceNumber }}\nAmount due: {{ $json.currency }} {{ $json.amountDue }}\nDue date: {{ $json.dueDate }}\nDays overdue: {{ $json.daysOverdue }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_object"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        1216,
+        0
+      ],
+      "id": "9d962e54-835e-4dea-9822-54aec8f43383",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "SYpGRkU0nCCv3rd3",
+          "name": "OpenAI account"
+        }
       }
-     }
-    }
-   },
-   "type": "@n8n/n8n-nodes-langchain.openAi",
-   "typeVersion": 2.3,
-   "position": [
-    1216,
-    0
-   ],
-   "id": "9d962e54-835e-4dea-9822-54aec8f43383",
-   "name": "Message a model",
-   "credentials": {
-    "openAiApi": {
-     "id": "SYpGRkU0nCCv3rd3",
-     "name": "OpenAI account"
-    }
-   }
-  },
-  {
-   "parameters": {
-    "sendTo": "you@example.com",
-    "subject": "={{ $('Normalize').item.json.subject }}",
-    "message": "={{ $('Normalize').item.json.body }}",
-    "options": {
-     "appendAttribution": false,
-     "bccList": ""
-    }
-   },
-   "type": "n8n-nodes-base.gmail",
-   "typeVersion": 2.2,
-   "position": [
-    2688,
-    144
-   ],
-   "id": "8559126d-32bc-4234-be8a-426574043b31",
-   "name": "Send a message",
-   "webhookId": "710b93ae-00e4-4fe9-aa01-ee3caa392dee",
-   "credentials": {
-    "gmailOAuth2": {
-     "id": "dku6asR2rjX2ypmP",
-     "name": "Gmail account Local"
-    }
-   }
-  },
-  {
-   "parameters": {
-    "jsCode": "const tierLevel = { friendly: 1, firm: 2, final: 3 };\n\nlet ledger = [];\ntry { ledger = $('Get chases').all().map(i => i.json); } catch (e) {}\nconst byId = {};\nfor (const row of ledger) { if (row.invoice_id) byId[row.invoice_id] = row; }\n\nconst results = [];\nfor (const item of $('Tier invoices').all()) {\n  const inv = item.json;\n  const level = tierLevel[inv.tier];\n  const existing = byId[inv.invoiceId];\n\n  let shouldSend = false;\n  if (!existing) shouldSend = true;                                   // never chased\n  else if (String(existing.status).toUpperCase() === 'CLOSED') shouldSend = false;\n  else if (level > Number(existing.level || 0)) shouldSend = true;    // escalation only\n\n  if (shouldSend) results.push({ json: { ...inv, level } });\n}\nreturn results;"
-   },
-   "type": "n8n-nodes-base.code",
-   "typeVersion": 2,
-   "position": [
-    1024,
-    0
-   ],
-   "id": "3481e2af-d6b7-4fd1-b7f3-2c657f16bae1",
-   "name": "Decide sends"
-  },
-  {
-   "parameters": {
-    "documentId": {
-     "__rl": true,
-     "value": "YOUR_SHEET_ID",
-     "mode": "list",
-     "cachedResultName": "CashChaser Ledger",
-     "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=drivesdk"
     },
-    "sheetName": {
-     "__rl": true,
-     "value": "gid=0",
-     "mode": "list",
-     "cachedResultName": "Chases",
-     "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=0"
-    },
-    "options": {}
-   },
-   "type": "n8n-nodes-base.googleSheets",
-   "typeVersion": 4.7,
-   "position": [
-    832,
-    0
-   ],
-   "id": "bcf85938-c477-4f8c-9523-c8ebf492fcd4",
-   "name": "Get chases",
-   "alwaysOutputData": true,
-   "credentials": {
-    "googleSheetsOAuth2Api": {
-     "id": "yMqkk4M0kF50KIC0",
-     "name": "Google Sheets account"
-    }
-   }
-  },
-  {
-   "parameters": {
-    "operation": "appendOrUpdate",
-    "documentId": {
-     "__rl": true,
-     "value": "YOUR_SHEET_ID",
-     "mode": "list",
-     "cachedResultName": "CashChaser Ledger",
-     "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=drivesdk"
-    },
-    "sheetName": {
-     "__rl": true,
-     "value": "gid=0",
-     "mode": "list",
-     "cachedResultName": "Chases",
-     "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=0"
-    },
-    "columns": {
-     "mappingMode": "defineBelow",
-     "value": {
-      "invoice_id": "={{ $('Normalize').item.json.invoiceId }}",
-      "invoice_number": "={{ $('Normalize').item.json.invoiceNumber }}",
-      "contact": "={{ $('Normalize').item.json.contactName }}",
-      "tier": "={{ $('Normalize').item.json.tier }}",
-      "level": "={{ $('Normalize').item.json.level }}",
-      "last_chased_at": "={{ $now.toISO() }}",
-      "status": "OPEN"
-     },
-     "matchingColumns": [
-      "invoice_id"
-     ],
-     "schema": [
-      {
-       "id": "invoice_id",
-       "displayName": "invoice_id",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true,
-       "removed": false
+    {
+      "parameters": {
+        "sendTo": "you@example.com",
+        "subject": "={{ $('Normalize').item.json.subject }}",
+        "message": "={{ $('Normalize').item.json.body }}",
+        "options": {
+          "appendAttribution": false,
+          "bccList": ""
+        }
       },
-      {
-       "id": "invoice_number",
-       "displayName": "invoice_number",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true
-      },
-      {
-       "id": "contact",
-       "displayName": "contact",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true
-      },
-      {
-       "id": "tier",
-       "displayName": "tier",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true
-      },
-      {
-       "id": "level",
-       "displayName": "level",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true
-      },
-      {
-       "id": "last_chased_at",
-       "displayName": "last_chased_at",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true
-      },
-      {
-       "id": "status",
-       "displayName": "status",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2688,
+        144
+      ],
+      "id": "8559126d-32bc-4234-be8a-426574043b31",
+      "name": "Send a message",
+      "webhookId": "710b93ae-00e4-4fe9-aa01-ee3caa392dee",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account Local"
+        }
       }
-     ],
-     "attemptToConvertTypes": false,
-     "convertFieldsToString": false
     },
-    "options": {}
-   },
-   "type": "n8n-nodes-base.googleSheets",
-   "typeVersion": 4.7,
-   "position": [
-    2944,
-    144
-   ],
-   "id": "cb2a5c3d-e221-4a07-8ede-2fc7e3df0515",
-   "name": "Update ledger",
-   "credentials": {
-    "googleSheetsOAuth2Api": {
-     "id": "yMqkk4M0kF50KIC0",
-     "name": "Google Sheets account"
-    }
-   }
-  },
-  {
-   "parameters": {
-    "jsCode": "const invoices = {};\nfor (const it of $('Get many invoices').all()) invoices[it.json.InvoiceID] = it.json;\n\nconst seen = new Set();\nconst results = [];\nfor (const it of $('Get chases').all()) {\n  const row = it.json;\n  if (String(row.status).toUpperCase() !== 'OPEN') continue;\n  if (seen.has(row.invoice_id)) continue;\n  const inv = invoices[row.invoice_id];\n  const paid = inv && (inv.Status === 'PAID' || Number(inv.AmountDue) === 0);\n  if (paid) {\n    seen.add(row.invoice_id);\n    results.push({ json: { invoiceNumber: row.invoice_number, contactName: row.contact, invoiceId: row.invoice_id } });\n  }\n}\nreturn results;"
-   },
-   "type": "n8n-nodes-base.code",
-   "typeVersion": 2,
-   "position": [
-    1040,
-    384
-   ],
-   "id": "a72af95f-daf1-4f2b-a17b-f944100efb61",
-   "name": "Detect paid"
-  },
-  {
-   "parameters": {
-    "sendTo": "you@example.com",
-    "subject": "={{ \"Payment received \u2013 invoice \" + $json.invoiceNumber }}",
-    "emailType": "text",
-    "message": "={{ \"Hi \" + $json.contactName + \",\\n\\nThanks \u2014 we've received payment for invoice \" + $json.invoiceNumber + \". Much appreciated!\\n\\nThe Demo Company Accounts Team\" }}",
-    "options": {
-     "appendAttribution": false
-    }
-   },
-   "type": "n8n-nodes-base.gmail",
-   "typeVersion": 2.2,
-   "position": [
-    1264,
-    384
-   ],
-   "id": "6d5ba2c6-4e32-4c46-b2dd-647d28c10367",
-   "name": "the thank-you",
-   "webhookId": "36f8f898-bdf4-415a-aeb4-d32cfd90ae26",
-   "credentials": {
-    "gmailOAuth2": {
-     "id": "dku6asR2rjX2ypmP",
-     "name": "Gmail account Local"
-    }
-   }
-  },
-  {
-   "parameters": {
-    "operation": "appendOrUpdate",
-    "documentId": {
-     "__rl": true,
-     "value": "YOUR_SHEET_ID",
-     "mode": "list",
-     "cachedResultName": "CashChaser Ledger",
-     "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=drivesdk"
+    {
+      "parameters": {
+        "jsCode": "const tierLevel = { friendly: 1, firm: 2, final: 3 };\n\nlet ledger = [];\ntry { ledger = $('Get chases').all().map(i => i.json); } catch (e) {}\nconst byId = {};\nfor (const row of ledger) { if (row.invoice_id) byId[row.invoice_id] = row; }\n\nconst results = [];\nfor (const item of $('Tier invoices').all()) {\n  const inv = item.json;\n  const level = tierLevel[inv.tier];\n  const existing = byId[inv.invoiceId];\n\n  let shouldSend = false;\n  if (!existing) shouldSend = true;                                   // never chased\n  else if (String(existing.status).toUpperCase() === 'CLOSED') shouldSend = false;\n  else if (level > Number(existing.level || 0)) shouldSend = true;    // escalation only\n\n  if (shouldSend) results.push({ json: { ...inv, level } });\n}\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1024,
+        0
+      ],
+      "id": "3481e2af-d6b7-4fd1-b7f3-2c657f16bae1",
+      "name": "Decide sends"
     },
-    "sheetName": {
-     "__rl": true,
-     "value": "gid=0",
-     "mode": "list",
-     "cachedResultName": "Chases",
-     "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=0"
-    },
-    "columns": {
-     "mappingMode": "defineBelow",
-     "value": {
-      "invoice_id": "={{ $('Detect paid').item.json.invoiceId }}",
-      "status": "CLOSED"
-     },
-     "matchingColumns": [
-      "invoice_id"
-     ],
-     "schema": [
-      {
-       "id": "invoice_id",
-       "displayName": "invoice_id",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true,
-       "removed": false
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "CashChaser Ledger",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Chases",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=0"
+        },
+        "options": {}
       },
-      {
-       "id": "invoice_number",
-       "displayName": "invoice_number",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true
-      },
-      {
-       "id": "contact",
-       "displayName": "contact",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true
-      },
-      {
-       "id": "tier",
-       "displayName": "tier",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true
-      },
-      {
-       "id": "level",
-       "displayName": "level",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true
-      },
-      {
-       "id": "last_chased_at",
-       "displayName": "last_chased_at",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true
-      },
-      {
-       "id": "status",
-       "displayName": "status",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        832,
+        0
+      ],
+      "id": "bcf85938-c477-4f8c-9523-c8ebf492fcd4",
+      "name": "Get chases",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "yMqkk4M0kF50KIC0",
+          "name": "Google Sheets account"
+        }
       }
-     ],
-     "attemptToConvertTypes": false,
-     "convertFieldsToString": false
     },
-    "options": {}
-   },
-   "type": "n8n-nodes-base.googleSheets",
-   "typeVersion": 4.7,
-   "position": [
-    1472,
-    384
-   ],
-   "id": "b294ca2a-0b71-4fa3-8f19-69f47461f95d",
-   "name": "mark-CLOSED",
-   "credentials": {
-    "googleSheetsOAuth2Api": {
-     "id": "yMqkk4M0kF50KIC0",
-     "name": "Google Sheets account"
-    }
-   }
-  },
-  {
-   "parameters": {
-    "conditions": {
-     "options": {
-      "caseSensitive": true,
-      "leftValue": "",
-      "typeValidation": "strict",
-      "version": 3
-     },
-     "conditions": [
-      {
-       "id": "e12d69f2-d951-425e-966a-1562f1026592",
-       "leftValue": "={{ $json.tier }}",
-       "rightValue": "final",
-       "operator": {
-        "type": "string",
-        "operation": "equals",
-        "name": "filter.operator.equals"
-       }
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "CashChaser Ledger",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Chases",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "invoice_id": "={{ $('Normalize').item.json.invoiceId }}",
+            "invoice_number": "={{ $('Normalize').item.json.invoiceNumber }}",
+            "contact": "={{ $('Normalize').item.json.contactName }}",
+            "tier": "={{ $('Normalize').item.json.tier }}",
+            "level": "={{ $('Normalize').item.json.level }}",
+            "last_chased_at": "={{ $now.toISO() }}",
+            "status": "OPEN"
+          },
+          "matchingColumns": [
+            "invoice_id"
+          ],
+          "schema": [
+            {
+              "id": "invoice_id",
+              "displayName": "invoice_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "invoice_number",
+              "displayName": "invoice_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "contact",
+              "displayName": "contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "tier",
+              "displayName": "tier",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "level",
+              "displayName": "level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_chased_at",
+              "displayName": "last_chased_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2944,
+        144
+      ],
+      "id": "cb2a5c3d-e221-4a07-8ede-2fc7e3df0515",
+      "name": "Update ledger",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "yMqkk4M0kF50KIC0",
+          "name": "Google Sheets account"
+        }
       }
-     ],
-     "combinator": "and"
     },
-    "options": {}
-   },
-   "type": "n8n-nodes-base.if",
-   "typeVersion": 2.3,
-   "position": [
-    1760,
-    0
-   ],
-   "id": "f7bea978-1bc7-4db7-b581-aa454d95e413",
-   "name": "If"
-  },
-  {
-   "parameters": {
-    "operation": "sendAndWait",
-    "sendTo": "you@example.com",
-    "subject": "=Approve {{ $json.count }} final payment notices",
-    "message": "=Approve these {{ $json.count }} FINAL notice(s) before they send?\n\n{{ $json.list }}",
-    "options": {
-     "appendAttribution": false
-    }
-   },
-   "type": "n8n-nodes-base.gmail",
-   "typeVersion": 2.2,
-   "position": [
-    2224,
-    -96
-   ],
-   "id": "8f154d7f-c317-4500-b795-7e3554dc6b1e",
-   "name": "Approve with owner",
-   "webhookId": "12b24f18-fea5-414e-9618-5e881705a168",
-   "credentials": {
-    "gmailOAuth2": {
-     "id": "dku6asR2rjX2ypmP",
-     "name": "Gmail account Local"
-    }
-   }
-  },
-  {
-   "parameters": {
-    "jsCode": "const senders = $('Decide sends').all();\nconst items = $input.all();\nconst results = [];\nfor (let i = 0; i < items.length; i++) {\n  const out = items[i].json.output?.[0]?.content?.[0]?.text;\n  let parsed = (out && typeof out === 'object') ? out\n    : (typeof out === 'string' ? (()=>{try{return JSON.parse(out)}catch(e){return {subject:'(parse failed)',body:out}}})()\n    : { subject:'(no output)', body:'' });\n  results.push({ json: { ...senders[i].json, subject: parsed.subject, body: parsed.body } });\n}\nreturn results;"
-   },
-   "type": "n8n-nodes-base.code",
-   "typeVersion": 2,
-   "position": [
-    1552,
-    0
-   ],
-   "id": "2da4f6c2-084e-49ef-9f5c-0e53ec7d7a94",
-   "name": "Normalize"
-  },
-  {
-   "parameters": {
-    "sendTo": "you@example.com",
-    "subject": "={{ $json.subject }}",
-    "emailType": "text",
-    "message": "={{ $json.body }}",
-    "options": {
-     "appendAttribution": false,
-     "bccList": ""
-    }
-   },
-   "type": "n8n-nodes-base.gmail",
-   "typeVersion": 2.2,
-   "position": [
-    2688,
-    -96
-   ],
-   "id": "c71b33ae-ec67-4fb6-ac63-348665a52191",
-   "name": "Send a message1",
-   "webhookId": "710b93ae-00e4-4fe9-aa01-ee3caa392dee",
-   "credentials": {
-    "gmailOAuth2": {
-     "id": "dku6asR2rjX2ypmP",
-     "name": "Gmail account Local"
-    }
-   }
-  },
-  {
-   "parameters": {
-    "jsCode": "const finals = $input.all().map(i => i.json);\nconst list = finals.map(r =>\n  `\u2022 ${r.contactName} \u2014 ${r.invoiceNumber}: ${r.currency} ${r.amountDue} (${r.daysOverdue} days overdue)`\n).join('\\n');\nreturn [{ json: { count: finals.length, list, finals } }];"
-   },
-   "type": "n8n-nodes-base.code",
-   "typeVersion": 2,
-   "position": [
-    2000,
-    -96
-   ],
-   "id": "403c0855-85ac-4c3f-82a6-2a157d7850d3",
-   "name": "Summarize finals"
-  },
-  {
-   "parameters": {
-    "jsCode": "return $('Summarize finals').item.json.finals.map(f => ({ json: f }));"
-   },
-   "type": "n8n-nodes-base.code",
-   "typeVersion": 2,
-   "position": [
-    2448,
-    -96
-   ],
-   "id": "f0ccca51-bc7b-45bd-8f75-cbb22f8f13ab",
-   "name": "Split finals"
-  },
-  {
-   "parameters": {
-    "operation": "appendOrUpdate",
-    "documentId": {
-     "__rl": true,
-     "value": "YOUR_SHEET_ID",
-     "mode": "list",
-     "cachedResultName": "CashChaser Ledger",
-     "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=drivesdk"
+    {
+      "parameters": {
+        "jsCode": "const invoices = {};\nfor (const it of $('Get many invoices').all()) invoices[it.json.InvoiceID] = it.json;\n\nconst seen = new Set();\nconst results = [];\nfor (const it of $('Get chases').all()) {\n  const row = it.json;\n  if (String(row.status).toUpperCase() !== 'OPEN') continue;\n  if (seen.has(row.invoice_id)) continue;\n  const inv = invoices[row.invoice_id];\n  const paid = inv && (inv.Status === 'PAID' || Number(inv.AmountDue) === 0);\n  if (paid) {\n    seen.add(row.invoice_id);\n    results.push({ json: { invoiceNumber: row.invoice_number, contactName: row.contact, invoiceId: row.invoice_id } });\n  }\n}\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        384
+      ],
+      "id": "a72af95f-daf1-4f2b-a17b-f944100efb61",
+      "name": "Detect paid"
     },
-    "sheetName": {
-     "__rl": true,
-     "value": "gid=0",
-     "mode": "list",
-     "cachedResultName": "Chases",
-     "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=0"
-    },
-    "columns": {
-     "mappingMode": "defineBelow",
-     "value": {
-      "invoice_id": "={{ $('Split finals').item.json.invoiceId }}",
-      "invoice_number": "={{ $('Split finals').item.json.invoiceNumber }}",
-      "contact": "={{ $('Split finals').item.json.contactName }}",
-      "tier": "={{ $('Split finals').item.json.tier }}",
-      "level": "={{ $('Split finals').item.json.level }}",
-      "last_chased_at": "={{ $now.toISO() }}",
-      "status": "OPEN"
-     },
-     "matchingColumns": [
-      "invoice_id"
-     ],
-     "schema": [
-      {
-       "id": "invoice_id",
-       "displayName": "invoice_id",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true,
-       "removed": false
+    {
+      "parameters": {
+        "sendTo": "you@example.com",
+        "subject": "={{ \"Payment received – invoice \" + $json.invoiceNumber }}",
+        "emailType": "text",
+        "message": "={{ \"Hi \" + $json.contactName + \",\\n\\nThanks — we've received payment for invoice \" + $json.invoiceNumber + \". Much appreciated!\\n\\nThe Demo Company Accounts Team\" }}",
+        "options": {
+          "appendAttribution": false
+        }
       },
-      {
-       "id": "invoice_number",
-       "displayName": "invoice_number",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true
-      },
-      {
-       "id": "contact",
-       "displayName": "contact",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true
-      },
-      {
-       "id": "tier",
-       "displayName": "tier",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true
-      },
-      {
-       "id": "level",
-       "displayName": "level",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true
-      },
-      {
-       "id": "last_chased_at",
-       "displayName": "last_chased_at",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true
-      },
-      {
-       "id": "status",
-       "displayName": "status",
-       "required": false,
-       "defaultMatch": false,
-       "display": true,
-       "type": "string",
-       "canBeUsedToMatch": true
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1264,
+        384
+      ],
+      "id": "6d5ba2c6-4e32-4c46-b2dd-647d28c10367",
+      "name": "the thank-you",
+      "webhookId": "36f8f898-bdf4-415a-aeb4-d32cfd90ae26",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account Local"
+        }
       }
-     ],
-     "attemptToConvertTypes": false,
-     "convertFieldsToString": false
     },
-    "options": {}
-   },
-   "type": "n8n-nodes-base.googleSheets",
-   "typeVersion": 4.7,
-   "position": [
-    2944,
-    -96
-   ],
-   "id": "07445522-de7d-41ee-a486-4da266a7da08",
-   "name": "Update ledger1",
-   "credentials": {
-    "googleSheetsOAuth2Api": {
-     "id": "yMqkk4M0kF50KIC0",
-     "name": "Google Sheets account"
-    }
-   }
-  },
-  {
-   "parameters": {
-    "rule": {
-     "interval": [
-      {
-       "field": "weeks",
-       "triggerAtDay": [
-        1
-       ],
-       "triggerAtHour": 9
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "CashChaser Ledger",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Chases",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "invoice_id": "={{ $('Detect paid').item.json.invoiceId }}",
+            "status": "CLOSED"
+          },
+          "matchingColumns": [
+            "invoice_id"
+          ],
+          "schema": [
+            {
+              "id": "invoice_id",
+              "displayName": "invoice_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "invoice_number",
+              "displayName": "invoice_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "contact",
+              "displayName": "contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "tier",
+              "displayName": "tier",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "level",
+              "displayName": "level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_chased_at",
+              "displayName": "last_chased_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1472,
+        384
+      ],
+      "id": "b294ca2a-0b71-4fa3-8f19-69f47461f95d",
+      "name": "mark-CLOSED",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "yMqkk4M0kF50KIC0",
+          "name": "Google Sheets account"
+        }
       }
-     ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e12d69f2-d951-425e-966a-1562f1026592",
+              "leftValue": "={{ $json.tier }}",
+              "rightValue": "final",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1760,
+        0
+      ],
+      "id": "f7bea978-1bc7-4db7-b581-aa454d95e413",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "you@example.com",
+        "subject": "=Approve {{ $json.count }} final payment notices",
+        "message": "=Approve these {{ $json.count }} FINAL notice(s) before they send?\n\n{{ $json.list }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2224,
+        -96
+      ],
+      "id": "8f154d7f-c317-4500-b795-7e3554dc6b1e",
+      "name": "Approve with owner",
+      "webhookId": "12b24f18-fea5-414e-9618-5e881705a168",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account Local"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const senders = $('Decide sends').all();\nconst items = $input.all();\nconst results = [];\nfor (let i = 0; i < items.length; i++) {\n  const out = items[i].json.output?.[0]?.content?.[0]?.text;\n  let parsed = (out && typeof out === 'object') ? out\n    : (typeof out === 'string' ? (()=>{try{return JSON.parse(out)}catch(e){return {subject:'(parse failed)',body:out}}})()\n    : { subject:'(no output)', body:'' });\n  results.push({ json: { ...senders[i].json, subject: parsed.subject, body: parsed.body } });\n}\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1552,
+        0
+      ],
+      "id": "2da4f6c2-084e-49ef-9f5c-0e53ec7d7a94",
+      "name": "Normalize"
+    },
+    {
+      "parameters": {
+        "sendTo": "you@example.com",
+        "subject": "={{ $json.subject }}",
+        "emailType": "text",
+        "message": "={{ $json.body }}",
+        "options": {
+          "appendAttribution": false,
+          "bccList": ""
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2688,
+        -96
+      ],
+      "id": "c71b33ae-ec67-4fb6-ac63-348665a52191",
+      "name": "Send a message1",
+      "webhookId": "710b93ae-00e4-4fe9-aa01-ee3caa392dee",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account Local"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const finals = $input.all().map(i => i.json);\nconst list = finals.map(r =>\n  `• ${r.contactName} — ${r.invoiceNumber}: ${r.currency} ${r.amountDue} (${r.daysOverdue} days overdue)`\n).join('\\n');\nreturn [{ json: { count: finals.length, list, finals } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2000,
+        -96
+      ],
+      "id": "403c0855-85ac-4c3f-82a6-2a157d7850d3",
+      "name": "Summarize finals"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $('Summarize finals').item.json.finals.map(f => ({ json: f }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2448,
+        -96
+      ],
+      "id": "f0ccca51-bc7b-45bd-8f75-cbb22f8f13ab",
+      "name": "Split finals"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SHEET_ID",
+          "mode": "list",
+          "cachedResultName": "CashChaser Ledger",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Chases",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "invoice_id": "={{ $('Split finals').item.json.invoiceId }}",
+            "invoice_number": "={{ $('Split finals').item.json.invoiceNumber }}",
+            "contact": "={{ $('Split finals').item.json.contactName }}",
+            "tier": "={{ $('Split finals').item.json.tier }}",
+            "level": "={{ $('Split finals').item.json.level }}",
+            "last_chased_at": "={{ $now.toISO() }}",
+            "status": "OPEN"
+          },
+          "matchingColumns": [
+            "invoice_id"
+          ],
+          "schema": [
+            {
+              "id": "invoice_id",
+              "displayName": "invoice_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "invoice_number",
+              "displayName": "invoice_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "contact",
+              "displayName": "contact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "tier",
+              "displayName": "tier",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "level",
+              "displayName": "level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_chased_at",
+              "displayName": "last_chased_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2944,
+        -96
+      ],
+      "id": "07445522-de7d-41ee-a486-4da266a7da08",
+      "name": "Update ledger1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "yMqkk4M0kF50KIC0",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        144,
+        0
+      ],
+      "id": "fba448cc-7ab9-4019-b85f-28b93cdb0cd5",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "content": "## 💸 CashChaser — AI Accounts-Receivable Autopilot\nDaily Xero poll → finds overdue invoices → AI writes tone-escalating reminders (friendly 7d → firm 14d → final 30d+) → sends → logs to a dedupe ledger → auto-stops + thanks the customer when paid. Final notices need one-click owner approval.\n**Xero · gpt-4o-mini · Google Sheets · Gmail**",
+        "height": 184,
+        "width": 1060,
+        "color": 7
+      },
+      "id": "e5244e45-350d-488e-a9a5-cd0e7fb373ac",
+      "name": "SN header",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        112,
+        -592
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 1 · Trigger + pull invoices\nDaily schedule pulls ALL invoices from Xero (no status filter — the paid branch must see PAID invoices).",
+        "height": 226,
+        "width": 400,
+        "color": 4
+      },
+      "id": "8a4b6685-17d8-48c2-a07d-63e3b1c1223b",
+      "name": "SN 1 trigger",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        128,
+        -272
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 2 · Detect overdue + tier\nKeeps AUTHORISED, AmountDue>0, past due. Buckets the chase tier: friendly 7-13d · firm 14-29d · final 30d+ (1-6d = grace).",
+        "height": 226,
+        "width": 230,
+        "color": 3
+      },
+      "id": "29973cf4-5765-4a10-a37a-45ec4c0c6ac1",
+      "name": "SN 2 tier",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        592,
+        -272
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 3 · Ledger read + dedupe\nReads the Chases sheet; sends ONLY on first contact or a real tier escalation — never re-sends the same level. Run twice → 2nd run sends nothing.",
+        "height": 226,
+        "width": 390,
+        "color": 3
+      },
+      "id": "89c0b4d7-5a2b-424b-bcb1-732c6dab188e",
+      "name": "SN 3 ledger",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        816,
+        -272
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 4 · AI writes the reminder\ngpt-4o-mini (JSON mode) drafts subject + body per tier with the real invoice #, amount, due date. Normalize parses + recombines.",
+        "height": 226,
+        "width": 450,
+        "color": 6
+      },
+      "id": "e45328de-16f6-4d55-a298-f3c6cf776eb1",
+      "name": "SN 4 ai",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        -272
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 5 · Route by tier\nFinal → owner approval.\nFriendly/firm → auto-send.",
+        "height": 226,
+        "width": 220,
+        "color": 2
+      },
+      "id": "5a0edf91-48ff-4dea-adb9-550c268e03e8",
+      "name": "SN 5 route",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1712,
+        -272
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 6 · Final notices — digest approval (human-in-the-loop)\nAll final-tier invoices are bundled into ONE approval email (Send-and-Wait). One click approves the whole batch → each notice sends + logs. Pattern: aggregate → single approval → split back (avoids Send-and-Wait dropping batch items).",
+        "height": 150,
+        "width": 1170,
+        "color": 5
+      },
+      "id": "10887978-b665-4383-bdb7-7e5245ad9297",
+      "name": "SN 6 approval",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1984,
+        -272
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 7 · Auto-send (friendly / firm)\nNon-final reminders send immediately, then log to the ledger (status=OPEN, tier, level, timestamp).",
+        "height": 90,
+        "width": 470,
+        "color": 4
+      },
+      "id": "5be36110-a105-4eca-84f1-161201edd59b",
+      "name": "SN 7 autosend",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2656,
+        48
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 8 · Paid = stop + thank-you\nCross-references OPEN ledger rows vs current Xero status. Paid invoices drop out of chasing automatically; this branch sends ONE thank-you and flips the row to CLOSED.",
+        "height": 174,
+        "width": 680,
+        "color": 4
+      },
+      "id": "70e35f90-d5f1-49ec-9542-5a0860d043fb",
+      "name": "SN 8 paid",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1008,
+        176
+      ]
     }
-   },
-   "type": "n8n-nodes-base.scheduleTrigger",
-   "typeVersion": 1.3,
-   "position": [
-    144,
-    0
-   ],
-   "id": "fba448cc-7ab9-4019-b85f-28b93cdb0cd5",
-   "name": "Schedule Trigger"
+  ],
+  "connections": {
+    "Get many invoices": {
+      "main": [
+        [
+          {
+            "node": "Tier invoices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tier invoices": {
+      "main": [
+        [
+          {
+            "node": "Get chases",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Normalize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Update ledger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Decide sends": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get chases": {
+      "main": [
+        [
+          {
+            "node": "Detect paid",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Decide sends",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detect paid": {
+      "main": [
+        [
+          {
+            "node": "the thank-you",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "the thank-you": {
+      "main": [
+        [
+          {
+            "node": "mark-CLOSED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Summarize finals",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approve with owner": {
+      "main": [
+        [
+          {
+            "node": "Split finals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        [
+          {
+            "node": "Update ledger1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize finals": {
+      "main": [
+        [
+          {
+            "node": "Approve with owner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split finals": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get many invoices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
   },
-  {
-   "parameters": {
-    "content": "## \ud83d\udcb8 CashChaser \u2014 AI Accounts-Receivable Autopilot\nDaily Xero poll \u2192 finds overdue invoices \u2192 AI writes tone-escalating reminders (friendly 7d \u2192 firm 14d \u2192 final 30d+) \u2192 sends \u2192 logs to a dedupe ledger \u2192 auto-stops + thanks the customer when paid. Final notices need one-click owner approval.\n**Xero \u00b7 gpt-4o-mini \u00b7 Google Sheets \u00b7 Gmail**",
-    "height": 184,
-    "width": 1060,
-    "color": 7
-   },
-   "id": "e5244e45-350d-488e-a9a5-cd0e7fb373ac",
-   "name": "SN header",
-   "type": "n8n-nodes-base.stickyNote",
-   "typeVersion": 1,
-   "position": [
-    112,
-    -592
-   ]
-  },
-  {
-   "parameters": {
-    "content": "### 1 \u00b7 Trigger + pull invoices\nDaily schedule pulls ALL invoices from Xero (no status filter \u2014 the paid branch must see PAID invoices).",
-    "height": 226,
-    "width": 400,
-    "color": 4
-   },
-   "id": "8a4b6685-17d8-48c2-a07d-63e3b1c1223b",
-   "name": "SN 1 trigger",
-   "type": "n8n-nodes-base.stickyNote",
-   "typeVersion": 1,
-   "position": [
-    128,
-    -272
-   ]
-  },
-  {
-   "parameters": {
-    "content": "### 2 \u00b7 Detect overdue + tier\nKeeps AUTHORISED, AmountDue>0, past due. Buckets the chase tier: friendly 7-13d \u00b7 firm 14-29d \u00b7 final 30d+ (1-6d = grace).",
-    "height": 226,
-    "width": 230,
-    "color": 3
-   },
-   "id": "29973cf4-5765-4a10-a37a-45ec4c0c6ac1",
-   "name": "SN 2 tier",
-   "type": "n8n-nodes-base.stickyNote",
-   "typeVersion": 1,
-   "position": [
-    592,
-    -272
-   ]
-  },
-  {
-   "parameters": {
-    "content": "### 3 \u00b7 Ledger read + dedupe\nReads the Chases sheet; sends ONLY on first contact or a real tier escalation \u2014 never re-sends the same level. Run twice \u2192 2nd run sends nothing.",
-    "height": 226,
-    "width": 390,
-    "color": 3
-   },
-   "id": "89c0b4d7-5a2b-424b-bcb1-732c6dab188e",
-   "name": "SN 3 ledger",
-   "type": "n8n-nodes-base.stickyNote",
-   "typeVersion": 1,
-   "position": [
-    816,
-    -272
-   ]
-  },
-  {
-   "parameters": {
-    "content": "### 4 \u00b7 AI writes the reminder\ngpt-4o-mini (JSON mode) drafts subject + body per tier with the real invoice #, amount, due date. Normalize parses + recombines.",
-    "height": 226,
-    "width": 450,
-    "color": 6
-   },
-   "id": "e45328de-16f6-4d55-a298-f3c6cf776eb1",
-   "name": "SN 4 ai",
-   "type": "n8n-nodes-base.stickyNote",
-   "typeVersion": 1,
-   "position": [
-    1200,
-    -272
-   ]
-  },
-  {
-   "parameters": {
-    "content": "### 5 \u00b7 Route by tier\nFinal \u2192 owner approval.\nFriendly/firm \u2192 auto-send.",
-    "height": 226,
-    "width": 220,
-    "color": 2
-   },
-   "id": "5a0edf91-48ff-4dea-adb9-550c268e03e8",
-   "name": "SN 5 route",
-   "type": "n8n-nodes-base.stickyNote",
-   "typeVersion": 1,
-   "position": [
-    1712,
-    -272
-   ]
-  },
-  {
-   "parameters": {
-    "content": "### 6 \u00b7 Final notices \u2014 digest approval (human-in-the-loop)\nAll final-tier invoices are bundled into ONE approval email (Send-and-Wait). One click approves the whole batch \u2192 each notice sends + logs. Pattern: aggregate \u2192 single approval \u2192 split back (avoids Send-and-Wait dropping batch items).",
-    "height": 150,
-    "width": 1170,
-    "color": 5
-   },
-   "id": "10887978-b665-4383-bdb7-7e5245ad9297",
-   "name": "SN 6 approval",
-   "type": "n8n-nodes-base.stickyNote",
-   "typeVersion": 1,
-   "position": [
-    1984,
-    -272
-   ]
-  },
-  {
-   "parameters": {
-    "content": "### 7 \u00b7 Auto-send (friendly / firm)\nNon-final reminders send immediately, then log to the ledger (status=OPEN, tier, level, timestamp).",
-    "height": 90,
-    "width": 470,
-    "color": 4
-   },
-   "id": "5be36110-a105-4eca-84f1-161201edd59b",
-   "name": "SN 7 autosend",
-   "type": "n8n-nodes-base.stickyNote",
-   "typeVersion": 1,
-   "position": [
-    2656,
-    48
-   ]
-  },
-  {
-   "parameters": {
-    "content": "### 8 \u00b7 Paid = stop + thank-you\nCross-references OPEN ledger rows vs current Xero status. Paid invoices drop out of chasing automatically; this branch sends ONE thank-you and flips the row to CLOSED.",
-    "height": 174,
-    "width": 680,
-    "color": 4
-   },
-   "id": "70e35f90-d5f1-49ec-9542-5a0860d043fb",
-   "name": "SN 8 paid",
-   "type": "n8n-nodes-base.stickyNote",
-   "typeVersion": 1,
-   "position": [
-    1008,
-    176
-   ]
+  "settings": {
+    "executionOrder": "v1"
   }
- ],
- "connections": {
-  "Get many invoices": {
-   "main": [
-    [
-     {
-      "node": "Tier invoices",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  },
-  "Tier invoices": {
-   "main": [
-    [
-     {
-      "node": "Get chases",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  },
-  "Message a model": {
-   "main": [
-    [
-     {
-      "node": "Normalize",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  },
-  "Send a message": {
-   "main": [
-    [
-     {
-      "node": "Update ledger",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  },
-  "Decide sends": {
-   "main": [
-    [
-     {
-      "node": "Message a model",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  },
-  "Get chases": {
-   "main": [
-    [
-     {
-      "node": "Detect paid",
-      "type": "main",
-      "index": 0
-     },
-     {
-      "node": "Decide sends",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  },
-  "Detect paid": {
-   "main": [
-    [
-     {
-      "node": "the thank-you",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  },
-  "the thank-you": {
-   "main": [
-    [
-     {
-      "node": "mark-CLOSED",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  },
-  "If": {
-   "main": [
-    [
-     {
-      "node": "Summarize finals",
-      "type": "main",
-      "index": 0
-     }
-    ],
-    [
-     {
-      "node": "Send a message",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  },
-  "Approve with owner": {
-   "main": [
-    [
-     {
-      "node": "Split finals",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  },
-  "Normalize": {
-   "main": [
-    [
-     {
-      "node": "If",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  },
-  "Send a message1": {
-   "main": [
-    [
-     {
-      "node": "Update ledger1",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  },
-  "Summarize finals": {
-   "main": [
-    [
-     {
-      "node": "Approve with owner",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  },
-  "Split finals": {
-   "main": [
-    [
-     {
-      "node": "Send a message1",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  },
-  "Schedule Trigger": {
-   "main": [
-    [
-     {
-      "node": "Get many invoices",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  }
- },
- "settings": {
-  "executionOrder": "v1"
- }
 }

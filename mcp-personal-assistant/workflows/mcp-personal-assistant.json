@@ -3,54 +3,6 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Chat message",
-        "height": 463,
-        "width": 203,
-        "color": 5
-      },
-      "id": "d2d3ed7d-0b3d-4e73-8942-be6ceb19f9c8",
-      "name": "Sticky · Chat message",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -60,
-        -79
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Reason\nAgent + memory decides what to do.",
-        "height": 463,
-        "width": 208,
-        "color": 3
-      },
-      "id": "29d22dd1-ca4c-4ed4-a692-bb37e14d8bb4",
-      "name": "Sticky · Reason",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        143,
-        -79
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Reach tools over MCP\nCalls the toolbox workflow, gating irreversible actions.",
-        "height": 463,
-        "width": 240,
-        "color": 6
-      },
-      "id": "06568b8d-c680-4c5c-9454-050ee205a5de",
-      "name": "Sticky · Reach tools over MCP",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        351,
-        -79
-      ]
-    },
-    {
-      "parameters": {
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.chatTrigger",
@@ -130,6 +82,54 @@
       ],
       "id": "52271720-c635-4bb4-8c26-f0463654b2d6",
       "name": "MCP Client"
+    },
+    {
+      "parameters": {
+        "content": "## 🧠 MCP Personal Assistant\nChat agent that consumes the MCP toolbox as a client - a conversational front end over the same Calendar/Gmail/Sheets/Supabase tools.\n**OpenAI agent - MCP client - Supabase**",
+        "height": 463,
+        "width": 203,
+        "color": 7
+      },
+      "id": "d2d3ed7d-0b3d-4e73-8942-be6ceb19f9c8",
+      "name": "Sticky · Chat message",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -79
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Reason\nAgent + memory decides what to do.",
+        "height": 463,
+        "width": 208,
+        "color": 3
+      },
+      "id": "29d22dd1-ca4c-4ed4-a692-bb37e14d8bb4",
+      "name": "Sticky · Reason",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        143,
+        -79
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Reach tools over MCP\nCalls the toolbox workflow, gating irreversible actions.",
+        "height": 463,
+        "width": 240,
+        "color": 6
+      },
+      "id": "06568b8d-c680-4c5c-9454-050ee205a5de",
+      "name": "Sticky · Reach tools over MCP",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        351,
+        -79
+      ]
     }
   ],
   "connections": {

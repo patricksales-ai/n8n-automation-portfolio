@@ -3,70 +3,6 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Message in\nVoice or text.",
-        "height": 783,
-        "width": 266,
-        "color": 5
-      },
-      "id": "218249fd-3622-4b85-bd0e-53a1caf647ff",
-      "name": "Sticky · Message in",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -1548,
-        -95
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Route\nText vs voice.",
-        "height": 783,
-        "width": 539,
-        "color": 6
-      },
-      "id": "32de50d9-b1d3-4966-b2d7-5ece4d993081",
-      "name": "Sticky · Route",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -1282,
-        -95
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Transcribe + reason\nWhisper transcribes voice; the agent routes to sub-agents for search, calendar and mail.",
-        "height": 783,
-        "width": 705,
-        "color": 3
-      },
-      "id": "fc4748ec-b919-400f-8c6d-c7c08bfde831",
-      "name": "Sticky · Transcribe + reason",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -743,
-        -95
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Reply\nText, or generate audio and send it back.",
-        "height": 783,
-        "width": 773,
-        "color": 7
-      },
-      "id": "4bd0bccc-aa38-4d2d-9af0-e811a96ad1d7",
-      "name": "Sticky · Reply",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -38,
-        -95
-      ]
-    },
-    {
-      "parameters": {
         "updates": [
           "message"
         ],
@@ -513,6 +449,70 @@
       ],
       "id": "23c5c237-2260-4389-8735-a8ebf95ccd68",
       "name": "Call 'Sub Calender Agent'"
+    },
+    {
+      "parameters": {
+        "content": "## 🤝 Multi-Tool Telegram Agent\nTelegram bot backed by an AI agent with multiple tools + delegated sub-workflows (routed via switch) - text/image handling, memory, and tool workflows.\n**OpenAI agent - Telegram - sub-workflow tools**",
+        "height": 783,
+        "width": 266,
+        "color": 7
+      },
+      "id": "218249fd-3622-4b85-bd0e-53a1caf647ff",
+      "name": "Sticky · Message in",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1548,
+        -95
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Route\nText vs voice.",
+        "height": 783,
+        "width": 539,
+        "color": 6
+      },
+      "id": "32de50d9-b1d3-4966-b2d7-5ece4d993081",
+      "name": "Sticky · Route",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1282,
+        -95
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Transcribe + reason\nWhisper transcribes voice; the agent routes to sub-agents for search, calendar and mail.",
+        "height": 783,
+        "width": 705,
+        "color": 3
+      },
+      "id": "fc4748ec-b919-400f-8c6d-c7c08bfde831",
+      "name": "Sticky · Transcribe + reason",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -743,
+        -95
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Reply\nText, or generate audio and send it back.",
+        "height": 783,
+        "width": 773,
+        "color": 7
+      },
+      "id": "4bd0bccc-aa38-4d2d-9af0-e811a96ad1d7",
+      "name": "Sticky · Reply",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -38,
+        -95
+      ]
     }
   ],
   "connections": {

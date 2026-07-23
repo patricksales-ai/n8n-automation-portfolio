@@ -3,54 +3,6 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Call ended\nVapi end-of-call report hits the webhook.",
-        "height": 655,
-        "width": 378,
-        "color": 5
-      },
-      "id": "77e95bca-f524-45b5-b0de-acbfaad584ab",
-      "name": "Sticky · Call ended",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -60,
-        -175
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Fetch & normalize\nWait, pull the transcript, flatten the fields.",
-        "height": 655,
-        "width": 593,
-        "color": 2
-      },
-      "id": "ec8bd02f-e8af-4054-8f40-78e5bd9b669c",
-      "name": "Sticky · Fetch & normalize",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        318,
-        -175
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Log & route\nLog every call to the sheet → qualified leads get an email; opt-outs are auto-added to the do-not-call list.",
-        "height": 655,
-        "width": 576,
-        "color": 7
-      },
-      "id": "26d036a0-63b4-4c79-8c0d-438198e972cf",
-      "name": "Sticky · Log & route",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        911,
-        -175
-      ]
-    },
-    {
-      "parameters": {
         "httpMethod": "POST",
         "path": "outbound-logger",
         "options": {}
@@ -568,6 +520,54 @@
         }
       },
       "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "## 📞 FeedbackVoice - Outbound Call Logger\nReceives Vapi call events -> waits for call end -> fetches the transcript/outcome -> logs to Sheets + adds opt-outs to a Do-Not-Call list. Backend for the outbound B2B feedback voice bot.\n**Vapi - Google Sheets - webhook**",
+        "height": 655,
+        "width": 378,
+        "color": 7
+      },
+      "id": "77e95bca-f524-45b5-b0de-acbfaad584ab",
+      "name": "Sticky · Call ended",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        -176
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Fetch & normalize\nWait, pull the transcript, flatten the fields.",
+        "height": 655,
+        "width": 593,
+        "color": 2
+      },
+      "id": "ec8bd02f-e8af-4054-8f40-78e5bd9b669c",
+      "name": "Sticky · Fetch & normalize",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        320,
+        -176
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Log & route\nLog every call to the sheet → qualified leads get an email; opt-outs are auto-added to the do-not-call list.",
+        "height": 655,
+        "width": 576,
+        "color": 7
+      },
+      "id": "26d036a0-63b4-4c79-8c0d-438198e972cf",
+      "name": "Sticky · Log & route",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        912,
+        -176
+      ]
     }
   ],
   "connections": {

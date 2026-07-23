@@ -1,277 +1,277 @@
 {
- "name": "Weekly cash-flow brief",
- "nodes": [
-  {
-   "parameters": {
-    "rule": {
-     "interval": [
-      {
-       "field": "weeks",
-       "triggerAtDay": [
-        1
-       ],
-       "triggerAtHour": 8
-      }
-     ]
-    }
-   },
-   "type": "n8n-nodes-base.scheduleTrigger",
-   "typeVersion": 1.3,
-   "position": [
-    -16,
-    96
-   ],
-   "id": "714bbe9a-c556-4cc0-9b6f-b93e9ef2e840",
-   "name": "Schedule Trigger"
-  },
-  {
-   "parameters": {
-    "operation": "getAll",
-    "organizationId": "YOUR_XERO_TENANT_ID",
-    "options": {
-     "statuses": [
-      "AUTHORISED"
-     ]
-    }
-   },
-   "type": "n8n-nodes-base.xero",
-   "typeVersion": 1,
-   "position": [
-    192,
-    96
-   ],
-   "id": "bd4d5069-313e-4cc5-8737-4939546126a0",
-   "name": "Get many invoices",
-   "credentials": {
-    "xeroOAuth2Api": {
-     "id": "MkHHi7MDrDBtGqwY",
-     "name": "Xero account"
-    }
-   }
-  },
-  {
-   "parameters": {
-    "jsCode": "const today = new Date(); today.setHours(0,0,0,0);\nconst wk = new Date(today); wk.setDate(wk.getDate() + 7);\nlet outstanding = 0, overdue = 0, dueThisWeek = 0;\nconst debtors = {};\nfor (const it of $input.all()) {\n  const inv = it.json;\n  if (inv.Status !== 'AUTHORISED' || !(inv.AmountDue > 0)) continue;\n  const due = new Date(inv.DueDateString); due.setHours(0,0,0,0);\n  outstanding += inv.AmountDue;\n  const name = inv.Contact?.Name || 'Unknown';\n  debtors[name] = (debtors[name] || 0) + inv.AmountDue;\n  if (due < today) overdue += inv.AmountDue;\n  else if (due <= wk) dueThisWeek += inv.AmountDue;\n}\nconst top = Object.entries(debtors).sort((a,b)=>b[1]-a[1]).slice(0,5)\n  .map(([n,v]) => `${n}: ${v.toFixed(2)}`);\nreturn [{ json: {\n  outstanding: outstanding.toFixed(2), overdue: overdue.toFixed(2),\n  dueThisWeek: dueThisWeek.toFixed(2), topDebtors: top.join('; ')\n}}];"
-   },
-   "type": "n8n-nodes-base.code",
-   "typeVersion": 2,
-   "position": [
-    400,
-    96
-   ],
-   "id": "2e82e1b2-7e91-4152-b18b-23a871f3e35d",
-   "name": "Build summary"
-  },
-  {
-   "parameters": {
-    "modelId": {
-     "__rl": true,
-     "value": "gpt-4o-mini",
-     "mode": "list",
-     "cachedResultName": "GPT-4O-MINI"
+  "name": "Weekly cash-flow brief",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -16,
+        96
+      ],
+      "id": "714bbe9a-c556-4cc0-9b6f-b93e9ef2e840",
+      "name": "Schedule Trigger"
     },
-    "responses": {
-     "values": [
-      {
-       "content": "=In 1\u20132 short sentences, give a plain-text cash-flow insight for a business owner based on: outstanding {{ $json.outstanding }}, overdue {{ $json.overdue }}, due this week {{ $json.dueThisWeek }}, top debtors {{ $json.topDebtors }}. No markdown, no greeting, no sign-off, no bullets \u2014 just the insight."
+    {
+      "parameters": {
+        "operation": "getAll",
+        "organizationId": "YOUR_XERO_TENANT_ID",
+        "options": {
+          "statuses": [
+            "AUTHORISED"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.xero",
+      "typeVersion": 1,
+      "position": [
+        192,
+        96
+      ],
+      "id": "bd4d5069-313e-4cc5-8737-4939546126a0",
+      "name": "Get many invoices",
+      "credentials": {
+        "xeroOAuth2Api": {
+          "id": "MkHHi7MDrDBtGqwY",
+          "name": "Xero account"
+        }
       }
-     ]
     },
-    "builtInTools": {},
-    "options": {}
-   },
-   "type": "@n8n/n8n-nodes-langchain.openAi",
-   "typeVersion": 2.3,
-   "position": [
-    608,
-    96
-   ],
-   "id": "134680d7-8ac5-4f49-b703-5170b069038b",
-   "name": "Message a model",
-   "credentials": {
-    "openAiApi": {
-     "id": "SYpGRkU0nCCv3rd3",
-     "name": "OpenAI account"
+    {
+      "parameters": {
+        "jsCode": "const today = new Date(); today.setHours(0,0,0,0);\nconst wk = new Date(today); wk.setDate(wk.getDate() + 7);\nlet outstanding = 0, overdue = 0, dueThisWeek = 0;\nconst debtors = {};\nfor (const it of $input.all()) {\n  const inv = it.json;\n  if (inv.Status !== 'AUTHORISED' || !(inv.AmountDue > 0)) continue;\n  const due = new Date(inv.DueDateString); due.setHours(0,0,0,0);\n  outstanding += inv.AmountDue;\n  const name = inv.Contact?.Name || 'Unknown';\n  debtors[name] = (debtors[name] || 0) + inv.AmountDue;\n  if (due < today) overdue += inv.AmountDue;\n  else if (due <= wk) dueThisWeek += inv.AmountDue;\n}\nconst top = Object.entries(debtors).sort((a,b)=>b[1]-a[1]).slice(0,5)\n  .map(([n,v]) => `${n}: ${v.toFixed(2)}`);\nreturn [{ json: {\n  outstanding: outstanding.toFixed(2), overdue: overdue.toFixed(2),\n  dueThisWeek: dueThisWeek.toFixed(2), topDebtors: top.join('; ')\n}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        96
+      ],
+      "id": "2e82e1b2-7e91-4152-b18b-23a871f3e35d",
+      "name": "Build summary"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=In 1–2 short sentences, give a plain-text cash-flow insight for a business owner based on: outstanding {{ $json.outstanding }}, overdue {{ $json.overdue }}, due this week {{ $json.dueThisWeek }}, top debtors {{ $json.topDebtors }}. No markdown, no greeting, no sign-off, no bullets — just the insight."
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        608,
+        96
+      ],
+      "id": "134680d7-8ac5-4f49-b703-5170b069038b",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "SYpGRkU0nCCv3rd3",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "you@example.com",
+        "subject": "Your Monday cash-flow brief",
+        "message": "={{ $json.html }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1152,
+        96
+      ],
+      "id": "28504126-9088-4fa4-8edb-23a8ec1d2c67",
+      "name": "Send a message",
+      "webhookId": "93452764-0cb0-4e49-82da-04f1a09d28b1",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dku6asR2rjX2ypmP",
+          "name": "Gmail account Local"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const s = $('Build summary').item.json;\nconst insight = $('Message a model').item.json.output?.[0]?.content?.[0]?.text || '';\n\nconst debtors = String(s.topDebtors).split(';').map(d => d.trim()).filter(Boolean).map(d => {\n  const i = d.lastIndexOf(':');\n  return { name: d.slice(0, i).trim(), amt: d.slice(i + 1).trim() };\n});\nconst rows = debtors.map(d =>\n  `<tr><td style=\"padding:6px 16px 6px 0;border-bottom:1px solid #eee;\">${d.name}</td>\n       <td style=\"padding:6px 0;text-align:right;font-weight:600;border-bottom:1px solid #eee;\">$${d.amt}</td></tr>`\n).join('');\nconst today = new Date().toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });\n\nconst html = `\n<div style=\"font-family:Arial,Helvetica,sans-serif;color:#1a1a1a;max-width:560px;margin:0 auto;padding:8px;\">\n  <h2 style=\"color:#0a8f5b;margin:0 0 2px;\">Monday Cash-Flow Brief</h2>\n  <p style=\"color:#888;margin:0 0 22px;font-size:13px;\">Week of ${today}</p>\n\n  <table style=\"width:100%;border-collapse:collapse;margin-bottom:26px;\">\n    <tr><td style=\"padding:12px;background:#f4f6f8;border-radius:6px;\">Total outstanding</td>\n        <td style=\"padding:12px;text-align:right;font-size:18px;font-weight:700;\">$${s.outstanding}</td></tr>\n    <tr><td style=\"padding:12px;color:#c0392b;\">Overdue</td>\n        <td style=\"padding:12px;text-align:right;font-size:18px;font-weight:700;color:#c0392b;\">$${s.overdue}</td></tr>\n    <tr><td style=\"padding:12px;\">Expected in this week</td>\n        <td style=\"padding:12px;text-align:right;font-size:18px;font-weight:700;\">$${s.dueThisWeek}</td></tr>\n  </table>\n\n  <h3 style=\"margin:0 0 10px;\">Top debtors to chase</h3>\n  <table style=\"border-collapse:collapse;margin-bottom:24px;width:100%;\">${rows}</table>\n\n  <p style=\"background:#fff8e1;padding:12px 14px;border-left:3px solid #f5a623;border-radius:4px;margin:0 0 24px;\">\n    <strong>This week:</strong> ${insight}\n  </p>\n\n  <p style=\"color:#888;font-size:13px;margin:0;\">— The Demo Company Accounts Team<br><em>Sent automatically by CashChaser</em></p>\n</div>`;\n\nreturn [{ json: { html } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        96
+      ],
+      "id": "0fdf7916-f52f-4daf-913f-5e3ffc6b0649",
+      "name": "Format brief"
+    },
+    {
+      "parameters": {
+        "content": "## 📊 CashChaser — Weekly Cash-Flow Brief\nEvery Monday: reads unpaid Xero invoices, computes the receivables picture, and emails the owner a branded HTML brief with an AI insight. The retention feature that justifies the monthly fee.",
+        "height": 180,
+        "width": 1200,
+        "color": 7
+      },
+      "id": "273d5bd1-5761-4235-b7ab-1a9119d35d43",
+      "name": "SN header",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        -448
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 1 · Monday trigger + pull unpaid\nWeekly schedule. Xero fetch filtered to Statuses=AUTHORISED (unpaid only) — receivables are just the unpaid invoices, so no big pagination.",
+        "height": 318,
+        "width": 430,
+        "color": 4
+      },
+      "id": "cfa29626-1fc0-4cc3-b893-5233ad59952f",
+      "name": "SN 1 trigger",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        -256
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 2 · Compute receivables\nTotals: outstanding · overdue · due-this-week · top 5 debtors. Pure calc from invoice data — no reports.read scope needed.",
+        "height": 318,
+        "width": 184,
+        "color": 3
+      },
+      "id": "c9274c3e-4e80-47ff-b2f7-81aeafc061e9",
+      "name": "SN 2 summary",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -256
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 3 · AI insight\ngpt-4o-mini writes a 1-2 sentence plain-English cash-flow insight from the numbers (who to chase, expected cash).",
+        "height": 318,
+        "width": 372,
+        "color": 6
+      },
+      "id": "ac12707d-ed8e-4fe1-ba48-0c2c5bb2873f",
+      "name": "SN 3 ai",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        592,
+        -256
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 4 · Branded HTML → owner\nDeterministic HTML template (totals table with overdue in red, debtor list, AI insight callout) → emailed to the owner. Looks designed, not a raw data dump.",
+        "height": 318,
+        "width": 420,
+        "color": 4
+      },
+      "id": "4bcc18a0-8d38-4582-afc2-343641a76999",
+      "name": "SN 4 html",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        960,
+        -256
+      ]
     }
-   }
-  },
-  {
-   "parameters": {
-    "sendTo": "you@example.com",
-    "subject": "Your Monday cash-flow brief",
-    "message": "={{ $json.html }}",
-    "options": {
-     "appendAttribution": false
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get many invoices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many invoices": {
+      "main": [
+        [
+          {
+            "node": "Build summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build summary": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Format brief",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format brief": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
-   },
-   "type": "n8n-nodes-base.gmail",
-   "typeVersion": 2.2,
-   "position": [
-    1152,
-    96
-   ],
-   "id": "28504126-9088-4fa4-8edb-23a8ec1d2c67",
-   "name": "Send a message",
-   "webhookId": "93452764-0cb0-4e49-82da-04f1a09d28b1",
-   "credentials": {
-    "gmailOAuth2": {
-     "id": "dku6asR2rjX2ypmP",
-     "name": "Gmail account Local"
-    }
-   }
   },
-  {
-   "parameters": {
-    "jsCode": "const s = $('Build summary').item.json;\nconst insight = $('Message a model').item.json.output?.[0]?.content?.[0]?.text || '';\n\nconst debtors = String(s.topDebtors).split(';').map(d => d.trim()).filter(Boolean).map(d => {\n  const i = d.lastIndexOf(':');\n  return { name: d.slice(0, i).trim(), amt: d.slice(i + 1).trim() };\n});\nconst rows = debtors.map(d =>\n  `<tr><td style=\"padding:6px 16px 6px 0;border-bottom:1px solid #eee;\">${d.name}</td>\n       <td style=\"padding:6px 0;text-align:right;font-weight:600;border-bottom:1px solid #eee;\">$${d.amt}</td></tr>`\n).join('');\nconst today = new Date().toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' });\n\nconst html = `\n<div style=\"font-family:Arial,Helvetica,sans-serif;color:#1a1a1a;max-width:560px;margin:0 auto;padding:8px;\">\n  <h2 style=\"color:#0a8f5b;margin:0 0 2px;\">Monday Cash-Flow Brief</h2>\n  <p style=\"color:#888;margin:0 0 22px;font-size:13px;\">Week of ${today}</p>\n\n  <table style=\"width:100%;border-collapse:collapse;margin-bottom:26px;\">\n    <tr><td style=\"padding:12px;background:#f4f6f8;border-radius:6px;\">Total outstanding</td>\n        <td style=\"padding:12px;text-align:right;font-size:18px;font-weight:700;\">$${s.outstanding}</td></tr>\n    <tr><td style=\"padding:12px;color:#c0392b;\">Overdue</td>\n        <td style=\"padding:12px;text-align:right;font-size:18px;font-weight:700;color:#c0392b;\">$${s.overdue}</td></tr>\n    <tr><td style=\"padding:12px;\">Expected in this week</td>\n        <td style=\"padding:12px;text-align:right;font-size:18px;font-weight:700;\">$${s.dueThisWeek}</td></tr>\n  </table>\n\n  <h3 style=\"margin:0 0 10px;\">Top debtors to chase</h3>\n  <table style=\"border-collapse:collapse;margin-bottom:24px;width:100%;\">${rows}</table>\n\n  <p style=\"background:#fff8e1;padding:12px 14px;border-left:3px solid #f5a623;border-radius:4px;margin:0 0 24px;\">\n    <strong>This week:</strong> ${insight}\n  </p>\n\n  <p style=\"color:#888;font-size:13px;margin:0;\">\u2014 The Demo Company Accounts Team<br><em>Sent automatically by CashChaser</em></p>\n</div>`;\n\nreturn [{ json: { html } }];"
-   },
-   "type": "n8n-nodes-base.code",
-   "typeVersion": 2,
-   "position": [
-    960,
-    96
-   ],
-   "id": "0fdf7916-f52f-4daf-913f-5e3ffc6b0649",
-   "name": "Format brief"
-  },
-  {
-   "parameters": {
-    "content": "## \ud83d\udcca CashChaser \u2014 Weekly Cash-Flow Brief\nEvery Monday: reads unpaid Xero invoices, computes the receivables picture, and emails the owner a branded HTML brief with an AI insight. The retention feature that justifies the monthly fee.",
-    "height": 180,
-    "width": 1200,
-    "color": 7
-   },
-   "id": "273d5bd1-5761-4235-b7ab-1a9119d35d43",
-   "name": "SN header",
-   "type": "n8n-nodes-base.stickyNote",
-   "typeVersion": 1,
-   "position": [
-    -16,
-    -448
-   ]
-  },
-  {
-   "parameters": {
-    "content": "### 1 \u00b7 Monday trigger + pull unpaid\nWeekly schedule. Xero fetch filtered to Statuses=AUTHORISED (unpaid only) \u2014 receivables are just the unpaid invoices, so no big pagination.",
-    "height": 318,
-    "width": 430,
-    "color": 4
-   },
-   "id": "cfa29626-1fc0-4cc3-b893-5233ad59952f",
-   "name": "SN 1 trigger",
-   "type": "n8n-nodes-base.stickyNote",
-   "typeVersion": 1,
-   "position": [
-    -16,
-    -256
-   ]
-  },
-  {
-   "parameters": {
-    "content": "### 2 \u00b7 Compute receivables\nTotals: outstanding \u00b7 overdue \u00b7 due-this-week \u00b7 top 5 debtors. Pure calc from invoice data \u2014 no reports.read scope needed.",
-    "height": 318,
-    "width": 184,
-    "color": 3
-   },
-   "id": "c9274c3e-4e80-47ff-b2f7-81aeafc061e9",
-   "name": "SN 2 summary",
-   "type": "n8n-nodes-base.stickyNote",
-   "typeVersion": 1,
-   "position": [
-    400,
-    -256
-   ]
-  },
-  {
-   "parameters": {
-    "content": "### 3 \u00b7 AI insight\ngpt-4o-mini writes a 1-2 sentence plain-English cash-flow insight from the numbers (who to chase, expected cash).",
-    "height": 318,
-    "width": 372,
-    "color": 6
-   },
-   "id": "ac12707d-ed8e-4fe1-ba48-0c2c5bb2873f",
-   "name": "SN 3 ai",
-   "type": "n8n-nodes-base.stickyNote",
-   "typeVersion": 1,
-   "position": [
-    592,
-    -256
-   ]
-  },
-  {
-   "parameters": {
-    "content": "### 4 \u00b7 Branded HTML \u2192 owner\nDeterministic HTML template (totals table with overdue in red, debtor list, AI insight callout) \u2192 emailed to the owner. Looks designed, not a raw data dump.",
-    "height": 318,
-    "width": 420,
-    "color": 4
-   },
-   "id": "4bcc18a0-8d38-4582-afc2-343641a76999",
-   "name": "SN 4 html",
-   "type": "n8n-nodes-base.stickyNote",
-   "typeVersion": 1,
-   "position": [
-    960,
-    -256
-   ]
+  "settings": {
+    "executionOrder": "v1"
   }
- ],
- "connections": {
-  "Schedule Trigger": {
-   "main": [
-    [
-     {
-      "node": "Get many invoices",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  },
-  "Get many invoices": {
-   "main": [
-    [
-     {
-      "node": "Build summary",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  },
-  "Build summary": {
-   "main": [
-    [
-     {
-      "node": "Message a model",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  },
-  "Message a model": {
-   "main": [
-    [
-     {
-      "node": "Format brief",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  },
-  "Format brief": {
-   "main": [
-    [
-     {
-      "node": "Send a message",
-      "type": "main",
-      "index": 0
-     }
-    ]
-   ]
-  }
- },
- "settings": {
-  "executionOrder": "v1"
- }
 }

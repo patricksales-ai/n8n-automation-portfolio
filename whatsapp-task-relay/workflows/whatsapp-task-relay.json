@@ -3,70 +3,6 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## 1. Intake\nClient texts a task to the WhatsApp Business number. Meta's **Cloud API** delivers it to n8n as a webhook (subscribed to `messages`).\n\n**Edit Fields** normalizes any message type into:\n`client_phone` · `client_name` · `msg_type` · `text`\n\n`text` falls back to an image/video **caption**, so a photo or clip with the task in the caption still works.",
-        "height": 527,
-        "width": 539,
-        "color": 5
-      },
-      "id": "f6970378-1d2a-4cc9-b60e-73bac65ebd20",
-      "name": "Sticky · New message",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -368,
-        -160
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## 2. Extract the task (AI)\n**gpt-4o-mini** turns free-form client chat into structured data.\n\nUses **Response Format = JSON Object** on the model plus a **Normalize** Code node — *not* the Structured Output Parser, which is unreliable on self-hosted n8n.\n\nOutput: `{ is_task, title, client, type, priority, summary }`\n\n`priority` is emitted as **High / Medium / Low** to match Monday's native labels exactly — no mapping code, no duplicate labels.",
-        "height": 527,
-        "width": 600,
-        "color": 3
-      },
-      "id": "d230ed57-2244-40b8-baea-021694728e05",
-      "name": "Sticky · Qualify (BANT agent)",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        176,
-        -160
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## 3. Is it actually a task?\nGates out chit-chat — \"thanks\", \"ok\", \"got it\" come back `is_task: false` and stop here.\n\nOnly real requests continue to Slack + Monday.",
-        "height": 527,
-        "width": 447,
-        "color": 6
-      },
-      "id": "e4a23dce-dcdc-44d6-94e5-9bf50116bd1e",
-      "name": "Sticky · Hot lead?",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        784,
-        -160
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## 4. Notify + file\n**Slack** — instant alert to the team channel.\n\n**Monday.com** — `create_item` via GraphQL (HTTP Request + Header Auth), mapped to the board's real column IDs.\n\nBoth hang off the IF's `true` output: the task is announced *and* filed.",
-        "height": 527,
-        "width": 281,
-        "color": 7
-      },
-      "id": "2614f902-35f9-4b26-8195-891612678efc",
-      "name": "Sticky · Alert sales",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        1232,
-        -160
-      ]
-    },
-    {
-      "parameters": {
         "model": {
           "__rl": true,
           "value": "gpt-4o-mini",
@@ -276,6 +212,70 @@
           "name": "Monday Header Auth"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "## 📲 TaskRelay - WhatsApp -> Task Router\nInbound WhatsApp client message -> AI extracts the task (title, client, priority) -> posts to Slack + creates a Monday.com item. Turns messages into tracked work.\n**OpenAI - WhatsApp - Slack - Monday.com**",
+        "height": 527,
+        "width": 539,
+        "color": 7
+      },
+      "id": "f6970378-1d2a-4cc9-b60e-73bac65ebd20",
+      "name": "Sticky · New message",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 2. Extract the task (AI)\n**gpt-4o-mini** turns free-form client chat into structured data.\n\nUses **Response Format = JSON Object** on the model plus a **Normalize** Code node — *not* the Structured Output Parser, which is unreliable on self-hosted n8n.\n\nOutput: `{ is_task, title, client, type, priority, summary }`\n\n`priority` is emitted as **High / Medium / Low** to match Monday's native labels exactly — no mapping code, no duplicate labels.",
+        "height": 527,
+        "width": 600,
+        "color": 3
+      },
+      "id": "d230ed57-2244-40b8-baea-021694728e05",
+      "name": "Sticky · Qualify (BANT agent)",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        176,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 3. Is it actually a task?\nGates out chit-chat — \"thanks\", \"ok\", \"got it\" come back `is_task: false` and stop here.\n\nOnly real requests continue to Slack + Monday.",
+        "height": 527,
+        "width": 447,
+        "color": 6
+      },
+      "id": "e4a23dce-dcdc-44d6-94e5-9bf50116bd1e",
+      "name": "Sticky · Hot lead?",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        784,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 4. Notify + file\n**Slack** — instant alert to the team channel.\n\n**Monday.com** — `create_item` via GraphQL (HTTP Request + Header Auth), mapped to the board's real column IDs.\n\nBoth hang off the IF's `true` output: the task is announced *and* filed.",
+        "height": 527,
+        "width": 281,
+        "color": 7
+      },
+      "id": "2614f902-35f9-4b26-8195-891612678efc",
+      "name": "Sticky · Alert sales",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        -160
+      ]
     }
   ],
   "connections": {

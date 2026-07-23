@@ -3,70 +3,6 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## New email",
-        "height": 863,
-        "width": 390,
-        "color": 5
-      },
-      "id": "e287271d-ae8b-49d1-a79d-f15d0eeb3e7c",
-      "name": "Sticky · New email",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -60,
-        -383
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Qualify the lead\nIs it a lead? Temperature, contact, intent, quality.",
-        "height": 863,
-        "width": 480,
-        "color": 3
-      },
-      "id": "520771bb-7a8a-467d-8611-26987611bb33",
-      "name": "Sticky · Qualify the lead",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        330,
-        -383
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Route by temperature",
-        "height": 863,
-        "width": 648,
-        "color": 6
-      },
-      "id": "4280107f-8ae3-4c79-8ce4-1b86f1e8bff2",
-      "name": "Sticky · Route by temperature",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        810,
-        -383
-      ]
-    },
-    {
-      "parameters": {
-        "content": "## Capture + reply\nUpsert into HubSpot, label, auto-reply to hot/warm, alert Slack.",
-        "height": 863,
-        "width": 1069,
-        "color": 7
-      },
-      "id": "44468652-a297-404d-9935-71a1fc78302c",
-      "name": "Sticky · Capture + reply",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        1458,
-        -383
-      ]
-    },
-    {
-      "parameters": {
         "pollTimes": {
           "item": [
             {
@@ -554,6 +490,70 @@
           "name": "HubSpot Header Auth Local"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "## 📨 Build 8 - Inbound Lead Capture\nNew inbound email -> AI extracts the lead, dedupes, creates/updates the HubSpot contact, routes by intent with a Slack alert + AI-drafted reply.\n**OpenAI - Gmail - HubSpot API - Slack**",
+        "height": 863,
+        "width": 390,
+        "color": 7
+      },
+      "id": "e287271d-ae8b-49d1-a79d-f15d0eeb3e7c",
+      "name": "Sticky · New email",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        -383
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Qualify the lead\nIs it a lead? Temperature, contact, intent, quality.",
+        "height": 863,
+        "width": 480,
+        "color": 3
+      },
+      "id": "520771bb-7a8a-467d-8611-26987611bb33",
+      "name": "Sticky · Qualify the lead",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        330,
+        -383
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Route by temperature",
+        "height": 863,
+        "width": 648,
+        "color": 6
+      },
+      "id": "4280107f-8ae3-4c79-8ce4-1b86f1e8bff2",
+      "name": "Sticky · Route by temperature",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        810,
+        -383
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Capture + reply\nUpsert into HubSpot, label, auto-reply to hot/warm, alert Slack.",
+        "height": 863,
+        "width": 1069,
+        "color": 7
+      },
+      "id": "44468652-a297-404d-9935-71a1fc78302c",
+      "name": "Sticky · Capture + reply",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1458,
+        -383
+      ]
     }
   ],
   "connections": {
