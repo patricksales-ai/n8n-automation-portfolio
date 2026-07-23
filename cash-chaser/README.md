@@ -49,6 +49,9 @@ Two workflows.
 
 **1 · The chaser** (daily)
 
+![The chaser workflow](docs/workflow-chaser.png)
+
+
 ```
 Schedule Trigger
   → Get many invoices     (Xero — ALL statuses; the paid branch needs to see PAID)
@@ -66,6 +69,9 @@ Schedule Trigger
 ```
 
 **2 · The weekly brief** (Mondays)
+
+![The weekly cash-flow brief workflow](docs/workflow-weekly-brief.png)
+
 
 ```
 Schedule Trigger → Get many invoices (AUTHORISED only)
