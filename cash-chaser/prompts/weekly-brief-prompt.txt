@@ -1,0 +1,4 @@
+# Prompt(s) used by the OpenAI 'Message a Model' node
+# Output Format = JSON (chaser) so subject/body parse cleanly.
+
+{}
