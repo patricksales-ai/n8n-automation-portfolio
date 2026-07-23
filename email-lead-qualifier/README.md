@@ -86,6 +86,21 @@ a glance-and-update tracker, Sheets is free and instant.)
 
 ---
 
+## Tech stack
+
+- **n8n** (cloud or self-hosted) — orchestration
+- **OpenAI** — `gpt-4o-mini` ×3: an **Information Extractor** to score each email
+  against BANT (0–100 + `stage`), and two **Basic LLM Chains** to write the hot- and
+  warm-branch acknowledgment replies. Model-agnostic; swap as you like.
+- **Supabase (Postgres)** — the `email_leads` system of record; an idempotent
+  `INSERT … ON CONFLICT (email)` upsert deduplicates re-contacts by sender
+- **Gmail** — inbound trigger, full-body fetch (Simplify OFF), in-thread auto-replies,
+  and the `qualified` label (doubles as the idempotency marker)
+- **Slack** — 🔥 hot / 🌤️ warm alerts with a one-click deep-link to the thread
+- **Google Sheets** — the human-facing lead tracker (owned `Status` column + "Open Email" link)
+
+---
+
 ## Demo
 
 ![Demo](docs/demo.gif)

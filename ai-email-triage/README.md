@@ -67,6 +67,18 @@ Single workflow. Real Gmail in, real Gmail/Slack actions out, two gpt-4o-mini ca
 
 ---
 
+## Tech stack
+
+- **n8n** (cloud or self-hosted) — orchestration
+- **OpenAI** — `gpt-4o-mini` ×2: an **Information Extractor** to classify each email
+  into the typed triage schema, and a **Basic LLM Chain** to draft replies. The AI
+  nodes are model-agnostic; swap as you like.
+- **Gmail** — inbound trigger (`is:unread -label:triaged`), plus the actions:
+  labels, mark-as-read, trash, and **Create draft** (replies are drafted, never sent)
+- **Slack** — urgent + new-lead alerts to your own channel
+
+---
+
 ## Demo
 
 ![Demo](docs/demo.gif)

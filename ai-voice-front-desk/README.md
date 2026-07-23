@@ -63,6 +63,22 @@ Sheets.
 
 ---
 
+## Tech stack
+
+- **Twilio** — the phone number and telephony: inbound/outbound **voice**
+  (`<Say>` / `<Gather input="speech">` / `<Dial>`) + **SMS** booking confirmations
+- **Vapi** *(realtime upgrade)* — streaming speech-to-speech that fronts the same
+  booking brain: **Deepgram** transcription + `gpt-4o-mini` + streamed voice, ~840 ms
+  end-to-end so the inbound call feels natural instead of turn-based
+- **n8n** (cloud or self-hosted) — orchestration across the greeting, the agent, the
+  Smart Booking webhook, the outbound dialer, and the two Vapi adapters
+- **OpenAI** — `gpt-4o-mini`, the conversational brain, with per-call memory keyed on
+  Twilio `CallSid`
+- **Google Calendar** — per-stylist availability guard + the actual booking
+- **Google Sheets** — booking log, outbound lead list, and the Vapi call log
+
+---
+
 ## Workflows
 
 | File | Role |
