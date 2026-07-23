@@ -1,0 +1,381 @@
+{
+  "name": "Sub Workflow Mails",
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -688,
+        480
+      ],
+      "id": "0627317c-9993-42de-89bb-a8344c1586ac",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "SYpGRkU0nCCv3rd3",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "simple": false,
+        "filters": {
+          "labelIds": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Label_Names_or_IDs', ``, 'string') }}",
+          "sender": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Sender', `Der Sender der Email.`, 'string') }}"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        -448,
+        592
+      ],
+      "id": "1f641953-7af6-452c-b9e3-2725177e83cf",
+      "name": "getEmails",
+      "webhookId": "312f5bbf-7614-4d1a-befc-7592c0367f92",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qu4dMnWqMOeE4D9H",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "reply",
+        "messageId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message_ID', `Die Thread ID der Email, auf die du antworten sollst.`, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', `Der Inhalt der Email.`, 'string') }}",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Sender_Name', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        -16,
+        592
+      ],
+      "id": "5615b58c-6116-40fd-81ae-524ea4bcbc69",
+      "name": "sendReply",
+      "webhookId": "bc2509c0-b19d-497e-b0ca-e22aa4c362f2",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qu4dMnWqMOeE4D9H",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', `Die Email Adresse des Empfängers.`, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', `Der Betreff der Email.`, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', `Den Inhalt der Email.`, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        -288,
+        592
+      ],
+      "id": "88bcdc91-b236-438e-9934-5f42d606d561",
+      "name": "sendEmail",
+      "webhookId": "180e0df0-cd79-4ee1-a3b7-660825b2a686",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qu4dMnWqMOeE4D9H",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', `Der Betreff der Email.`, 'string') }}",
+        "emailType": "html",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', `Die Nachricht der Email.`, 'string') }}",
+        "options": {
+          "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To_Email', `Die Email des Empfängers.`, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        -160,
+        592
+      ],
+      "id": "727c60e3-5ff7-4a3e-97cb-cf1a79e25358",
+      "name": "saveEmailDraft",
+      "webhookId": "82eec91a-c9a1-40ed-bfc8-556c153390f7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qu4dMnWqMOeE4D9H",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -736,
+        160
+      ],
+      "id": "1308dc22-3afe-41e8-9ce6-9d834ed0a709",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4f360190-a717-4a93-8336-d03ea65975d5",
+              "name": "response",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "372edf52-6bbb-45d9-84f2-64fee581412e",
+      "name": "Response"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4f360190-a717-4a93-8336-d03ea65975d5",
+              "name": "response",
+              "value": "An error occurred. Please try again.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        160
+      ],
+      "id": "f49389ea-f931-4bbc-b4a2-eb428fba2226",
+      "name": "Try Again"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query }}",
+        "options": {
+          "systemMessage": "=# Role  \nYour task is to manage, read, and write Arnie`s emails. Make sure to use the correct tool based on the request.  \n\n# INFORMATION  \n- date and time: **{{ $now }}**  \n- You format emails professionally, following standard email writing conventions. \n- The name at the end of the email, after the closing, is always **\"Arnie\"**.  \n\n# Examples:  \n*\"Send an email to...\"* → Use the **sendEmail** tool  \n*\"Reply to this email with a draft...\"* → Use the **saveReplyDraft** tool  \n\n# TOOLS  \n\n## getEmails  \nUse this tool to retrieve unread emails.  \n\n## saveEmailDraft  \nUse this tool to create a draft of an email.  \n\n## sendEmail  \nUse this tool to send an email.  \n\n## saveReplyDraft  \nUse this tool to save a draft for an email reply. You must first use **\"getEmails\"** to retrieve the thread ID of the email you need to reply to with a draft.  \n\n## sendReply  \nUse this tool to send an email reply. You must first use **\"getEmails\"** to retrieve the message ID of the email you want to reply to.  \n\n## getLabels  \nUse this tool to retrieve available labels.  \n\n## labelEmails  \nUse this tool to label an email. First, use **\"getEmails\"** to get the message ID of the email you want to label. Then, use **\"getLabels\"** to obtain the label ID.  \n\n## markRead  \nUse this tool to mark an email as read. You must first use **\"getEmails\"** to get the message ID of the email to be marked.  \n\n## markUnread  \nUse this tool to mark an email as unread. You must first use **\"getEmails\"** to get the message ID of the email you want to mark as unread.  \n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -448,
+        192
+      ],
+      "id": "21fe4172-f204-44b6-8b7b-3e4902aa5df4",
+      "name": "Email Agent",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "content": "## 📧 Sub-Agent - Email\nA **tool workflow**: called by the Multi-Tool Telegram Agent when the conversation involves email. Runs its own mini-agent over four Gmail operations and returns the result.\n**OpenAI agent - Gmail - Execute Workflow Trigger**",
+        "height": 175,
+        "width": 940,
+        "color": 7
+      },
+      "id": "813e34cf-49c3-48a8-bc32-179f5493fad0",
+      "name": "SN header",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -770,
+        -430
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 1 - Called as a tool\nExecute Workflow Trigger - the parent agent passes the request down.",
+        "height": 150,
+        "width": 280,
+        "color": 4
+      },
+      "id": "1b80a30f-0e30-4f9f-989e-94d633cbb1ed",
+      "name": "SN 1 called",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -800,
+        -215
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 2 - Email sub-agent\nWorks out the intent - read, send, draft or reply - and fills in the arguments.",
+        "height": 150,
+        "width": 350,
+        "color": 6
+      },
+      "id": "56651c56-27ab-4de3-8292-f3c479771732",
+      "name": "SN 2 agent",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -510,
+        -215
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 3 - Return to caller\nResponse or Try Again goes back to the Telegram agent.",
+        "height": 150,
+        "width": 300,
+        "color": 5
+      },
+      "id": "459cdea5-bfff-4a68-80c0-bc76c69913be",
+      "name": "SN 3 return",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -100,
+        -215
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### Gmail tools\n**getEmails** - **sendEmail** - **saveEmailDraft** - **sendReply**. Drafting is available so the agent can prepare a reply for a human to approve instead of sending blind.",
+        "height": 120,
+        "width": 780,
+        "color": 6
+      },
+      "id": "c973e919-ce12-4593-8625-e5aa9947c40c",
+      "name": "SN 4 tools",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        760
+      ]
+    }
+  ],
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "getEmails": {
+      "ai_tool": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "sendReply": {
+      "ai_tool": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "sendEmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "saveEmailDraft": {
+      "ai_tool": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Email Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Agent": {
+      "main": [
+        [
+          {
+            "node": "Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Try Again",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

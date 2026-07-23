@@ -1,0 +1,230 @@
+{
+  "name": "Telegram1  sub workflow search",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "097f63f4-0e12-4a71-b634-acdbb20fc2bf",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query }}",
+        "options": {
+          "systemMessage": "=You are a helpful research agent.\nYou use your tools to search the web. You have access to hacker news, wikipedia, and serpapi. Seacrch them all or use the right one."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "32b310e0-1caa-4e24-9969-531df9a3a29e",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        96,
+        224
+      ],
+      "id": "78ef6dcb-66cc-4a26-862d-39b9b0152075",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "SYpGRkU0nCCv3rd3",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
+      "typeVersion": 1,
+      "position": [
+        256,
+        224
+      ],
+      "id": "8e84654b-0bd4-4686-87b2-502018038164",
+      "name": "Wikipedia"
+    },
+    {
+      "parameters": {
+        "additionalFields": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-serpapi.serpApiTool",
+      "typeVersion": 1,
+      "position": [
+        384,
+        224
+      ],
+      "id": "28cdfca1-df17-4dca-96d7-bf89b0c4f7dc",
+      "name": "Google search in SerpApi",
+      "credentials": {
+        "serpApi": {
+          "id": "wjILadmFmbCLX673",
+          "name": "SerpApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "articleId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Article_ID', ``, 'string') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.hackerNewsTool",
+      "typeVersion": 1,
+      "position": [
+        528,
+        224
+      ],
+      "id": "4e2ba598-50b7-4fd5-9910-76934976c5ad",
+      "name": "Get an article in Hacker News"
+    },
+    {
+      "parameters": {
+        "content": "## 🔎 Sub-Agent - Research\nA **tool workflow**: called by the Multi-Tool Telegram Agent for anything needing outside information. Runs its own mini-agent across three research sources and returns a synthesized answer.\n**OpenAI agent - SerpApi - Wikipedia - Hacker News**",
+        "height": 175,
+        "width": 940,
+        "color": 7
+      },
+      "id": "52328c5f-83bd-49c7-b6b1-e396d9b3a67d",
+      "name": "SN header",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -30,
+        -430
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 1 - Called as a tool\nExecute Workflow Trigger - the question arrives from the parent agent.",
+        "height": 150,
+        "width": 220,
+        "color": 4
+      },
+      "id": "0dc12b5d-575e-49a5-b52b-62ec94c23eab",
+      "name": "SN 1 called",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -215
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### 2 - Research agent\nChooses a source (or several), then synthesizes one answer rather than dumping raw results.",
+        "height": 150,
+        "width": 300,
+        "color": 6
+      },
+      "id": "34d9c27d-1e67-4cb0-ac8d-55070484edba",
+      "name": "SN 2 agent",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        190,
+        -215
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### Research tools\n**Wikipedia** for background - **SerpApi** for live web search - **Hacker News** for tech/startup discussion.",
+        "height": 120,
+        "width": 560,
+        "color": 6
+      },
+      "id": "3deca243-54ac-4ba6-86ac-5395bf1779bd",
+      "name": "SN 3 tools",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        230,
+        390
+      ]
+    }
+  ],
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wikipedia": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google search in SerpApi": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get an article in Hacker News": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
