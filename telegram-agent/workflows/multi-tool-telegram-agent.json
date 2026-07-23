@@ -244,9 +244,9 @@
         "description": "Use this tool whenever you are dealing with mails",
         "workflowId": {
           "__rl": true,
-          "value": "2FJbnBwfM2rngRiN",
+          "value": "nEzmAuykUHExA12L",
           "mode": "list",
-          "cachedResultUrl": "/workflow/2FJbnBwfM2rngRiN",
+          "cachedResultUrl": "/workflow/nEzmAuykUHExA12L",
           "cachedResultName": "Sub Workflow Mails"
         },
         "workflowInputs": {
